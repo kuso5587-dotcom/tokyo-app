@@ -107,25 +107,25 @@ a.nbtn.b{background:#2E86AB18;color:#2E86AB;border:1px solid #2E86AB40;}
 .loading-screen{position:fixed;inset:0;background:#F5F0E8;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;}
 .loading-logo{font-family:'Zen Dots',cursive;font-size:26px;color:#1A1008;letter-spacing:2px;}
 .loading-logo span{color:#C84B31;}
-.loading-sub{font-family:'Noto Serif JP',serif;font-size:11px;color:#C84B31;letter-spacing:1px;opacity:.8;animation:fadepulse 2.5s ease-in-out infinite;}
-.loading-bar{width:180px;height:2px;background:#E8DFD0;border-radius:2px;overflow:hidden;margin-top:4px;}
-.loading-fill{height:100%;background:linear-gradient(90deg,#C84B31,#e8836a,#C84B31);background-size:200% 100%;border-radius:2px;animation:loadfill 2.5s ease-in-out infinite;}
+.loading-bar{width:180px;height:2px;background:#E8DFD0;border-radius:2px;overflow:hidden;}
+.loading-fill{height:100%;background:linear-gradient(90deg,#C84B31,#e8836a,#C84B31);background-size:200% 100%;border-radius:2px;animation:loadfill 3s ease-in-out infinite;}
 .loading-txt{font-family:'Zen Dots',cursive;font-size:9px;color:#B0A090;letter-spacing:3px;animation:fadepulse 2s ease-in-out infinite;}
+.loading-sub{font-family:'Noto Serif JP',serif;font-size:11px;color:#C84B31;letter-spacing:1px;opacity:.7;margin-top:-8px;animation:fadepulse 2.5s ease-in-out infinite;}
 @keyframes loadfill{0%{background-position:100% 0;}50%{background-position:0% 0;}100%{background-position:100% 0;}}
-@keyframes fadepulse{0%,100%{opacity:.3;}50%{opacity:1;}}
-
+@keyframes fadepulse{0%,100%{opacity:.4;}50%{opacity:1;}}
 /* sync badge */
 .sync-badge{display:inline-flex;align-items:center;gap:4px;font-family:'Zen Dots',cursive;font-size:8px;letter-spacing:.5px;padding:3px 8px;border-radius:20px;}
 .sync-cloud{background:#2E86AB15;color:#2E86AB;border:1px solid #2E86AB30;}
 .sync-ok{background:#3BB27315;color:#3BB273;border:1px solid #3BB27330;}
 .sync-err{background:#C84B3115;color:#C84B31;border:1px solid #C84B3130;}
 .sync-saving{background:#F18F0115;color:#F18F01;border:1px solid #F18F0130;}
+@keyframes loadfill{0%{width:0%;}50%{width:80%;}100%{width:100%;}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 .fu{animation:fadeUp .28s ease both;}
 </style>
 </head>
 <body>
-<div id="root" style="width:100%;height:100%;display:flex;flex-direction:column;">
+<div id="root">
   <div class="loading-screen" id="loadingScreen">
     <div style="display:flex;flex-direction:column;align-items:center;gap:18px;">
       <div style="font-size:52px;animation:fadepulse 2s ease-in-out infinite;">🗼</div>
@@ -135,7 +135,7 @@ a.nbtn.b{background:#2E86AB18;color:#2E86AB;border:1px solid #2E86AB40;}
       <div class="loading-txt">CONNECTING TO CLOUD</div>
     </div>
   </div>
-  <div class="app" id="app" style="display:none;"></div>
+  <div class="app" id="app" style="display:none"></div>
 </div>
 
 <script>
@@ -344,7 +344,7 @@ let S={
   flightForm:{direction:"去程",flightNo:"",airline:"",from:"TPE",fromCity:"台灣桃園",to:"NRT",toCity:"東京成田",date:"",departTime:"",arriveTime:"",terminal:"",gate:"",seat:"",ticketPrice:""},
   expenses:[],expForm:{label:"",category:"🍜 餐飲",amount:"",currency:"TWD",paidBy:1,splitWith:[],date:"",note:""},
   preset:"standard",budget:{...BP_DEF.standard},
-  filter:"全部",search:"",navFilter:"全部",transitTab:"route",selectedPass:"combo",modal:null,mSpot:null,
+  filter:"全部",search:"",navFilter:"全部",transitTab:"route",selectedPass:"combo",modal:null,mSpot:null,aiText:"",aiLoad:false,aiUpdateLoad:false,aiTransitLoad:false,aiTransitText:"",
   syncStatus:"cloud", // cloud | saving | saved | error
   newName:""
 };
@@ -371,43 +371,52 @@ function persist(){
 // ═══════════════════════════════════════════
 //  INIT — load from Supabase
 // ═══════════════════════════════════════════
-function init(){
-  // 直接顯示 App，背景載入 Supabase
-  const ls = document.getElementById("loadingScreen");
-  ls.style.display = "none";
-  const app = document.getElementById("app");
-  app.style.display = "flex";
-  app.style.flexDirection = "column";
-  app.style.height = "100%";
-  S.syncStatus = "cloud";
-  try { render(); } catch(e) {
-    // JS 錯誤時顯示錯誤訊息而不是卡在 loading
-    app.innerHTML = '<div style="padding:24px;font-family:sans-serif;color:#C84B31;">'
-      + '<div style="font-size:18px;font-weight:700;margin-bottom:12px;">⚠️ 載入錯誤</div>'
-      + '<div style="font-size:12px;color:#666;word-break:break-all;">' + e.message + '</div>'
-      + '</div>';
-  }
+async function init(){
+  const MIN_LOAD_MS = 2800;
+  const startTime = Date.now();
 
-  // 背景靜默同步 Supabase
-  dbLoad().then(d=>{
-    if(!d) return;
-    let changed = false;
-    if(d.flights?.length){S.flights=d.flights;changed=true;}
-    if(d.days){S.days=d.days;changed=true;}
-    if(d.persons?.length){S.persons=d.persons;changed=true;}
-    if(d.pexp){S.pexp=d.pexp;changed=true;}
-    if(d.expenses?.length){S.expenses=d.expenses;changed=true;}
-    if(d.preset){S.preset=d.preset;changed=true;}
-    if(d.budget){S.budget=d.budget;changed=true;}
-    if(d.num_days){S.numDays=d.num_days;changed=true;}
-    if(d.day_pass!==null&&d.day_pass!==undefined){S.dayPass=d.day_pass;changed=true;}
-    if(changed){S.syncStatus="saved";render();setTimeout(()=>{S.syncStatus="cloud";render();},2000);}
-  }).catch(()=>{S.syncStatus="error";render();});
+  try {
+    const timeout = new Promise((_,rej) => setTimeout(()=>rej(new Error("timeout")), 4000));
+    const d = await Promise.race([dbLoad(), timeout]);
+    if(d){
+      if(d.flights?.length)   S.flights  = d.flights;
+      if(d.days)              S.days     = d.days;
+      if(d.persons?.length)   S.persons  = d.persons;
+      if(d.pexp)              S.pexp     = d.pexp;
+      if(d.expenses?.length)  S.expenses = d.expenses;
+      if(d.preset)            S.preset   = d.preset;
+      if(d.budget)            S.budget   = d.budget;
+      if(d.num_days)          S.numDays  = d.num_days;
+      if(d.day_pass!==null&&d.day_pass!==undefined) S.dayPass = d.day_pass;
+    }
+  } catch(_){ /* 離線或超時，用預設值 */ }
+
+  // 確保 loading 畫面至少顯示 MIN_LOAD_MS 毫秒
+  const elapsed = Date.now() - startTime;
+  const remain  = MIN_LOAD_MS - elapsed;
+  if(remain > 0) await new Promise(r => setTimeout(r, remain));
+
+  // 淡出 loading 畫面
+  const ls = document.getElementById("loadingScreen");
+  ls.style.transition = "opacity .6s ease";
+  ls.style.opacity = "0";
+  await new Promise(r => setTimeout(r, 620));
+  ls.style.display = "none";
+
+  document.getElementById("app").style.display = "flex";
+  document.getElementById("app").style.opacity = "0";
+  document.getElementById("app").style.transition = "opacity .4s ease";
+  setTimeout(()=>{ document.getElementById("app").style.opacity="1"; }, 30);
+
+  S.syncStatus="cloud";
+  render();
 }
 
 // ═══════════════════════════════════════════
 //  DERIVED
 // ═══════════════════════════════════════════
+const TYPE_ORDER=["全部","🌆 熱門景點","⛩️ 文化古蹟","🌅 展望台","🎨 藝術體驗","🆕 新地標","🎢 主題樂園","🍣 必吃美食","🔍 隱藏美食","🛍️ 一般購物","🎎 公仔玩具","👜 精品包","⌚ 精品錶","🏮 私藏秘境"];
+
 function derived(){
   const dayKeys=DAYS5.slice(0,S.numDays);
   const allAdded=dayKeys.flatMap(d=>S.days[d]||[]);
@@ -426,7 +435,7 @@ function derived(){
     return{...p,total:Math.round(t)};
   });
   const grand=perPerson.reduce((a,p)=>a+p.total,0);
-  const TYPE_ORDER=["全部","🌆 熱門景點","⛩️ 文化古蹟","🌅 展望台","🎨 藝術體驗","🆕 新地標","🎢 主題樂園","🍣 必吃美食","🔍 隱藏美食","🛍️ 一般購物","🎎 公仔玩具","👜 精品包","⌚ 精品錶","🏮 私藏秘境"];const TYPES=TYPE_ORDER.filter(t=>t==="全部"||SPOTS.some(s=>s.type===t));
+  const TYPES=TYPE_ORDER.filter(t=>t==="全部"||SPOTS.some(s=>s.type===t));
   const filtered=SPOTS.filter(s=>(S.filter==="全部"||s.type===S.filter)&&(S.search===""||s.name.includes(S.search)||s.area.includes(S.search)));
   return{dayKeys,allAdded,addedIds,spotJPY,transTWD,flightTotal,expTWD,bpp,perPerson,grand,TYPES,filtered};
 }
@@ -499,7 +508,7 @@ function buildFlight(D){
     ?[div({className:"card",style:{textAlign:"center",padding:"26px 16px"}},div({style:{fontSize:"46px",marginBottom:"9px"}},"🎫"),div({style:{fontFamily:"'Noto Serif JP',serif",fontSize:"14px",fontWeight:"700",marginBottom:"5px"}},"尚未加入航班"),div({style:{fontSize:"12px",color:"#9A8F7E",marginBottom:"14px",lineHeight:"1.6"}},"新增去程 & 回程登機證"),btn({className:"btn-red",onClick:openNewFlight},"＋ 新增航班"))]
     :S.flights.map(f=>buildBP(f));
   return div({className:"fu"},div({className:"sec"},"BOARDING PASS"),...cards,
-    S.flights.length>0?btn({className:"btn-sm",style:{width:"100%",padding:"10px",fontSize:"12px",marginTop:"2px"},onClick:openNewFlight},"＋ 新增另一航班"):null,
+    S.flights.length>0?btn({className:"btn-sm",style:{width:"100%",padding:"10px",fontSize:"12px",marginTop:"2px"},onClick:openNewFlight},"＋ 新增另一航班"):span({}),
     div({className:"sec"},"AIRPORT GUIDE"),
     div({className:"card"},...[["🛫","成田機場 NRT","T1 JAL長榮 · T2 ANA全日空 · T3 樂桃/星宇/虎航"],["🛬","羽田機場 HND","T1 JAL · T2 ANA · T3 國際線，市區最快"],["🚆","成田→市區","Skyliner 36分 NT$約380 / 利木津巴士 NT$約230"],["⏰","提早到機場","長榮/華航建議起飛前3小時；LCC 2.5小時"],["📱","Visit Japan Web","出發前填好，入境掃QR不排隊"]].map(([ic,ti,de])=>div({style:{display:"flex",gap:"11px",marginBottom:"10px",alignItems:"flex-start"}},span({style:{fontSize:"18px",flexShrink:"0"}},ic),div({},div({style:{fontSize:"12px",fontWeight:"700",marginBottom:"2px"}},ti),div({style:{fontSize:"11px",color:"#9A8F7E",lineHeight:"1.6"}},de)))))
   );
@@ -518,7 +527,7 @@ function buildBP(f){
     ),
     div({className:"bp-dashed"}),
     div({style:{padding:"0 16px 14px",display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:"10px"}},...[["DATE",f.date||"–"],["DEPART",f.departTime||"–"],["ARRIVE",f.arriveTime||"–"],["TERMINAL",f.terminal?`T${f.terminal}`:"–"],["GATE",f.gate||"–"],["SEAT",f.seat||"–"]].map(([l,v])=>div({},div({style:{fontSize:"8px",color:"#B0A090",fontFamily:"'Zen Dots',cursive",letterSpacing:"1px",marginBottom:"2px"}},l),div({style:{fontSize:"13px",fontWeight:"700",color:"#1A1008"}},v)))),
-    (f.airline||f.ticketPrice)?div({style:{padding:"8px 16px",background:"#F0EBE0",borderTop:"1px solid #E8DFD0",display:"flex",justifyContent:"space-between",alignItems:"center"}},div({style:{fontSize:"12px",color:"#6B5D4A",fontWeight:"600"}},f.airline||""),f.ticketPrice?div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px",color:ac}},`NT$${Number(f.ticketPrice).toLocaleString()}`):null):null,
+    (f.airline||f.ticketPrice)?div({style:{padding:"8px 16px",background:"#F0EBE0",borderTop:"1px solid #E8DFD0",display:"flex",justifyContent:"space-between",alignItems:"center"}},div({style:{fontSize:"12px",color:"#6B5D4A",fontWeight:"600"}},f.airline||""),f.ticketPrice?div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px",color:ac}},`NT$${Number(f.ticketPrice).toLocaleString()}`):span({})):span({}),
     div({style:{padding:"8px 16px 12px",display:"flex",gap:"6px"}},
       btn({style:{flex:"1",padding:"7px",fontSize:"11px",fontWeight:"600",background:"#F0EBE0",border:"1px solid #E0D5C0",borderRadius:"8px",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",color:"#6B5D4A"},onClick:()=>openEditFlight(f)},"✏️ 編輯"),
       btn({style:{padding:"7px 12px",fontSize:"11px",fontWeight:"600",background:"#FFF0EE",border:"1px solid #F0D0C8",borderRadius:"8px",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",color:"#C84B31"},onClick:()=>{S.flights=S.flights.filter(x=>x.id!==f.id);persist();render();}},"刪除")
@@ -568,7 +577,7 @@ function buildPlan(D){
         );
       }),
       div({style:{display:'none'}},div({style:{}}),
-        
+        span({style:{fontSize:"11px",color:"#9A8F7E"}},"💡 行程規劃請在 Claude App 中使用 AI 功能")
       ),
       null
     );
@@ -638,7 +647,36 @@ function buildRouteUrl(spots){
 }
 
 // ── Transit AI ──
+async function runTransitAI(){
+  S.aiTransitLoad=true; S.aiTransitText=""; render();
+  const D=derived();
+  const allSpots=D.allAdded.map(s=>`${s.name}(${s.subway})`).join("、");
+  const pass=PASS_RECOMMEND.find(p=>p.id===S.selectedPass);
+  const prompt=`你是東京交通達人，請為以下${S.numDays}天行程規劃最詳細的交通路線：
 
+景點清單：${allSpots||"尚未選擇景點"}
+選擇票券：${pass?pass.name:"Suica/PASMO"}
+
+請以繁體中文，每天分開列出：
+1. 🚇 建議出發時間與路線（列出具體線路名稱）
+2. 🚉 各段搭乘方式（地鐵線名→換乘→目的站）
+3. ⏱ 各段預估時間
+4. 💰 用${pass?pass.name:"Suica"}時的費用估算
+5. ⚡ 省時換乘技巧
+6. ⚠️ 注意事項（尖峰時段等）
+
+格式要清晰易讀，像導遊手冊一樣詳細。`;
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,
+        messages:[{role:"user",content:prompt}]})
+    });
+    const d=await r.json();
+    S.aiTransitText=d.content?.map(c=>c.text||"").join("")||"規劃失敗";
+  }catch(_){S.aiTransitText="連線失敗，請確認網路";}
+  S.aiTransitLoad=false; render();
+}
 
 function buildNav(){
   const D=derived();
@@ -746,7 +784,7 @@ function buildNav(){
             a({href:routeUrl,target:"_blank",style:{display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",background:"#F5F0E8",color:"#1A1008",borderRadius:"8px",padding:"11px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"8px"}},
               "🗺 一鍵規劃所有景點完整路線"
             ),
-            
+            span({})
           ),
           null
         )
@@ -882,9 +920,48 @@ function openEditFlight(f){S.editFlight=f.id;S.flightForm={...f};S.modal="flight
 function saveFlight(){if(!S.flightForm.flightNo&&!S.flightForm.date)return;if(S.editFlight)S.flights=S.flights.map(f=>f.id===S.editFlight?{...S.flightForm,id:S.editFlight}:f);else S.flights=[...S.flights,{...S.flightForm,id:Date.now()}];S.modal=null;persist();render();}
 function openExpense(){S.expForm={label:"",category:"🍜 餐飲",amount:"",currency:"TWD",paidBy:S.persons[0]?.id||1,splitWith:[],date:"",note:""};S.modal="expense";render();}
 function saveExpense(){if(!S.expForm.label||!S.expForm.amount)return;S.expenses=[...S.expenses,{...S.expForm,id:Date.now()}];S.modal=null;persist();render();}
+async function runAI(){
+  S.aiLoad=true;render();
+  const D=derived();const list=D.allAdded.map(s=>s.name+"("+s.area+")").join("、");
+  const prompt=list?`東京${S.numDays}天，景點：${list}。繁體中文，地鐵效率最佳動線、出發時間、美食推薦，分天清晰列出。`:`規劃東京${S.numDays}天IG打卡行程2026，繁體中文，分天列景點、地鐵路線、美食推薦。`;
+  try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1200,messages:[{role:"user",content:prompt}]})});const d=await r.json();S.aiText=d.content?.map(c=>c.text||"").join("")||"生成失敗";}
+  catch(_){S.aiText="AI 連線失敗";}
+  S.aiLoad=false;render();
+}
 
+async function runAIUpdate(){
+  S.aiUpdateLoad=true;S.aiText="";render();
+  const D=derived();
+  const list=D.allAdded.map(s=>s.name+"("+s.area+")").join("、");
+  const prompt=`你是東京旅遊達人，請搜尋並整合2025-2026年最新的IG、Dcard、PTT、部落客推薦資訊，為以下行程提供最新升級建議：
 
+現有景點：${list||"尚未加入景點"}
+行程天數：${S.numDays}天
 
+請提供：
+1. 🆕 2025-2026最新爆紅景點（含原因）
+2. 🍜 各區域最新隱藏版美食推薦（含價位）
+3. ☕ 最新網美咖啡廳打卡點
+4. 🏮 在地人才知道的隱藏景點
+5. ⚡ 最新地鐵效率路線建議
+6. 💡 2026年最新省錢技巧
+
+以繁體中文分類清楚列出，每項加上為何值得去。`;
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",max_tokens:2000,
+        tools:[{type:"web_search_20250305",name:"web_search"}],
+        messages:[{role:"user",content:prompt}]
+      })
+    });
+    const d=await r.json();
+    const text=d.content?.filter(c=>c.type==="text").map(c=>c.text).join("") || "搜尋完成，請查看結果";
+    S.aiText=text;
+  }catch(_){S.aiText="更新失敗，請確認網路連線。";}
+  S.aiUpdateLoad=false;render();
+}
 
 // ── RENDER ──
 function render(){

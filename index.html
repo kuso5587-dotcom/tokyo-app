@@ -125,7 +125,7 @@ a.nbtn.b{background:#2E86AB18;color:#2E86AB;border:1px solid #2E86AB40;}
 </style>
 </head>
 <body>
-<div id="root">
+<div id="root" style="width:100%;height:100%;display:flex;flex-direction:column;">
   <div class="loading-screen" id="loadingScreen">
     <div style="display:flex;flex-direction:column;align-items:center;gap:18px;">
       <div style="font-size:52px;animation:fadepulse 2s ease-in-out infinite;">🗼</div>
@@ -135,7 +135,7 @@ a.nbtn.b{background:#2E86AB18;color:#2E86AB;border:1px solid #2E86AB40;}
       <div class="loading-txt">CONNECTING TO CLOUD</div>
     </div>
   </div>
-  <div class="app" id="app" style="display:none"></div>
+  <div class="app" id="app" style="display:none;"></div>
 </div>
 
 <script>
@@ -371,44 +371,38 @@ function persist(){
 // ═══════════════════════════════════════════
 //  INIT — load from Supabase
 // ═══════════════════════════════════════════
-async function init(){
-  const MIN_LOAD_MS = 2800;
-  const startTime = Date.now();
-
-  try {
-    const d = await dbLoad();
-    if(d){
-      if(d.flights?.length)   S.flights  = d.flights;
-      if(d.days)              S.days     = d.days;
-      if(d.persons?.length)   S.persons  = d.persons;
-      if(d.pexp)              S.pexp     = d.pexp;
-      if(d.expenses?.length)  S.expenses = d.expenses;
-      if(d.preset)            S.preset   = d.preset;
-      if(d.budget)            S.budget   = d.budget;
-      if(d.num_days)          S.numDays  = d.num_days;
-      if(d.day_pass!==null&&d.day_pass!==undefined) S.dayPass = d.day_pass;
-    }
-  } catch(_){ /* 離線時用預設值 */ }
-
-  // 確保 loading 畫面至少顯示 MIN_LOAD_MS 毫秒
-  const elapsed = Date.now() - startTime;
-  const remain  = MIN_LOAD_MS - elapsed;
-  if(remain > 0) await new Promise(r => setTimeout(r, remain));
-
-  // 淡出 loading 畫面
+function init(){
+  // 直接顯示 App，背景載入 Supabase
   const ls = document.getElementById("loadingScreen");
-  ls.style.transition = "opacity .6s ease";
-  ls.style.opacity = "0";
-  await new Promise(r => setTimeout(r, 620));
   ls.style.display = "none";
+  const app = document.getElementById("app");
+  app.style.display = "flex";
+  app.style.flexDirection = "column";
+  app.style.height = "100%";
+  S.syncStatus = "cloud";
+  try { render(); } catch(e) {
+    // JS 錯誤時顯示錯誤訊息而不是卡在 loading
+    app.innerHTML = '<div style="padding:24px;font-family:sans-serif;color:#C84B31;">'
+      + '<div style="font-size:18px;font-weight:700;margin-bottom:12px;">⚠️ 載入錯誤</div>'
+      + '<div style="font-size:12px;color:#666;word-break:break-all;">' + e.message + '</div>'
+      + '</div>';
+  }
 
-  document.getElementById("app").style.display = "flex";
-  document.getElementById("app").style.opacity = "0";
-  document.getElementById("app").style.transition = "opacity .4s ease";
-  setTimeout(()=>{ document.getElementById("app").style.opacity="1"; }, 30);
-
-  S.syncStatus="cloud";
-  render();
+  // 背景靜默同步 Supabase
+  dbLoad().then(d=>{
+    if(!d) return;
+    let changed = false;
+    if(d.flights?.length){S.flights=d.flights;changed=true;}
+    if(d.days){S.days=d.days;changed=true;}
+    if(d.persons?.length){S.persons=d.persons;changed=true;}
+    if(d.pexp){S.pexp=d.pexp;changed=true;}
+    if(d.expenses?.length){S.expenses=d.expenses;changed=true;}
+    if(d.preset){S.preset=d.preset;changed=true;}
+    if(d.budget){S.budget=d.budget;changed=true;}
+    if(d.num_days){S.numDays=d.num_days;changed=true;}
+    if(d.day_pass!==null&&d.day_pass!==undefined){S.dayPass=d.day_pass;changed=true;}
+    if(changed){S.syncStatus="saved";render();setTimeout(()=>{S.syncStatus="cloud";render();},2000);}
+  }).catch(()=>{S.syncStatus="error";render();});
 }
 
 // ═══════════════════════════════════════════
@@ -505,7 +499,7 @@ function buildFlight(D){
     ?[div({className:"card",style:{textAlign:"center",padding:"26px 16px"}},div({style:{fontSize:"46px",marginBottom:"9px"}},"🎫"),div({style:{fontFamily:"'Noto Serif JP',serif",fontSize:"14px",fontWeight:"700",marginBottom:"5px"}},"尚未加入航班"),div({style:{fontSize:"12px",color:"#9A8F7E",marginBottom:"14px",lineHeight:"1.6"}},"新增去程 & 回程登機證"),btn({className:"btn-red",onClick:openNewFlight},"＋ 新增航班"))]
     :S.flights.map(f=>buildBP(f));
   return div({className:"fu"},div({className:"sec"},"BOARDING PASS"),...cards,
-    S.flights.length>0?btn({className:"btn-sm",style:{width:"100%",padding:"10px",fontSize:"12px",marginTop:"2px"},onClick:openNewFlight},"＋ 新增另一航班"):,
+    S.flights.length>0?btn({className:"btn-sm",style:{width:"100%",padding:"10px",fontSize:"12px",marginTop:"2px"},onClick:openNewFlight},"＋ 新增另一航班"):null,
     div({className:"sec"},"AIRPORT GUIDE"),
     div({className:"card"},...[["🛫","成田機場 NRT","T1 JAL長榮 · T2 ANA全日空 · T3 樂桃/星宇/虎航"],["🛬","羽田機場 HND","T1 JAL · T2 ANA · T3 國際線，市區最快"],["🚆","成田→市區","Skyliner 36分 NT$約380 / 利木津巴士 NT$約230"],["⏰","提早到機場","長榮/華航建議起飛前3小時；LCC 2.5小時"],["📱","Visit Japan Web","出發前填好，入境掃QR不排隊"]].map(([ic,ti,de])=>div({style:{display:"flex",gap:"11px",marginBottom:"10px",alignItems:"flex-start"}},span({style:{fontSize:"18px",flexShrink:"0"}},ic),div({},div({style:{fontSize:"12px",fontWeight:"700",marginBottom:"2px"}},ti),div({style:{fontSize:"11px",color:"#9A8F7E",lineHeight:"1.6"}},de)))))
   );
@@ -524,7 +518,7 @@ function buildBP(f){
     ),
     div({className:"bp-dashed"}),
     div({style:{padding:"0 16px 14px",display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:"10px"}},...[["DATE",f.date||"–"],["DEPART",f.departTime||"–"],["ARRIVE",f.arriveTime||"–"],["TERMINAL",f.terminal?`T${f.terminal}`:"–"],["GATE",f.gate||"–"],["SEAT",f.seat||"–"]].map(([l,v])=>div({},div({style:{fontSize:"8px",color:"#B0A090",fontFamily:"'Zen Dots',cursive",letterSpacing:"1px",marginBottom:"2px"}},l),div({style:{fontSize:"13px",fontWeight:"700",color:"#1A1008"}},v)))),
-    (f.airline||f.ticketPrice)?div({style:{padding:"8px 16px",background:"#F0EBE0",borderTop:"1px solid #E8DFD0",display:"flex",justifyContent:"space-between",alignItems:"center"}},div({style:{fontSize:"12px",color:"#6B5D4A",fontWeight:"600"}},f.airline||""),f.ticketPrice?div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px",color:ac}},`NT$${Number(f.ticketPrice).toLocaleString()}`):):,
+    (f.airline||f.ticketPrice)?div({style:{padding:"8px 16px",background:"#F0EBE0",borderTop:"1px solid #E8DFD0",display:"flex",justifyContent:"space-between",alignItems:"center"}},div({style:{fontSize:"12px",color:"#6B5D4A",fontWeight:"600"}},f.airline||""),f.ticketPrice?div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px",color:ac}},`NT$${Number(f.ticketPrice).toLocaleString()}`):null):null,
     div({style:{padding:"8px 16px 12px",display:"flex",gap:"6px"}},
       btn({style:{flex:"1",padding:"7px",fontSize:"11px",fontWeight:"600",background:"#F0EBE0",border:"1px solid #E0D5C0",borderRadius:"8px",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",color:"#6B5D4A"},onClick:()=>openEditFlight(f)},"✏️ 編輯"),
       btn({style:{padding:"7px 12px",fontSize:"11px",fontWeight:"600",background:"#FFF0EE",border:"1px solid #F0D0C8",borderRadius:"8px",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",color:"#C84B31"},onClick:()=>{S.flights=S.flights.filter(x=>x.id!==f.id);persist();render();}},"刪除")

@@ -201,6 +201,8 @@ const BP_DEF={economy:{label:"省錢背包客",icon:"🎒",flight:8000,hotel:180
 const fmtY=n=>`¥${Number(n).toLocaleString()}`;
 const fmtN=n=>`NT$${Math.round(n).toLocaleString()}`;
 const j2t=n=>Math.round(n*0.22);
+const gmapSearch = s => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name+'%20'+s.area+'%20東京')}`;
+const gmapNav    = s => `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(s.name+' '+s.area+' 東京')}&travelmode=transit&dir_action=navigate`;
 
 // ═══════════════════════════════════════════
 //  STATE
@@ -435,7 +437,7 @@ function buildPlan(D){
               span({style:{fontFamily:"'Zen Dots',cursive",fontSize:"10px",color:"#C84B31",minWidth:"18px"}},String(i+1).padStart(2,"0")),span({style:{fontSize:"17px"}},s.icon),
               div({style:{flex:"1",minWidth:"0"}},div({style:{fontSize:"13px",fontWeight:"600",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},s.name),div({style:{fontSize:"10px",color:"#9A8F7E"}},s.subway)),
               span({style:{fontSize:"11px",color:"#3BB273",fontWeight:"600",flexShrink:"0"}},s.cost===0?"免費":fmtY(s.cost)),
-              a({className:"nbtn b",href:`https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=transit`,target:"_blank",style:{padding:"4px 7px",fontSize:"10px"}},"🗺"),
+              a({className:"nbtn b",href:gmapNav(s),target:"_blank",style:{padding:"4px 7px",fontSize:"10px"}},"🗺"),
               btn({className:"btn-danger",onClick:()=>{S.days={...S.days,[day]:S.days[day].filter(x=>x.id!==s.id)};persist();render();}},"✕")
             ))
           ),
@@ -501,7 +503,7 @@ function buildBudget(D){
 
 // ── NAV ──
 function buildNav(){
-  return div({className:"fu"},div({className:"sec"},"QUICK NAV"),...SPOTS.map(s=>div({className:"card",style:{display:"flex",alignItems:"center",gap:"11px",marginBottom:"6px",padding:"11px 13px"}},div({className:"sico",style:{width:"37px",height:"37px",fontSize:"17px"}},s.icon),div({style:{flex:"1",minWidth:"0"}},div({style:{fontSize:"13px",fontWeight:"600",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},s.name),div({style:{fontSize:"10px",color:"#C84B31",fontWeight:"600",marginTop:"2px"}},"🚇 "+s.subway)),div({style:{display:"flex",gap:"5px"}},a({className:"nbtn g",href:`https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}`,target:"_blank"},"📍"),a({className:"nbtn b",href:`https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=transit`,target:"_blank"},"🚇")))));
+  return div({className:"fu"},div({className:"sec"},"QUICK NAV"),...SPOTS.map(s=>div({className:"card",style:{display:"flex",alignItems:"center",gap:"11px",marginBottom:"6px",padding:"11px 13px"}},div({className:"sico",style:{width:"37px",height:"37px",fontSize:"17px"}},s.icon),div({style:{flex:"1",minWidth:"0"}},div({style:{fontSize:"13px",fontWeight:"600",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},s.name),div({style:{fontSize:"10px",color:"#C84B31",fontWeight:"600",marginTop:"2px"}},"🚇 "+s.subway)),div({style:{display:"flex",gap:"5px"}},a({className:"nbtn g",href:gmapSearch(s),target:"_blank"},"📍"),a({className:"nbtn b",href:gmapNav(s),target:"_blank"},"🚇")))));
 }
 
 // ── MODALS ──
@@ -542,7 +544,7 @@ function buildExpenseModal(){
 }
 function buildSpotModal(){
   const s=S.mSpot;if(!s)return null;
-  return div({},div({style:{textAlign:"center",marginBottom:"13px"}},div({style:{fontSize:"44px",marginBottom:"7px"}},s.icon),div({style:{fontFamily:"'Noto Serif JP',serif",fontSize:"18px",fontWeight:"700",marginBottom:"3px"}},s.name),div({style:{fontSize:"12px",color:"#9A8F7E"}},s.area+" · "+s.type)),div({className:"tip",style:{marginBottom:"12px",fontSize:"12px"}},s.tip),div({style:{background:"#F0EBE0",borderRadius:"10px",padding:"10px 13px",marginBottom:"12px"}},div({style:{fontSize:"9px",fontWeight:"700",color:"#C84B31",marginBottom:"3px",letterSpacing:"1px",fontFamily:"'Zen Dots',cursive"}},"TRANSIT"),div({style:{fontSize:"12px",fontWeight:"500"}},"🚇 "+s.subway)),div({style:{display:"flex",gap:"8px",marginBottom:"12px"}},...[["費用",s.cost===0?"免費":fmtY(s.cost),"#3BB273"],["時間",s.dur+"分鐘","#2E86AB"]].map(([l,v,c])=>div({style:{flex:"1",background:"#F0EBE0",borderRadius:"10px",padding:"10px",textAlign:"center"}},div({style:{fontSize:"10px",color:"#9A8F7E",marginBottom:"3px"}},l),div({style:{fontSize:"15px",color:c,fontWeight:"700",fontFamily:"'Zen Dots',cursive"}},v)))),div({style:{display:"flex",gap:"8px",marginBottom:"9px"}},a({className:"nbtn g",style:{flex:"1",padding:"10px"},href:`https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}`,target:"_blank"},"📍 Google Maps"),a({className:"nbtn b",style:{flex:"1",padding:"10px"},href:`https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=transit`,target:"_blank"},"🚇 地鐵導航")),btn({style:{width:"100%",padding:"10px",fontSize:"13px",borderRadius:"8px",border:"1px solid #F0D0C8",background:"#FFF0EE",color:"#C84B31",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontWeight:"600"},onClick:()=>{DAYS5.forEach(d=>{S.days={...S.days,[d]:(S.days[d]||[]).filter(x=>x.id!==s.id)};});S.modal=null;persist();render();}},"從行程中移除"));
+  return div({},div({style:{textAlign:"center",marginBottom:"13px"}},div({style:{fontSize:"44px",marginBottom:"7px"}},s.icon),div({style:{fontFamily:"'Noto Serif JP',serif",fontSize:"18px",fontWeight:"700",marginBottom:"3px"}},s.name),div({style:{fontSize:"12px",color:"#9A8F7E"}},s.area+" · "+s.type)),div({className:"tip",style:{marginBottom:"12px",fontSize:"12px"}},s.tip),div({style:{background:"#F0EBE0",borderRadius:"10px",padding:"10px 13px",marginBottom:"12px"}},div({style:{fontSize:"9px",fontWeight:"700",color:"#C84B31",marginBottom:"3px",letterSpacing:"1px",fontFamily:"'Zen Dots',cursive"}},"TRANSIT"),div({style:{fontSize:"12px",fontWeight:"500"}},"🚇 "+s.subway)),div({style:{display:"flex",gap:"8px",marginBottom:"12px"}},...[["費用",s.cost===0?"免費":fmtY(s.cost),"#3BB273"],["時間",s.dur+"分鐘","#2E86AB"]].map(([l,v,c])=>div({style:{flex:"1",background:"#F0EBE0",borderRadius:"10px",padding:"10px",textAlign:"center"}},div({style:{fontSize:"10px",color:"#9A8F7E",marginBottom:"3px"}},l),div({style:{fontSize:"15px",color:c,fontWeight:"700",fontFamily:"'Zen Dots',cursive"}},v)))),div({style:{display:"flex",gap:"8px",marginBottom:"9px"}},a({className:"nbtn g",style:{flex:"1",padding:"10px"},href:gmapSearch(s),target:"_blank"},"📍 Google Maps"),a({className:"nbtn b",style:{flex:"1",padding:"10px"},href:gmapNav(s),target:"_blank"},"🚇 地鐵導航")),btn({style:{width:"100%",padding:"10px",fontSize:"13px",borderRadius:"8px",border:"1px solid #F0D0C8",background:"#FFF0EE",color:"#C84B31",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontWeight:"600"},onClick:()=>{DAYS5.forEach(d=>{S.days={...S.days,[d]:(S.days[d]||[]).filter(x=>x.id!==s.id)};});S.modal=null;persist();render();}},"從行程中移除"));
 }
 
 // ── ACTIONS ──

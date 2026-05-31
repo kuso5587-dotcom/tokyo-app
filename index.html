@@ -674,7 +674,7 @@ async function runTransitAI(){
 格式要清晰易讀，像導遊手冊一樣詳細。`;
   try{
     const r=await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",headers:{"Content-Type":"application/json"},
+      method:"POST",headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,
         messages:[{role:"user",content:prompt}]})
     });
@@ -933,7 +933,7 @@ async function runAI(){
   S.aiLoad=true;render();
   const D=derived();const list=D.allAdded.map(s=>s.name+"("+s.area+")").join("、");
   const prompt=list?`東京${S.numDays}天，景點：${list}。繁體中文，地鐵效率最佳動線、出發時間、美食推薦，分天清晰列出。`:`規劃東京${S.numDays}天IG打卡行程2026，繁體中文，分天列景點、地鐵路線、美食推薦。`;
-  try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1200,messages:[{role:"user",content:prompt}]})});const d=await r.json();S.aiText=d.content?.map(c=>c.text||"").join("")||"生成失敗";}
+  try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1200,messages:[{role:"user",content:prompt}]})});const d=await r.json();S.aiText=d.content?.map(c=>c.text||"").join("")||"生成失敗";}
   catch(_){S.aiText="AI 連線失敗";}
   S.aiLoad=false;render();
 }
@@ -958,7 +958,7 @@ async function runAIUpdate(){
 以繁體中文分類清楚列出，每項加上為何值得去。`;
   try{
     const r=await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",headers:{"Content-Type":"application/json"},
+      method:"POST",headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
       body:JSON.stringify({
         model:"claude-sonnet-4-20250514",max_tokens:2000,
         tools:[{type:"web_search_20250305",name:"web_search"}],

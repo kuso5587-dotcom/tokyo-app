@@ -327,6 +327,40 @@ const PASS_RECOMMEND = [
   },
 ];
 
+
+const PASS_COVERAGE = {
+  metro24:   ["銀座線","丸之內線","日比谷線","東西線","千代田線","有樂町線","半藏門線","南北線","副都心線"],
+  jr1day:    ["JR","山手線","中央線","埼京線","京浜東北線","総武線","横須賀線"],
+  combo:     ["銀座線","丸之內線","日比谷線","東西線","千代田線","有樂町線","半藏門線","南北線","副都心線","都營","淺草線","三田線","新宿線","大江戶線","都電荒川線"],
+  yurikamome:["ゆりかもめ","百合海鷗"],
+  suica:     ["全部"],
+};
+
+function checkPassCoverage(spot, passId){
+  if(passId === "suica") return {ok:true, note:"Suica刷卡"};
+  const lines = PASS_COVERAGE[passId] || [];
+  const subway = spot.subway || "";
+  const matched = lines.some(l => subway.includes(l));
+  // Special checks
+  if(!matched){
+    // Check if needs extra ticket
+    if(subway.includes("ゆりかもめ") || subway.includes("百合海鷗")){
+      return {ok:false, note:"需另購百合海鷗券¥820"};
+    }
+    if(subway.includes("東急") || subway.includes("小田急") || subway.includes("東武") || subway.includes("西武") || subway.includes("京王") || subway.includes("京急") || subway.includes("京成")){
+      return {ok:false, note:"私鐵需Suica/另購票"};
+    }
+    if((passId==="metro24") && (subway.includes("都營") || subway.includes("三田線") || subway.includes("大江戶") || subway.includes("淺草線") || subway.includes("新宿線"))){
+      return {ok:false, note:"都營線需另購都營券¥700"};
+    }
+    if((passId==="jr1day") && (subway.includes("Metro") || subway.includes("銀座線") || subway.includes("日比谷") || subway.includes("半藏門") || subway.includes("千代田") || subway.includes("南北") || subway.includes("副都心"))){
+      return {ok:false, note:"地鐵線需另購Metro券¥800"};
+    }
+    return {ok:false, note:"需Suica按次付費"};
+  }
+  return {ok:true, note:"票券可搭"};
+}
+
 const fmtY=n=>`¥${Number(n).toLocaleString()}`;
 const fmtN=n=>`NT$${Math.round(n).toLocaleString()}`;
 const j2t=n=>Math.round(n*0.22);
@@ -422,7 +456,23 @@ function derived(){
   const allAdded=dayKeys.flatMap(d=>S.days[d]||[]);
   const addedIds=new Set(allAdded.map(s=>s.id));
   const spotJPY=allAdded.reduce((a,x)=>a+x.cost,0);
-  const transTWD=j2t(S.dayPass?S.numDays*800*S.persons.length:allAdded.length*220*S.persons.length);
+  // Transit cost based on selected pass
+  const passId = S.selectedPass || "suica";
+  let transTWD;
+  if(passId === "suica"){
+    transTWD = j2t(allAdded.length * 220 * S.persons.length);
+  } else if(passId === "metro24"){
+    transTWD = 800 * S.numDays * S.persons.length; // Metro day pass in TWD (800JPY * 0.22 already in j2t)
+    transTWD = j2t(800 * S.numDays) * S.persons.length;
+  } else if(passId === "jr1day"){
+    transTWD = j2t(800 * S.numDays) * S.persons.length;
+  } else if(passId === "combo"){
+    transTWD = j2t(1000 * S.numDays) * S.persons.length;
+  } else if(passId === "yurikamome"){
+    transTWD = j2t(820 * S.numDays) * S.persons.length;
+  } else {
+    transTWD = j2t(S.dayPass ? S.numDays*800*S.persons.length : allAdded.length*220*S.persons.length);
+  }
   const flightTotal=S.flights.reduce((a,f)=>a+(Number(f.ticketPrice)||0)*S.persons.length,0);
   const expTWD=S.expenses.reduce((a,e)=>a+(e.currency==="JPY"?j2t(Number(e.amount)):Number(e.amount)),0);
   const bpp=S.budget.flight+S.budget.hotel*S.numDays+S.budget.food*3*S.numDays+S.budget.misc;
@@ -620,7 +670,7 @@ function buildBudget(D){
   const ppCards=D.perPerson.map(p=>{const pct=D.grand?Math.round(p.total/D.grand*100):0;return div({className:"card",style:{marginBottom:"8px"}},div({style:{display:"flex",alignItems:"center",gap:"12px"}},avatar(p.name,p.color),div({style:{flex:"1"}},div({style:{fontSize:"13px",fontWeight:"600",marginBottom:"5px"}},p.name),div({className:"pbar-track"},div({className:"pbar-fill",style:{width:pct+"%",background:p.color}}))),div({style:{textAlign:"right"}},div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"16px",color:p.color}},`NT$${p.total.toLocaleString()}`),div({style:{fontSize:"10px",color:"#9A8F7E",marginTop:"2px"}},pct+"% of logged"))));});
   const spotJPYpp=D.spotJPY/S.persons.length;const transpp=j2t(S.dayPass?S.numDays*800:D.allAdded.length*220);
   const totalBars=S.budget.flight+S.budget.hotel*S.numDays+S.budget.food*3*S.numDays+j2t(spotJPYpp)+transpp+S.budget.misc;
-  const bars=[["✈️ 機票",S.budget.flight,"#C84B31"],["🏨 住宿",S.budget.hotel*S.numDays,"#F18F01"],["🍜 餐飲",S.budget.food*3*S.numDays,"#3BB273"],["🎡 景點",j2t(spotJPYpp),"#A23B72"],["🚇 交通",transpp,"#2E86AB"],["🛍️ 購物等",S.budget.misc,"#9B8FC0"]].map(([l,v,c])=>{const pct=totalBars?Math.round(v/totalBars*100):0;return div({style:{marginBottom:"8px"}},div({style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"3px"}},div({style:{fontSize:"11px",color:"rgba(245,240,232,.8)",fontWeight:"600"}},l),div({style:{display:"flex",gap:"8px",alignItems:"center"}},div({style:{fontSize:"9px",color:"#8B7355"}},pct+"%"),div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px",color:c}},fmtN(v)))),div({style:{height:"4px",background:"rgba(255,255,255,.08)",borderRadius:"2px"}},div({style:{height:"100%",width:pct+"%",background:c,borderRadius:"2px"}})));});
+  const bars=[["✈️ 機票",S.budget.flight,"#C84B31"],["🏨 住宿",S.budget.hotel*S.numDays,"#F18F01"],["🍜 餐飲",S.budget.food*3*S.numDays,"#3BB273"],["🎡 景點",j2t(spotJPYpp),"#A23B72"],["🚇 交通 ("+( S.selectedPass==="suica"?"Suica":S.selectedPass==="metro24"?"Metro券":S.selectedPass==="jr1day"?"JR券":S.selectedPass==="combo"?"聯合券":S.selectedPass==="yurikamome"?"海鷗券":"通票")+")",transpp,"#2E86AB"],["🛍️ 購物等",S.budget.misc,"#9B8FC0"]].map(([l,v,c])=>{const pct=totalBars?Math.round(v/totalBars*100):0;return div({style:{marginBottom:"8px"}},div({style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"3px"}},div({style:{fontSize:"11px",color:"rgba(245,240,232,.8)",fontWeight:"600"}},l),div({style:{display:"flex",gap:"8px",alignItems:"center"}},div({style:{fontSize:"9px",color:"#8B7355"}},pct+"%"),div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px",color:c}},fmtN(v)))),div({style:{height:"4px",background:"rgba(255,255,255,.08)",borderRadius:"2px"}},div({style:{height:"100%",width:pct+"%",background:c,borderRadius:"2px"}})));});
   const personsCard=div({className:"card"},...S.persons.map(p=>div({style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"9px"}},avatar(p.name,p.color),span({style:{flex:"1",fontSize:"13px",fontWeight:"600"}},p.name),S.persons.length>1?btn({className:"btn-danger",onClick:()=>{S.persons=S.persons.filter(x=>x.id!==p.id);persist();render();}},"移除"):null)),div({style:{display:"flex",gap:"7px",marginTop:"4px"}},inp({className:"inp",style:{flex:"1"},placeholder:"新增旅伴姓名",value:S.newName,onInput:e=>S.newName=e.target.value,onKeyDown:e=>{if(e.key==="Enter"&&S.newName.trim()){const id=Date.now();S.persons=[...S.persons,{id,name:S.newName.trim(),color:PC[S.persons.length%PC.length]}];S.newName="";persist();render();}}}),btn({className:"btn-sm",style:{padding:"9px 12px"},onClick:()=>{if(!S.newName.trim())return;const id=Date.now();S.persons=[...S.persons,{id,name:S.newName.trim(),color:PC[S.persons.length%PC.length]}];S.newName="";persist();render();}},"＋")));
   const presets=Object.entries(BP_DEF).map(([key,p])=>div({className:"bcard"+(S.preset===key?" sel":""),onClick:()=>{S.preset=key;S.budget={...p};persist();render();}},div({style:{display:"flex",alignItems:"center",justifyContent:"space-between"}},div({style:{display:"flex",alignItems:"center",gap:"10px"}},div({style:{fontSize:"28px"}},p.icon),div({},div({style:{fontSize:"13px",fontWeight:"700"}},p.label),div({style:{fontSize:"11px",color:"#9A8F7E"}},"每人約 NT$"+(p.flight+p.hotel*S.numDays+p.food*3*S.numDays+p.misc).toLocaleString()))),div({style:{width:"20px",height:"20px",borderRadius:"50%",border:`2px solid ${S.preset===key?"#C84B31":"#E0D5C0"}`,background:S.preset===key?"#C84B31":"transparent",display:"flex",alignItems:"center",justifyContent:"center"}},S.preset===key?div({style:{width:"8px",height:"8px",borderRadius:"50%",background:"#fff"}}):null)),S.preset===key?div({style:{display:"flex",gap:"5px",flexWrap:"wrap",marginTop:"10px"}},...[["✈️",p.flight],["🏨",p.hotel],["🍜",p.food],["🛍️",p.misc]].map(([ic,v])=>span({className:"cpill"},ic+" NT$"+v.toLocaleString()))):null));
   const sliders=[{key:"flight",label:"✈️ 來回機票",min:6000,max:25000,step:500},{key:"hotel",label:"🏨 住宿/每晚",min:1000,max:12000,step:200},{key:"food",label:"🍜 餐費/每餐",min:200,max:2000,step:50},{key:"misc",label:"🛍️ 購物&其他",min:500,max:20000,step:500}].map(({key,label,min,max,step})=>div({style:{marginBottom:"14px"}},div({style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"4px"}},div({style:{fontSize:"12px",fontWeight:"600"}},label),div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"13px",color:"#C84B31"}},"NT$"+Number(S.budget[key]).toLocaleString())),inp({type:"range",className:"slider",min,max,step,value:S.budget[key],onInput:e=>{S.budget={...S.budget,[key]:Number(e.target.value)};persist();render();}}),div({style:{display:"flex",justifyContent:"space-between",fontSize:"9px",color:"#C0B8A8"}},span({},"NT$"+min.toLocaleString()),span({},"NT$"+max.toLocaleString()))));
@@ -709,7 +759,18 @@ function buildNav(){
               div({style:{fontSize:"11px",fontWeight:"600",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},s.name),
               div({style:{fontSize:"9px",color:"#C84B31"}},s.subway)
             ),
-            a({href:gmapNav(s),target:"_blank",style:{padding:"4px 8px",background:"#2E86AB18",color:"#2E86AB",border:"1px solid #2E86AB40",borderRadius:"6px",fontSize:"10px",fontWeight:"600",textDecoration:"none",flexShrink:"0"}},"導航")
+            (()=>{
+              const cov = checkPassCoverage(s, S.selectedPass||"suica");
+              return div({style:{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:"3px",flexShrink:"0"}},
+                span({style:{fontSize:"9px",padding:"2px 6px",borderRadius:"10px",fontWeight:"600",
+                  background:cov.ok?"#DCFCE7":"#FEF3C7",
+                  color:cov.ok?"#166534":"#92400E",
+                  whiteSpace:"nowrap"}},
+                  cov.ok?"✓ 可搭":"⚠️ "+cov.note
+                ),
+                a({href:gmapNav(s),target:"_blank",style:{padding:"4px 8px",background:"#2E86AB18",color:"#2E86AB",border:"1px solid #2E86AB40",borderRadius:"6px",fontSize:"10px",fontWeight:"600",textDecoration:"none"}},"導航")
+              );
+            })()
           ))
         ),
         url?a({href:url,target:"_blank",style:{display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",background:"#C84B31",color:"#fff",borderRadius:"8px",padding:"10px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",boxShadow:"0 2px 8px #C84B3130"}},"🗺 "+day+" 一鍵路線"):null
@@ -717,8 +778,28 @@ function buildNav(){
     }).filter(Boolean);
 
     const allUrl=buildRouteUrl(allAdded);
+    const curPass = PASS_RECOMMEND.find(p=>p.id===(S.selectedPass||"suica"));
+    const passStrip = div({style:{marginBottom:"12px"}},
+      div({style:{fontSize:"10px",color:"#9A8F7E",fontWeight:"600",marginBottom:"6px"}},"使用票券 →"),
+      div({style:{display:"flex",gap:"5px",overflowX:"auto",paddingBottom:"4px",WebkitOverflowScrolling:"touch"}},
+        ...PASS_RECOMMEND.map(p=>span({
+          style:{flexShrink:"0",padding:"5px 11px",borderRadius:"20px",fontSize:"10px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap",fontFamily:"'DM Sans',sans-serif",
+            background:S.selectedPass===p.id?"#1A1008":"#FDFAF5",
+            color:S.selectedPass===p.id?"#F5F0E8":"#6B5D4A",
+            border:`1.5px solid ${S.selectedPass===p.id?"#1A1008":"#E0D5C0"}`},
+          onClick:()=>{S.selectedPass=p.id;render();}
+        },p.icon+" "+p.name))
+      ),
+      curPass?div({style:{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:"10px",padding:"8px 12px",marginTop:"6px",display:"flex",gap:"8px",alignItems:"center"}},
+        span({style:{fontSize:"16px"}},curPass.icon),
+        div({},
+          div({style:{fontSize:"11px",fontWeight:"700",color:"#166534"}},curPass.name+" — "+curPass.cover),
+          div({style:{fontSize:"10px",color:"#6B5D4A",marginTop:"1px"}},"💡 "+curPass.tip)
+        )
+      ):null
+    );
     return div({className:"fu"},
-      div({className:"sec"},"智慧路線規劃"),subTabs,
+      div({className:"sec"},"智慧路線規劃"),subTabs,passStrip,
       !allAdded.length
         ?div({className:"card"},div({className:"empty"},div({style:{fontSize:"28px",marginBottom:"6px"}},"🗺"),div({},"先在行程頁加入景點")))
         :div({},...dayCards,

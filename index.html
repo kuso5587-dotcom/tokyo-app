@@ -344,7 +344,7 @@ let S={
   flightForm:{direction:"去程",flightNo:"",airline:"",from:"TPE",fromCity:"台灣桃園",to:"NRT",toCity:"東京成田",date:"",departTime:"",arriveTime:"",terminal:"",gate:"",seat:"",ticketPrice:""},
   expenses:[],expForm:{label:"",category:"🍜 餐飲",amount:"",currency:"TWD",paidBy:1,splitWith:[],date:"",note:""},
   preset:"standard",budget:{...BP_DEF.standard},
-  filter:"全部",search:"",navFilter:"全部",transitTab:"route",selectedPass:"combo",modal:null,mSpot:null,aiText:"",aiLoad:false,aiUpdateLoad:false,aiTransitLoad:false,aiTransitText:"",
+  filter:"全部",search:"",navFilter:"全部",transitTab:"route",selectedPass:"combo",modal:null,mSpot:null,
   syncStatus:"cloud", // cloud | saving | saved | error
   newName:""
 };
@@ -498,7 +498,7 @@ function buildApp(){
   else if(S.tab==="plan")content=buildPlan(D);
   else if(S.tab==="expense")content=buildExpense(D);
   else if(S.tab==="budget")content=buildBudget(D);
-  else content=buildNav();
+  else { try { content=buildNav(); } catch(e) { content=div({style:{padding:"20px",color:"#C84B31",fontSize:"12px"}},"導航載入錯誤: "+e.message); } }
   return[hdr,h("main",{className:"content"},content)];
 }
 
@@ -681,183 +681,87 @@ async function runTransitAI(){
 function buildNav(){
   const D=derived();
   const allAdded=D.allAdded;
-  const routeUrl=buildRouteUrl(allAdded);
+  const navFilter=S.navFilter||"全部";
+  const navTypes=TYPE_ORDER.filter(t=>t==="全部"||SPOTS.some(s=>s.type===t));
+  const navFiltered=SPOTS.filter(s=>navFilter==="全部"||s.type===navFilter);
 
-  // ── Sub tabs ──
   const subTabs=div({style:{display:"flex",gap:"6px",marginBottom:"14px"}},
-    ...[ ["route","🗺 路線規劃"], ["pass","🎫 票券選擇"], ["spots","📍 景點導航"] ].map(([k,l])=>
-      btn({className:"btn-sm"+(S.transitTab===k?" active":""),style:{flex:"1",padding:"8px",fontSize:"11px"},
-        onClick:()=>{S.transitTab=k;render();}},l)
+    ...[["route","🗺 路線規劃"],["pass","🎫 票券"],["spots","📍 景點"]].map(([k,l])=>
+      btn({className:"btn-sm"+(S.transitTab===k?" active":""),style:{flex:"1",padding:"8px",fontSize:"11px"},onClick:()=>{S.transitTab=k;render();}},l)
     )
   );
 
-  // ══ TAB: ROUTE ══
   if(S.transitTab==="route"){
-    const passInfo = PASS_RECOMMEND.find(p=>p.id===S.selectedPass);
-    return div({className:"fu"},
-      div({className:"sec"},"智慧路線規劃"),
-      subTabs,
-
-      // Pass selector strip
-      div({style:{marginBottom:"12px"}},
-        div({style:{fontSize:"10px",color:"#9A8F7E",fontWeight:"600",marginBottom:"6px"}},"使用票券 →"),
-        div({style:{display:"flex",gap:"5px",overflowX:"auto",paddingBottom:"4px",WebkitOverflowScrolling:"touch"}},
-          ...PASS_RECOMMEND.map(p=>span({
-            style:{flexShrink:"0",padding:"6px 11px",borderRadius:"20px",fontSize:"10px",fontWeight:"600",
-              cursor:"pointer",fontFamily:"'DM Sans',sans-serif",whiteSpace:"nowrap",
-              background:S.selectedPass===p.id?"#1A1008":"#FDFAF5",
-              color:S.selectedPass===p.id?"#F5F0E8":"#6B5D4A",
-              border:`1.5px solid ${S.selectedPass===p.id?"#1A1008":"#E0D5C0"}`},
-            onClick:()=>{S.selectedPass=p.id;render();}
-          }, p.icon+" "+p.name))
-        )
-      ),
-
-      // Selected pass info
-      passInfo?div({className:"card",style:{background:"#F0FDF4",border:"1px solid #BBF7D0",marginBottom:"12px",padding:"12px 14px"}},
-        div({style:{display:"flex",alignItems:"center",gap:"8px",marginBottom:"6px"}},
-          span({style:{fontSize:"20px"}},passInfo.icon),
-          div({},
-            div({style:{fontSize:"13px",fontWeight:"700"}},passInfo.name),
-            div({style:{fontSize:"11px",color:"#6B5D4A"}},passInfo.cover)
-          ),
-          passInfo.price>0?div({style:{marginLeft:"auto",fontFamily:"'Zen Dots',cursive",fontSize:"13px",color:"#C84B31"}},"¥"+passInfo.price):
-            div({style:{marginLeft:"auto",fontSize:"11px",color:"#059669",fontWeight:"600"}},"按次計費")
+    const dayCards=D.dayKeys.map(day=>{
+      const spots=S.days[day]||[];
+      if(!spots.length) return null;
+      const url=buildRouteUrl(spots);
+      return div({className:"card",style:{marginBottom:"10px"}},
+        div({style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"10px"}},
+          div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px"}},day),
+          div({style:{fontSize:"10px",color:"#9A8F7E"}},spots.length+" 景點")
         ),
-        div({style:{fontSize:"10px",color:"#6B5D4A",background:"#DCFCE7",borderRadius:"6px",padding:"5px 8px"}},
-          "💡 "+passInfo.tip
-        )
-      ):null,
-
-      // Per-day route cards
-      allAdded.length===0
-        ?div({className:"card"},div({className:"empty"},
-            div({style:{fontSize:"28px",marginBottom:"6px"}},"🗺"),
-            div({},"先在「行程」頁加入景點"),
-            div({style:{fontSize:"10px",color:"#C0B8A8",marginTop:"4px"}},"加入後可一鍵規劃完整交通路線")
-          ))
-        :div({},
-          ...D.dayKeys.map(day=>{
-            const spots=S.days[day]||[];
-            if(spots.length===0)return null;
-            const url=buildRouteUrl(spots);
-            return div({className:"card",style:{marginBottom:"10px"}},
-              // Day header
-              div({style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"10px"}},
-                div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px",color:"#1A1008"}},day),
-                div({style:{fontSize:"10px",color:"#9A8F7E"}},spots.length+" 個景點")
-              ),
-              // Spot flow with arrows
-              div({style:{marginBottom:"10px"}},
-                ...spots.map((s,i)=>div({},
-                  div({style:{display:"flex",alignItems:"center",gap:"8px",padding:"7px 10px",background:"#F8F5F0",borderRadius:"8px",marginBottom:"2px"}},
-                    div({style:{width:"22px",height:"22px",borderRadius:"50%",background:"#C84B31",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Zen Dots',cursive",fontSize:"9px",color:"#fff",flexShrink:"0"}},i+1),
-                    span({style:{fontSize:"15px"}},"  "+s.icon),
-                    div({style:{flex:"1",minWidth:"0"}},
-                      div({style:{fontSize:"12px",fontWeight:"600",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},s.name),
-                      div({style:{fontSize:"9px",color:"#C84B31",marginTop:"1px"}},s.subway)
-                    ),
-                    a({href:gmapNav(s),target:"_blank",style:{flexShrink:"0",padding:"4px 8px",background:"#2E86AB18",color:"#2E86AB",border:"1px solid #2E86AB40",borderRadius:"6px",fontSize:"10px",fontWeight:"600",textDecoration:"none"}},"導航")
-                  ),
-                  i<spots.length-1?div({style:{display:"flex",alignItems:"center",gap:"6px",padding:"3px 12px",marginBottom:"2px"}},
-                    div({style:{width:"1px",height:"16px",background:"#E0D5C0",marginLeft:"10px"}}),
-                    div({style:{fontSize:"9px",color:"#9A8F7E",marginLeft:"6px"}},"🚇 搭乘地鐵前往")
-                  ):null
-                ))
-              ),
-              // Action buttons
-              div({style:{display:"flex",gap:"7px"}},
-                a({href:url,target:"_blank",style:{flex:"2",display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",background:"#C84B31",color:"#fff",borderRadius:"8px",padding:"10px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",boxShadow:"0 2px 8px #C84B3130"}},
-                  "🗺 "+day+" 一鍵Google Maps路線"
-                ),
-                a({href:"https://www.google.com/maps/dir/?api=1&origin="+encodeURIComponent((spots[0]||{name:"",area:""}).name+" "+spots[0].area+" 東京")+"&destination="+encodeURIComponent((spots[spots.length-1]||{name:"",area:""}).name+" "+spots[spots.length-1].area+" 東京")+"&travelmode=walking",target:"_blank",
-                  style:{flex:"1",display:"flex",alignItems:"center",justifyContent:"center",background:"#F0EBE0",color:"#6B5D4A",borderRadius:"8px",padding:"10px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"11px",border:"1px solid #E0D5C0"}},
-                  "🚶 步行"
-                )
-              )
-            );
-          }).filter(Boolean),
-
-          // All days combined
-          div({className:"card",style:{background:"linear-gradient(135deg,#1A1008,#2D1F0A)",border:"none",marginTop:"6px"}},
-            div({style:{fontSize:"9px",color:"#8B7355",letterSpacing:"2px",marginBottom:"8px",fontFamily:"'Zen Dots',cursive"}},"FULL TRIP · ALL "+allAdded.length+" SPOTS"),
-            a({href:routeUrl,target:"_blank",style:{display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",background:"#F5F0E8",color:"#1A1008",borderRadius:"8px",padding:"11px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"8px"}},
-              "🗺 一鍵規劃所有景點完整路線"
+        div({style:{marginBottom:"10px"}},
+          ...spots.map((s,i)=>div({style:{display:"flex",alignItems:"center",gap:"8px",padding:"6px 8px",background:"#F8F5F0",borderRadius:"8px",marginBottom:"3px"}},
+            div({style:{width:"20px",height:"20px",borderRadius:"50%",background:"#C84B31",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"9px",color:"#fff",flexShrink:"0",fontFamily:"'Zen Dots',cursive"}},String(i+1)),
+            span({style:{fontSize:"14px"}}," "+s.icon),
+            div({style:{flex:"1",minWidth:"0"}},
+              div({style:{fontSize:"11px",fontWeight:"600",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},s.name),
+              div({style:{fontSize:"9px",color:"#C84B31"}},s.subway)
             ),
-            span({})
-          ),
-          null
+            a({href:gmapNav(s),target:"_blank",style:{padding:"4px 8px",background:"#2E86AB18",color:"#2E86AB",border:"1px solid #2E86AB40",borderRadius:"6px",fontSize:"10px",fontWeight:"600",textDecoration:"none",flexShrink:"0"}},"導航")
+          ))
+        ),
+        url?a({href:url,target:"_blank",style:{display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",background:"#C84B31",color:"#fff",borderRadius:"8px",padding:"10px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",boxShadow:"0 2px 8px #C84B3130"}},"🗺 "+day+" 一鍵路線"):null
+      );
+    }).filter(Boolean);
+
+    const allUrl=buildRouteUrl(allAdded);
+    return div({className:"fu"},
+      div({className:"sec"},"智慧路線規劃"),subTabs,
+      !allAdded.length
+        ?div({className:"card"},div({className:"empty"},div({style:{fontSize:"28px",marginBottom:"6px"}},"🗺"),div({},"先在行程頁加入景點")))
+        :div({},...dayCards,
+          allUrl?div({className:"card",style:{background:"linear-gradient(135deg,#1A1008,#2D1F0A)",border:"none"}},
+            div({style:{fontSize:"9px",color:"#8B7355",letterSpacing:"2px",marginBottom:"8px",fontFamily:"'Zen Dots',cursive"}},"ALL DAYS · "+allAdded.length+" SPOTS"),
+            a({href:allUrl,target:"_blank",style:{display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",background:"#F5F0E8",color:"#1A1008",borderRadius:"8px",padding:"11px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}},"🗺 一鍵規劃所有景點路線")
+          ):null
         )
     );
   }
 
-  // ══ TAB: PASS ══
   if(S.transitTab==="pass"){
     return div({className:"fu"},
-      div({className:"sec"},"票券選擇指南"),
-      subTabs,
-      div({style:{fontSize:"11px",color:"#9A8F7E",marginBottom:"12px",lineHeight:"1.7"}},"根據你的行程景點，推薦最划算票券 👇"),
-
+      div({className:"sec"},"票券選擇指南"),subTabs,
       ...PASS_RECOMMEND.map(p=>{
-        const isSel = S.selectedPass===p.id;
-        const hasSpots = allAdded.some(s=>p.good.includes("全部景點")||p.good.some(g=>s.name.includes(g)||s.area.includes(g)));
-        return div({style:{background:"#FDFAF5",border:`2px solid ${isSel?"#C84B31":"#E8DFD0"}`,borderRadius:"14px",padding:"13px",marginBottom:"9px",cursor:"pointer",boxShadow:isSel?"0 3px 12px #C84B3120":"0 1px 3px rgba(0,0,0,.04)"},
-          onClick:()=>{S.selectedPass=p.id;render();}},
-          div({style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"8px"}},
+        const isSel=S.selectedPass===p.id;
+        return div({style:{background:"#FDFAF5",border:`2px solid ${isSel?"#C84B31":"#E8DFD0"}`,borderRadius:"14px",padding:"13px",marginBottom:"9px",cursor:"pointer"},onClick:()=>{S.selectedPass=p.id;render();}},
+          div({style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"6px"}},
             span({style:{fontSize:"22px"}},p.icon),
-            div({style:{flex:"1"}},
-              div({style:{fontSize:"13px",fontWeight:"700"}},p.name),
-              div({style:{fontSize:"10px",color:"#9A8F7E",marginTop:"1px"}},p.cover)
-            ),
-            div({style:{textAlign:"right"}},
-              p.price>0
-                ?div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"14px",color:"#C84B31"}},"¥"+p.price)
-                :div({style:{fontSize:"11px",color:"#059669",fontWeight:"700"}},"按次計費"),
-              div({style:{fontSize:"9px",color:"#9A8F7E",marginTop:"1px"}},"per person/day")
-            )
+            div({style:{flex:"1"}},div({style:{fontSize:"13px",fontWeight:"700"}},p.name),div({style:{fontSize:"10px",color:"#9A8F7E"}},p.cover)),
+            p.price>0?div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"14px",color:"#C84B31"}},"¥"+p.price):div({style:{fontSize:"11px",color:"#059669",fontWeight:"700"}},"按次計費")
           ),
-          div({style:{background:"#F0EBE0",borderRadius:"8px",padding:"7px 10px",marginBottom:"8px"}},
-            div({style:{fontSize:"10px",color:"#C84B31",fontWeight:"700",marginBottom:"3px"}},"✅ 最適合"),
-            div({style:{fontSize:"11px",color:"#6B5D4A"}},p.best)
+          div({style:{background:"#F0EBE0",borderRadius:"8px",padding:"7px 10px"}},
+            div({style:{fontSize:"10px",color:"#C84B31",fontWeight:"700",marginBottom:"2px"}},"✅ "+p.best),
+            div({style:{fontSize:"10px",color:"#6B5D4A"}},"💡 "+p.tip)
           ),
-          div({style:{fontSize:"10px",color:"#6B5D4A",lineHeight:"1.6",marginBottom:"8px"}},"💡 "+p.tip),
-          hasSpots&&p.good[0]!=="全部景點"?div({style:{display:"flex",gap:"4px",flexWrap:"wrap"}},
-            div({style:{fontSize:"9px",color:"#059669",fontWeight:"700",marginRight:"2px"}},"你的行程可用："),
-            ...p.good.filter(g=>allAdded.some(s=>s.name.includes(g)||s.area.includes(g))).map(g=>
-              span({style:{fontSize:"9px",background:"#DCFCE7",color:"#166534",borderRadius:"12px",padding:"2px 7px"}},g)
-            )
-          ):null,
-          div({style:{display:"flex",justifyContent:"flex-end",marginTop:"8px"}},
-            isSel
-              ?span({style:{fontSize:"11px",color:"#C84B31",fontWeight:"700"}},"✓ 已選擇")
-              :span({style:{fontSize:"11px",color:"#9A8F7E"}},p.good[0]==="全部景點"?"通用":"點擊選擇")
-          )
+          isSel?div({style:{marginTop:"6px",fontSize:"11px",color:"#C84B31",fontWeight:"700"}},"✓ 已選擇"):null
         );
       }),
-
-      // Transport line info
       div({className:"sec"},"各交通工具說明"),
       div({className:"card"},
-        ...Object.values(TRANSIT_LINES).map(t=>div({style:{display:"flex",gap:"10px",marginBottom:"12px",alignItems:"flex-start"}},
-          span({style:{fontSize:"18px",flexShrink:"0"}},t.icon),
-          div({},
-            div({style:{fontSize:"12px",fontWeight:"700",marginBottom:"2px"}},t.name),
-            t.lines?div({style:{fontSize:"10px",color:"#9A8F7E",marginBottom:"3px"}},"路線："+t.lines.join("・")):null,
-            t.pass?div({style:{fontSize:"10px",color:"#C84B31"}},"票券："+t.pass.name+" ¥"+t.pass.price+" — "+t.pass.tip):null,
-            t.tip?div({style:{fontSize:"10px",color:"#9A8F7E"}},t.tip):null
+        ...[["🟠","東京Metro","銀座/丸之內/日比谷/東西/千代田/有樂町/半藏門/南北/副都心線"],["🔵","都營地鐵","淺草/三田/新宿/大江戶線"],["🟢","JR東日本","山手線/中央線/埼京線/京浜東北線/総武線"],["🚟","百合海鷗線","台場↔豐洲↔汐留"],["🚃","私鐵各線","東急/小田急/京王/西武/東武"],["💳","Suica/PASMO","全線通用，Apple Pay綁定最方便"]].map(([ic,name,lines])=>
+          div({style:{display:"flex",gap:"10px",marginBottom:"11px",alignItems:"flex-start"}},
+            span({style:{fontSize:"18px",flexShrink:"0"}},ic),
+            div({},div({style:{fontSize:"12px",fontWeight:"700",marginBottom:"2px"}},name),div({style:{fontSize:"10px",color:"#9A8F7E"}},lines))
           )
-        ))
+        )
       )
     );
   }
 
-  // ══ TAB: SPOTS (Quick Nav) ══
-  const navTypes=TYPE_ORDER.filter(t=>t==="全部"||SPOTS.some(s=>s.type===t));
-  const navFilter=S.navFilter||"全部";
-  const navFiltered=SPOTS.filter(s=>navFilter==="全部"||s.type===navFilter);
   return div({className:"fu"},
-    div({className:"sec"},"景點快速導航"),
-    subTabs,
+    div({className:"sec"},"景點快速導航"),subTabs,
     div({className:"pills",style:{marginBottom:"12px"}},...navTypes.map(t=>span({className:"pill"+(navFilter===t?" on":""),onClick:()=>{S.navFilter=t;render();}},t))),
     div({style:{fontSize:"11px",color:"#B0A090",marginBottom:"8px"}},navFiltered.length+" 個景點"),
     ...navFiltered.map(s=>div({className:"card",style:{display:"flex",alignItems:"center",gap:"11px",marginBottom:"6px",padding:"11px 13px"}},

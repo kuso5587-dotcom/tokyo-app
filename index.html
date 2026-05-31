@@ -246,12 +246,28 @@ const SPOTS=[
   {id:64,name:"新宿 思い出横丁 燒烤",area:"新宿",type:"🔍 隱藏美食",cost:3000,dur:90,icon:"🍺",ig:"在地推薦",hot:true,subway:"JR山手線 新宿站 西口",lat:35.6938,lng:138.6998,tip:"昭和50年老店烤內臟！日本本地人的深夜食堂，啤酒配串烤，氣氛超好"},
   {id:65,name:"RURU SHIBUYA 抹茶甜點",area:"澀谷",type:"🔍 隱藏美食",cost:1800,dur:45,icon:"🍵",ig:"爆紅",hot:true,subway:"JR山手線 澀谷站 徒步5分",lat:35.6600,lng:139.6995,tip:"2024爆紅抹茶咖啡廳！流水抹茶裝置超夢幻，IG打卡必去，記得提早排隊"},
   {id:66,name:"谷中銀座 銅鑼燒老店",area:"谷中",type:"🔍 隱藏美食",cost:500,dur:20,icon:"🍡",ig:"在地推薦",hot:false,subway:"JR 日暮里站 徒步7分",lat:35.7256,lng:139.7659,tip:"在地阿嬤級甜點！現包熱騰騰銅鑼燒+草糰子，¥200-300，昭和風情老街邊走邊吃"},
+  // ── 宜庭私藏選項 ──
+  {id:67,name:"真人版卡丁車 街道賽車",area:"澀谷/新宿",type:"🏮 私藏秘境",cost:8000,dur:120,icon:"🏎️",ig:"秘境",hot:true,subway:"JR山手線 新宿站 or 澀谷站",lat:35.6762,lng:139.6503,tip:"穿著Mario等遊戲角色在東京街道開卡丁車！超爆紅IG必拍，建議提前預約，需國際駕照或台灣駕照"},
+  {id:68,name:"黑毛和牛壽喜燒 日本橋一利",area:"日本橋",type:"🔍 隱藏美食",cost:8000,dur:90,icon:"🥩",ig:"必吃",hot:true,subway:"東京Metro銀座線 三越前站 徒步3分",lat:35.6839,lng:139.7745,tip:"🔥宜庭私藏！A5黑毛和牛壽喜燒老店，湯底醬汁絕配，午間套餐CP值超高，建議提前訂位"},
+  {id:69,name:"RURU SHIBUYA 流水抹茶咖啡廳",area:"澀谷",type:"🔍 隱藏美食",cost:1800,dur:60,icon:"🍵",ig:"爆紅",hot:true,subway:"JR山手線 澀谷站 徒步5分",lat:35.6601,lng:139.6997,tip:"🔥宜庭私藏！流水抹茶裝置超夢幻，點抹茶拿鐵看抹茶從高處緩緩流下，IG打卡必去，記得提早排隊"},
+  {id:70,name:"潮見 龍宮社",area:"潮見",type:"⛩️ 文化古蹟",cost:0,dur:45,icon:"🐉",ig:"秘境",hot:true,subway:"JR京葉線 潮見站 徒步5分",lat:35.6582,lng:139.8152,tip:"🔥宜庭私藏！鮮為人知的龍神小神社，朱紅鳥居+龍雕刻超美，幾乎沒有觀光客，絕對的隱藏秘境"},
+  {id:71,name:"陽光水族館",area:"池袋",type:"🆕 新地標",cost:2400,dur:150,icon:"🐠",ig:"必拍",hot:true,subway:"東京Metro有樂町線 東池袋站 徒步3分",lat:35.7302,lng:139.7194,tip:"屋頂上的水族館！透明水槽走廊拍照超美，企鵝空中飛翔裝置是IG爆紅打卡點，下雨天也好玩"},
+  {id:72,name:"富士野生動物園",area:"富士山周邊",type:"🆕 新地標",cost:3000,dur:300,icon:"🦁",ig:"必拍",hot:true,subway:"JR東海道線 三島站→巴士（或自駕）",lat:35.3606,lng:138.8113,tip:"🔥開車穿越獅子/熊/長頸鹿區域！動物近距離接觸，背景是富士山，親子必去，建議包車或租車前往"},
+  // ── 宜庭私藏 ──
+  {id:73,name:"真人版卡丁車 MariCart",area:"澀谷/新宿",type:"🎌 宜庭私藏",cost:8000,dur:120,icon:"🏎️",ig:"必體驗",hot:true,subway:"JR山手線 新宿站 or 澀谷站",lat:35.6938,lng:139.7034,tip:"🔥宜庭私藏！穿角色扮演服裝在東京街道開真實卡丁車！需提前預約+國際駕照，最爽的東京體驗之一"},
+  {id:74,name:"黑毛和牛壽喜燒 日本橋一利",area:"日本橋",type:"🎌 宜庭私藏",cost:15000,dur:120,icon:"🥩",ig:"必吃",hot:true,subway:"東京Metro銀座線 三越前站 徒步3分",lat:35.6836,lng:139.7740,tip:"🔥宜庭私藏！頂級黑毛和牛壽喜燒，入口即化，日本橋老店風格，建議提前訂位"},
+  {id:75,name:"RURU SHIBUYA 流水抹茶",area:"澀谷",type:"🎌 宜庭私藏",cost:1800,dur:60,icon:"🍵",ig:"爆紅",hot:true,subway:"JR山手線 澀谷站 徒步5分",lat:35.6600,lng:139.6995,tip:"🔥宜庭私藏！2024爆紅流水抹茶咖啡廳，抹茶從竹管流下的夢幻裝置超好拍，記得提早排隊"},
+  {id:76,name:"潮見龍宮社",area:"江東區潮見",type:"🎌 宜庭私藏",cost:0,dur:45,icon:"⛩️",ig:"秘境",hot:true,subway:"JR京葉線 潮見站 徒步5分",lat:35.6548,lng:139.8024,tip:"🔥宜庭私藏！隱藏在住宅區的海龍王神社，紅色鳥居超夢幻，遊客極少，IG秘境必去"},
+  {id:77,name:"陽光水族館 Sunshine Aquarium",area:"池袋",type:"🎌 宜庭私藏",cost:2400,dur:150,icon:"🦈",ig:"必拍",hot:true,subway:"東京Metro有樂町線 東池袋站 徒步5分",lat:35.7292,lng:139.7186,tip:"🔥宜庭私藏！屋頂空中水族館，60m高空水箱超夢幻，企鵝空中步道是IG熱點，傍晚燈光最美"},
+  {id:78,name:"富士野生動物園",area:"靜岡富士",type:"🎌 宜庭私藏",cost:2800,dur:300,icon:"🦁",ig:"必體驗",hot:true,subway:"JR東海道線 三島站 → 巴士約50分",lat:35.3606,lng:138.7878,tip:"🔥宜庭私藏！開車穿越獅子/老虎/熊區域，動物直接靠近車窗！東京近郊一日遊必去，建議租車或參加套裝行程"},
+
+
 
 
 ];
 const DAYS5=["DAY 1","DAY 2","DAY 3","DAY 4","DAY 5"];
 const PC=["#C84B31","#2E86AB","#A23B72","#F18F01","#3BB273","#7B2D8B"];
-const TC={"⛩️ 文化古蹟":"#8B6F47","🌆 熱門景點":"#6B7280","🌅 展望台":"#0EA5E9","🎨 藝術體驗":"#A23B72","🆕 新地標":"#10B981","🎢 主題樂園":"#7C3AED","🍣 必吃美食":"#DC2626","🔍 隱藏美食":"#D97706","🛍️ 一般購物":"#C84B31","🎎 公仔玩具":"#E8541A","👜 精品包":"#8B5CF6","⌚ 精品錶":"#0369A1","🏮 私藏秘境":"#059669"};
+const TC={"⛩️ 文化古蹟":"#8B6F47","🌆 熱門景點":"#6B7280","🌅 展望台":"#0EA5E9","🎨 藝術體驗":"#A23B72","🆕 新地標":"#10B981","🎢 主題樂園":"#7C3AED","🍣 必吃美食":"#DC2626","🔍 隱藏美食":"#D97706","🛍️ 一般購物":"#C84B31","🎎 公仔玩具":"#E8541A","👜 精品包":"#8B5CF6","⌚ 精品錶":"#0369A1","🏮 私藏秘境":"#059669","🎌 宜庭私藏":"#E11D48"};
 const EXP_CATS=["✈️ 機票","🏨 住宿","🚇 交通","🍜 餐飲","🛍️ 購物","🎡 門票","💊 藥妝","📦 其他"];
 const BP_DEF={economy:{label:"省錢背包客",icon:"🎒",flight:8000,hotel:1800,food:600,misc:2000},standard:{label:"標準舒適",icon:"🧳",flight:11000,hotel:3500,food:900,misc:4000},premium:{label:"享受優質",icon:"✨",flight:15000,hotel:6000,food:1500,misc:8000}};
 
@@ -461,7 +477,7 @@ async function init(){
 // ═══════════════════════════════════════════
 //  DERIVED
 // ═══════════════════════════════════════════
-const TYPE_ORDER=["全部","🌆 熱門景點","⛩️ 文化古蹟","🌅 展望台","🎨 藝術體驗","🆕 新地標","🎢 主題樂園","🍣 必吃美食","🔍 隱藏美食","🛍️ 一般購物","🎎 公仔玩具","👜 精品包","⌚ 精品錶","🏮 私藏秘境"];
+const TYPE_ORDER=["全部","🌆 熱門景點","⛩️ 文化古蹟","🌅 展望台","🎨 藝術體驗","🆕 新地標","🎢 主題樂園","🍣 必吃美食","🔍 隱藏美食","🛍️ 一般購物","🎎 公仔玩具","👜 精品包","⌚ 精品錶","🏮 私藏秘境","🎌 宜庭私藏"];
 
 function derived(){
   const dayKeys=DAYS5.slice(0,S.numDays);
@@ -608,7 +624,14 @@ function buildPlan(D){
   if(S.subTab==="lib"){
     sub=div({},
       div({style:{marginBottom:"10px"}},div({style:{fontSize:"11px",color:"#9A8F7E",fontWeight:"600",marginBottom:"6px"}},"加入到 →"),div({className:"day-strip"},...D.dayKeys.map(d=>span({className:"day-chip"+(S.selDay===d?" sel":""),onClick:()=>{S.selDay=d;render();}},d)))),
-      inp({className:"inp",placeholder:"搜尋景點名稱、區域…",value:S.search,style:{marginBottom:"8px"},onInput:e=>{S.search=e.target.value;render();}}),
+      inp({className:"inp",id:"spotSearchInp",placeholder:"搜尋景點名稱、區域…",value:S.search,style:{marginBottom:"8px"},
+        onInput:e=>{
+          S.search=e.target.value;
+          clearTimeout(window._searchTimer);
+          window._searchTimer=setTimeout(()=>render(),300);
+        },
+        onKeyDown:e=>e.stopPropagation()
+      }),
       div({className:"pills",style:{marginBottom:"11px"}},...D.TYPES.map(t=>span({className:"pill"+(S.filter===t?" on":""),onClick:()=>{S.filter=t;render();}},t))),
       div({style:{fontSize:"11px",color:"#B0A090",marginBottom:"8px"}},`${D.filtered.length} 個景點 · 點擊加入「${S.selDay}」`),
       ...D.filtered.map(s=>{
@@ -962,12 +985,26 @@ async function runAIUpdate(){
 
 // ── RENDER ──
 function render(){
+  // Remember focused element
+  const focusedId = document.activeElement && document.activeElement.id;
+  const selStart = document.activeElement && document.activeElement.selectionStart;
+  const selEnd   = document.activeElement && document.activeElement.selectionEnd;
+
   const app=document.getElementById("app");
   while(app.firstChild)app.removeChild(app.firstChild);
   const[hdr,main]=buildApp();
   app.appendChild(hdr);app.appendChild(main);
   const modal=buildModal();
   if(modal)app.appendChild(modal);
+
+  // Restore focus if search box was active
+  if(focusedId){
+    const el=document.getElementById(focusedId);
+    if(el){
+      el.focus();
+      try{ el.setSelectionRange(selStart,selEnd); } catch(_){}
+    }
+  }
 }
 
 init();

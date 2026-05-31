@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="東京旅遊">
@@ -377,6 +380,18 @@ function checkPassCoverage(spot, passId){
   return {ok:true, note:"票券可搭"};
 }
 
+
+// ── Geocode: find lat/lng from place name ──
+async function geocodePlace(name){
+  try{
+    const q=encodeURIComponent(name+" 東京 日本");
+    const r=await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`,{headers:{"Accept-Language":"zh-TW"}});
+    const d=await r.json();
+    if(d&&d.length>0) return{lat:parseFloat(d[0].lat),lng:parseFloat(d[0].lon)};
+  }catch(_){}
+  return{lat:35.6762,lng:139.6503}; // fallback Tokyo center
+}
+
 const fmtY=n=>`¥${Number(n).toLocaleString()}`;
 const fmtN=n=>`NT$${Math.round(n).toLocaleString()}`;
 const j2t=n=>Math.round(n*0.22);
@@ -394,7 +409,7 @@ let S={
   flightForm:{direction:"去程",flightNo:"",airline:"",from:"TPE",fromCity:"台灣桃園",to:"NRT",toCity:"東京成田",date:"",departTime:"",arriveTime:"",terminal:"",gate:"",seat:"",ticketPrice:""},
   expenses:[],expForm:{label:"",category:"🍜 餐飲",amount:"",currency:"TWD",paidBy:1,splitWith:[],date:"",note:""},
   preset:"standard",budget:{...BP_DEF.standard},
-  filter:"全部",navFilter:"全部",transitTab:"route",selectedPass:"combo",modal:null,mSpot:null,
+  filter:"全部",customSpots:[],showAddSpot:false,addSpotForm:{name:"",area:"",type:"",customType:"",cost:"",dur:"90",icon:"📍",tip:"",subway:""},navFilter:"全部",transitTab:"route",selectedPass:"combo",modal:null,mSpot:null,
   syncStatus:"cloud", // cloud | saving | saved | error
   newName:""
 };
@@ -412,7 +427,7 @@ function persist(){
     if(badge){badge.className="sync-badge sync-saving";badge.textContent="💾 儲存中…";}
     try{
       await dbSave({
-        flights:S.flights, days:S.days, persons:S.persons, pexp:S.pexp,
+        flights:S.flights, days:S.days, persons:S.persons, pexp:S.pexp, customSpots:S.customSpots||[],
         expenses:S.expenses, preset:S.preset, budget:S.budget,
         num_days:S.numDays, day_pass:S.dayPass
       });
@@ -442,6 +457,7 @@ async function init(){
     const d = await Promise.race([dbLoad(), timeout]);
     if(d){
       if(d.flights?.length)   S.flights  = d.flights;
+      if(d.customSpots?.length) S.customSpots = d.customSpots;
       if(d.days)              S.days     = d.days;
       if(d.persons?.length)   S.persons  = d.persons;
       if(d.pexp)              S.pexp     = d.pexp;
@@ -480,6 +496,7 @@ async function init(){
 const TYPE_ORDER=["全部","🌆 熱門景點","⛩️ 文化古蹟","🌅 展望台","🎨 藝術體驗","🆕 新地標","🎢 主題樂園","🍣 必吃美食","🔍 隱藏美食","🛍️ 一般購物","🎎 公仔玩具","👜 精品包","⌚ 精品錶","🏮 私藏秘境","🎌 宜庭私藏"];
 
 function derived(){
+  const ALL_SPOTS = [...SPOTS, ...S.customSpots];
   const dayKeys=DAYS5.slice(0,S.numDays);
   const allAdded=dayKeys.flatMap(d=>S.days[d]||[]);
   const addedIds=new Set(allAdded.map(s=>s.id));
@@ -513,8 +530,8 @@ function derived(){
     return{...p,total:Math.round(t)};
   });
   const grand=perPerson.reduce((a,p)=>a+p.total,0);
-  const TYPES=TYPE_ORDER.filter(t=>t==="全部"||SPOTS.some(s=>s.type===t));
-  const filtered=SPOTS.filter(s=>(S.filter==="全部"||s.type===S.filter));
+  const TYPES=TYPE_ORDER.filter(t=>t==="全部"||ALL_SPOTS.some(s=>s.type===t));
+  const filtered=ALL_SPOTS.filter(s=>(S.filter==="全部"||s.type===S.filter));
   return{dayKeys,allAdded,addedIds,spotJPY,transTWD,flightTotal,expTWD,bpp,perPerson,grand,TYPES,filtered};
 }
 
@@ -626,11 +643,19 @@ function buildPlan(D){
       div({style:{marginBottom:"10px"}},div({style:{fontSize:"11px",color:"#9A8F7E",fontWeight:"600",marginBottom:"6px"}},"加入到 →"),div({className:"day-strip"},...D.dayKeys.map(d=>span({className:"day-chip"+(S.selDay===d?" sel":""),onClick:()=>{S.selDay=d;render();}},d)))),
       
       div({className:"pills",style:{marginBottom:"11px"}},...D.TYPES.map(t=>span({className:"pill"+(S.filter===t?" on":""),onClick:()=>{S.filter=t;render();}},t))),
-      div({style:{fontSize:"11px",color:"#B0A090",marginBottom:"8px"}},`${D.filtered.length} 個景點 · 點擊加入「${S.selDay}」`),
+      div({style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"8px"}},
+        div({style:{fontSize:"11px",color:"#B0A090"}},""+D.filtered.length+" 個景點"),
+        btn({className:"btn-sm",style:{background:"#1A1008",color:"#F5F0E8",border:"none",fontSize:"11px",padding:"5px 12px"},
+          onClick:()=>{S.showAddSpot=true;render();}},"＋ 自訂新增")
+      ),
       ...D.filtered.map(s=>{
         const added=D.addedIds.has(s.id);
         return div({className:"scard"+(added?" added":""),onClick:()=>{if(added){S.mSpot=s;S.modal="spot";render();}else{S.days={...S.days,[S.selDay]:[...(S.days[S.selDay]||[]),s]};persist();render();}}},
-          s.hot&&!added?div({className:"hot-badge"},"🔥 HOT"):null,added?div({className:"hot-badge",style:{background:"#3BB273"}},"✓ 已加入"):null,
+          s.hot&&!added?div({className:"hot-badge"},"🔥 HOT"):null,
+          s.custom&&!added?div({className:"hot-badge",style:{background:"#8B5CF6"}},"✏️ 自訂"):null,
+          added?div({className:"hot-badge",style:{background:"#3BB273"}},"✓ 已加入"):null,
+          s.custom&&!added?btn({style:{position:"absolute",bottom:"9px",right:"9px",background:"#FFF0EE",border:"1px solid #F0D0C8",borderRadius:"5px",color:"#C84B31",fontSize:"9px",padding:"2px 6px",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontWeight:"600"},
+            onClick:e=>{e.stopPropagation();deleteCustomSpot(s.id);}},"刪除"):null,
           div({style:{display:"flex",gap:"10px",alignItems:"flex-start"}},div({className:"sico"},s.icon),div({style:{flex:"1",minWidth:"0"}},div({style:{fontFamily:"'Noto Serif JP',serif",fontSize:"14px",fontWeight:"700",marginBottom:"3px"}},s.name),div({style:{fontSize:"11px",color:"#9A8F7E",marginBottom:"6px"}},s.area),div({style:{display:"flex",gap:"4px",flexWrap:"wrap"}},tag(s.type,TC[s.type]),tag(s.ig,s.ig.includes("爆紅")?"#C84B31":s.ig==="必拍"?"#A23B72":"#8B7355"),tag(s.cost===0?"免費":fmtY(s.cost),"#3BB273"),tag(s.dur+"分鐘","#2E86AB")),div({className:"tip"},s.tip),div({className:"sw"},"🚇 "+s.subway)))
         );
       })
@@ -701,7 +726,34 @@ function buildBudget(D){
   const bars=[["✈️ 機票",S.budget.flight,"#C84B31"],["🏨 住宿",S.budget.hotel*S.numDays,"#F18F01"],["🍜 餐飲",S.budget.food*3*S.numDays,"#3BB273"],["🎡 景點",j2t(spotJPYpp),"#A23B72"],["🚇 交通 ("+( S.selectedPass==="suica"?"Suica":S.selectedPass==="metro24"?"Metro券":S.selectedPass==="jr1day"?"JR券":S.selectedPass==="combo"?"聯合券":S.selectedPass==="yurikamome"?"海鷗券":"通票")+")",transpp,"#2E86AB"],["🛍️ 購物等",S.budget.misc,"#9B8FC0"]].map(([l,v,c])=>{const pct=totalBars?Math.round(v/totalBars*100):0;return div({style:{marginBottom:"8px"}},div({style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"3px"}},div({style:{fontSize:"11px",color:"rgba(245,240,232,.8)",fontWeight:"600"}},l),div({style:{display:"flex",gap:"8px",alignItems:"center"}},div({style:{fontSize:"9px",color:"#8B7355"}},pct+"%"),div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px",color:c}},fmtN(v)))),div({style:{height:"4px",background:"rgba(255,255,255,.08)",borderRadius:"2px"}},div({style:{height:"100%",width:pct+"%",background:c,borderRadius:"2px"}})));});
   const personsCard=div({className:"card"},...S.persons.map(p=>div({style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"9px"}},avatar(p.name,p.color),span({style:{flex:"1",fontSize:"13px",fontWeight:"600"}},p.name),S.persons.length>1?btn({className:"btn-danger",onClick:()=>{S.persons=S.persons.filter(x=>x.id!==p.id);persist();render();}},"移除"):null)),div({style:{display:"flex",gap:"7px",marginTop:"4px"}},inp({className:"inp",style:{flex:"1"},placeholder:"新增旅伴姓名",value:S.newName,onInput:e=>S.newName=e.target.value,onKeyDown:e=>{if(e.key==="Enter"&&S.newName.trim()){const id=Date.now();S.persons=[...S.persons,{id,name:S.newName.trim(),color:PC[S.persons.length%PC.length]}];S.newName="";persist();render();}}}),btn({className:"btn-sm",style:{padding:"9px 12px"},onClick:()=>{if(!S.newName.trim())return;const id=Date.now();S.persons=[...S.persons,{id,name:S.newName.trim(),color:PC[S.persons.length%PC.length]}];S.newName="";persist();render();}},"＋")));
   const presets=Object.entries(BP_DEF).map(([key,p])=>div({className:"bcard"+(S.preset===key?" sel":""),onClick:()=>{S.preset=key;S.budget={...p};persist();render();}},div({style:{display:"flex",alignItems:"center",justifyContent:"space-between"}},div({style:{display:"flex",alignItems:"center",gap:"10px"}},div({style:{fontSize:"28px"}},p.icon),div({},div({style:{fontSize:"13px",fontWeight:"700"}},p.label),div({style:{fontSize:"11px",color:"#9A8F7E"}},"每人約 NT$"+(p.flight+p.hotel*S.numDays+p.food*3*S.numDays+p.misc).toLocaleString()))),div({style:{width:"20px",height:"20px",borderRadius:"50%",border:`2px solid ${S.preset===key?"#C84B31":"#E0D5C0"}`,background:S.preset===key?"#C84B31":"transparent",display:"flex",alignItems:"center",justifyContent:"center"}},S.preset===key?div({style:{width:"8px",height:"8px",borderRadius:"50%",background:"#fff"}}):null)),S.preset===key?div({style:{display:"flex",gap:"5px",flexWrap:"wrap",marginTop:"10px"}},...[["✈️",p.flight],["🏨",p.hotel],["🍜",p.food],["🛍️",p.misc]].map(([ic,v])=>span({className:"cpill"},ic+" NT$"+v.toLocaleString()))):null));
-  const sliders=[{key:"flight",label:"✈️ 來回機票",min:6000,max:25000,step:500},{key:"hotel",label:"🏨 住宿/每晚",min:1000,max:12000,step:200},{key:"food",label:"🍜 餐費/每餐",min:200,max:2000,step:50},{key:"misc",label:"🛍️ 購物&其他",min:500,max:20000,step:500}].map(({key,label,min,max,step})=>div({style:{marginBottom:"14px"}},div({style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"4px"}},div({style:{fontSize:"12px",fontWeight:"600"}},label),div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"13px",color:"#C84B31"}},"NT$"+Number(S.budget[key]).toLocaleString())),inp({type:"range",className:"slider",min,max,step,value:S.budget[key],onInput:e=>{S.budget={...S.budget,[key]:Number(e.target.value)};persist();render();}}),div({style:{display:"flex",justifyContent:"space-between",fontSize:"9px",color:"#C0B8A8"}},span({},"NT$"+min.toLocaleString()),span({},"NT$"+max.toLocaleString()))));
+  const sliders=[
+    {key:"flight",label:"✈️ 來回機票",placeholder:"例：11000"},
+    {key:"hotel", label:"🏨 住宿/每晚",placeholder:"例：3500"},
+    {key:"food",  label:"🍜 餐費/每餐",placeholder:"例：900"},
+    {key:"misc",  label:"🛍️ 購物&其他",placeholder:"例：4000"},
+  ].map(({key,label,placeholder})=>
+    div({style:{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 0",borderBottom:"1px solid #EDE6D8"}},
+      div({style:{fontSize:"12px",fontWeight:"600",color:"#1A1008"}},"  "+label),
+      div({style:{display:"flex",alignItems:"center",gap:"4px"}},
+        div({style:{fontSize:"11px",color:"#9A8F7E"}},"NT$"),
+        inp({
+          type:"number",
+          className:"inp",
+          style:{width:"100px",textAlign:"right",padding:"6px 8px",fontSize:"13px",fontFamily:"'Zen Dots',cursive",color:"#C84B31"},
+          value:S.budget[key],
+          placeholder,
+          onBlur:e=>{
+            const v=Number(e.target.value);
+            if(v>0){S.budget={...S.budget,[key]:v};persist();render();}
+          },
+          onKeyDown:e=>{
+            if(e.key==="Enter"){e.target.blur();}
+            e.stopPropagation();
+          }
+        })
+      )
+    )
+  );
   return div({className:"fu"},
     div({className:"sec"},"旅伴設定"),personsCard,
     div({className:"sec"},"2026 預算等級"),...presets,
@@ -760,8 +812,8 @@ function buildNav(){
   const D=derived();
   const allAdded=D.allAdded;
   const navFilter=S.navFilter||"全部";
-  const navTypes=TYPE_ORDER.filter(t=>t==="全部"||SPOTS.some(s=>s.type===t));
-  const navFiltered=SPOTS.filter(s=>navFilter==="全部"||s.type===navFilter);
+  const navTypes=TYPE_ORDER.filter(t=>t==="全部"||[...SPOTS,...S.customSpots].some(s=>s.type===t));
+  const navFiltered=[...SPOTS,...S.customSpots].filter(s=>navFilter==="全部"||s.type===navFilter);
 
   const subTabs=div({style:{display:"flex",gap:"6px",marginBottom:"14px"}},
     ...[["route","🗺 路線規劃"],["pass","🎫 票券"],["spots","📍 景點"]].map(([k,l])=>
@@ -887,6 +939,90 @@ function buildNav(){
   );
 }
 
+function buildAddSpotModal(){
+  if(!S.showAddSpot) return null;
+  const f=S.addSpotForm;
+  const sf=(k,v)=>{S.addSpotForm={...S.addSpotForm,[k]:v};render();};
+  const allTypes=[...TYPE_ORDER.filter(t=>t!=="全部"),"＋ 新增分類"];
+  const ICONS=["📍","🍜","🍣","🍺","🍵","☕","🛍️","🎮","🎎","⛩️","🌸","🏖️","🎡","🚗","🏨","💆","🎵","🎨","🏃","🌿"];
+  return div({className:"ov",onClick:()=>{S.showAddSpot=false;render();}},
+    div({className:"modal",onClick:e=>e.stopPropagation()},
+      div({className:"modal-bar"}),
+      div({className:"modal-title"},"✏️ 自訂新增景點"),
+      // Name
+      div({style:{marginBottom:"10px"}},
+        h("label",{className:"flabel"},"景點名稱 *"),
+        inp({className:"inp",placeholder:"例：三鷹之森 吉卜力美術館",value:f.name,
+          onInput:e=>sf("name",e.target.value),onKeyDown:e=>e.stopPropagation()})
+      ),
+      // Area
+      div({style:{marginBottom:"10px"}},
+        h("label",{className:"flabel"},"區域"),
+        inp({className:"inp",placeholder:"例：三鷹 / 新宿 / 澀谷",value:f.area,
+          onInput:e=>sf("area",e.target.value),onKeyDown:e=>e.stopPropagation()})
+      ),
+      // Type selector
+      div({style:{marginBottom:"10px"}},
+        h("label",{className:"flabel"},"分類"),
+        div({style:{display:"flex",gap:"5px",flexWrap:"wrap",marginBottom:"6px"}},
+          ...allTypes.map(t=>span({
+            style:{padding:"5px 10px",borderRadius:"16px",fontSize:"10px",fontWeight:"600",cursor:"pointer",
+              background:f.type===t?"#1A1008":"#F0EBE0",
+              color:f.type===t?"#F5F0E8":"#6B5D4A",
+              border:`1px solid ${f.type===t?"#1A1008":"#E0D5C0"}`},
+            onClick:()=>{sf("type",t==="＋ 新增分類"?"":t);if(t==="＋ 新增分類")sf("customType","");}
+          },t))
+        ),
+        f.type===""||(f.type===""&&f.customType!=="")?
+          inp({className:"inp",placeholder:"輸入新分類名稱（例：🎭 特殊體驗）",value:f.customType,
+            onInput:e=>sf("customType",e.target.value),onKeyDown:e=>e.stopPropagation()}):null
+      ),
+      // Icon picker
+      div({style:{marginBottom:"10px"}},
+        h("label",{className:"flabel"},"圖示"),
+        div({style:{display:"flex",gap:"6px",flexWrap:"wrap"}},
+          ...ICONS.map(ic=>span({
+            style:{fontSize:"22px",cursor:"pointer",padding:"4px",borderRadius:"8px",
+              background:f.icon===ic?"#F0EBE0":"transparent",
+              border:`1px solid ${f.icon===ic?"#C84B31":"transparent"}`},
+            onClick:()=>sf("icon",ic)
+          },ic))
+        )
+      ),
+      // Cost + Duration
+      div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},
+        div({style:{flex:"1"}},h("label",{className:"flabel"},"費用 (¥)"),
+          inp({className:"inp",type:"number",placeholder:"0=免費",value:f.cost,
+            onInput:e=>sf("cost",e.target.value),onKeyDown:e=>e.stopPropagation()})
+        ),
+        div({style:{flex:"1"}},h("label",{className:"flabel"},"建議時間(分)"),
+          inp({className:"inp",type:"number",placeholder:"90",value:f.dur,
+            onInput:e=>sf("dur",e.target.value),onKeyDown:e=>e.stopPropagation()})
+        )
+      ),
+      // Subway
+      div({style:{marginBottom:"10px"}},
+        h("label",{className:"flabel"},"最近地鐵站"),
+        inp({className:"inp",placeholder:"例：JR 三鷹站 徒步10分",value:f.subway,
+          onInput:e=>sf("subway",e.target.value),onKeyDown:e=>e.stopPropagation()})
+      ),
+      // Tip
+      div({style:{marginBottom:"14px"}},
+        h("label",{className:"flabel"},"備註小貼士"),
+        inp({className:"inp",placeholder:"例：需提前預約，週一公休",value:f.tip,
+          onInput:e=>sf("tip",e.target.value),onKeyDown:e=>e.stopPropagation()})
+      ),
+      div({style:{fontSize:"10px",color:"#9A8F7E",marginBottom:"12px",background:"#F0EBE0",borderRadius:"8px",padding:"8px 10px"}},
+        "📍 系統會自動根據景點名稱+區域搜尋座標，加入後可直接點導航"
+      ),
+      div({style:{display:"flex",gap:"8px"}},
+        btn({className:"btn-sm",style:{flex:"1",padding:"12px"},onClick:()=>{S.showAddSpot=false;render();}},"取消"),
+        btn({className:"btn-red",style:{flex:"2",padding:"12px"},onClick:saveCustomSpot},"確認新增")
+      )
+    )
+  );
+}
+
 function buildModal(){
   if(!S.modal)return null;
   let inner;
@@ -930,6 +1066,44 @@ function buildSpotModal(){
 // ── ACTIONS ──
 function openNewFlight(){S.editFlight=null;S.flightForm={direction:"去程",flightNo:"",airline:"",from:"TPE",fromCity:"台灣桃園",to:"NRT",toCity:"東京成田",date:"",departTime:"",arriveTime:"",terminal:"",gate:"",seat:"",ticketPrice:""};S.modal="flight";render();}
 function openEditFlight(f){S.editFlight=f.id;S.flightForm={...f};S.modal="flight";render();}
+async function saveCustomSpot(){
+  const f=S.addSpotForm;
+  if(!f.name.trim()) return;
+  const type=f.customType.trim()||f.type||"📍 自訂景點";
+  // Add custom type to TYPE_ORDER if new
+  if(!TYPE_ORDER.includes(type)) TYPE_ORDER.push(type);
+  // Geocode the location
+  const searchName = f.area ? f.name+" "+f.area : f.name;
+  const{lat,lng}=await geocodePlace(searchName);
+  const newSpot={
+    id: Date.now(),
+    name:f.name.trim(),
+    area:f.area.trim()||"東京",
+    type,
+    cost:Number(f.cost)||0,
+    dur:Number(f.dur)||90,
+    icon:f.icon||"📍",
+    ig:"自訂",
+    hot:false,
+    subway:f.subway.trim()||"請查詢最近車站",
+    lat, lng,
+    tip:f.tip.trim()||f.name,
+    custom:true,
+  };
+  S.customSpots=[...S.customSpots, newSpot];
+  S.addSpotForm={name:"",area:"",type:"",customType:"",cost:"",dur:"90",icon:"📍",tip:"",subway:""};
+  S.showAddSpot=false;
+  persist();
+  render();
+}
+
+function deleteCustomSpot(id){
+  S.customSpots=S.customSpots.filter(s=>s.id!==id);
+  // Also remove from days
+  Object.keys(S.days).forEach(d=>{S.days[d]=(S.days[d]||[]).filter(s=>s.id!==id);});
+  persist();render();
+}
+
 function saveFlight(){if(!S.flightForm.flightNo&&!S.flightForm.date)return;if(S.editFlight)S.flights=S.flights.map(f=>f.id===S.editFlight?{...S.flightForm,id:S.editFlight}:f);else S.flights=[...S.flights,{...S.flightForm,id:Date.now()}];S.modal=null;persist();render();}
 function openExpense(){S.expForm={label:"",category:"🍜 餐飲",amount:"",currency:"TWD",paidBy:S.persons[0]?.id||1,splitWith:[],date:"",note:""};S.modal="expense";render();}
 function saveExpense(){if(!S.expForm.label||!S.expForm.amount)return;S.expenses=[...S.expenses,{...S.expForm,id:Date.now()}];S.modal=null;persist();render();}
@@ -989,6 +1163,8 @@ function render(){
   app.appendChild(hdr);app.appendChild(main);
   const modal=buildModal();
   if(modal)app.appendChild(modal);
+  const addModal=buildAddSpotModal();
+  if(addModal)app.appendChild(addModal);
 
   // Restore focus if search box was active
   if(focusedId){

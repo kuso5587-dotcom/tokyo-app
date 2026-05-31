@@ -107,19 +107,19 @@ a.nbtn.b{background:#2E86AB18;color:#2E86AB;border:1px solid #2E86AB40;}
 .loading-screen{position:fixed;inset:0;background:#F5F0E8;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;}
 .loading-logo{font-family:'Zen Dots',cursive;font-size:26px;color:#1A1008;letter-spacing:2px;}
 .loading-logo span{color:#C84B31;}
-.loading-bar{width:180px;height:2px;background:#E8DFD0;border-radius:2px;overflow:hidden;}
-.loading-fill{height:100%;background:linear-gradient(90deg,#C84B31,#e8836a,#C84B31);background-size:200% 100%;border-radius:2px;animation:loadfill 3s ease-in-out infinite;}
+.loading-sub{font-family:'Noto Serif JP',serif;font-size:11px;color:#C84B31;letter-spacing:1px;opacity:.8;animation:fadepulse 2.5s ease-in-out infinite;}
+.loading-bar{width:180px;height:2px;background:#E8DFD0;border-radius:2px;overflow:hidden;margin-top:4px;}
+.loading-fill{height:100%;background:linear-gradient(90deg,#C84B31,#e8836a,#C84B31);background-size:200% 100%;border-radius:2px;animation:loadfill 2.5s ease-in-out infinite;}
 .loading-txt{font-family:'Zen Dots',cursive;font-size:9px;color:#B0A090;letter-spacing:3px;animation:fadepulse 2s ease-in-out infinite;}
-.loading-sub{font-family:'Noto Serif JP',serif;font-size:11px;color:#C84B31;letter-spacing:1px;opacity:.7;margin-top:-8px;animation:fadepulse 2.5s ease-in-out infinite;}
 @keyframes loadfill{0%{background-position:100% 0;}50%{background-position:0% 0;}100%{background-position:100% 0;}}
-@keyframes fadepulse{0%,100%{opacity:.4;}50%{opacity:1;}}
+@keyframes fadepulse{0%,100%{opacity:.3;}50%{opacity:1;}}
+
 /* sync badge */
 .sync-badge{display:inline-flex;align-items:center;gap:4px;font-family:'Zen Dots',cursive;font-size:8px;letter-spacing:.5px;padding:3px 8px;border-radius:20px;}
 .sync-cloud{background:#2E86AB15;color:#2E86AB;border:1px solid #2E86AB30;}
 .sync-ok{background:#3BB27315;color:#3BB273;border:1px solid #3BB27330;}
 .sync-err{background:#C84B3115;color:#C84B31;border:1px solid #C84B3130;}
 .sync-saving{background:#F18F0115;color:#F18F01;border:1px solid #F18F0130;}
-@keyframes loadfill{0%{width:0%;}50%{width:80%;}100%{width:100%;}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 .fu{animation:fadeUp .28s ease both;}
 </style>

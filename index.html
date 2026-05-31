@@ -573,19 +573,10 @@ function buildPlan(D){
           btn({className:"btn-sm",style:{width:"100%",padding:"8px",marginTop:"3px",fontSize:"11px"},onClick:()=>{S.selDay=day;S.subTab="lib";render();}},"＋ 為 "+day+" 新增")
         );
       }),
-      div({className:"sec"},"AI 行程優化"),
-      div({className:"card",style:{background:"linear-gradient(135deg,#FDF8F0,#F8EDE0)",border:"1px solid #E8D8C0"}},
-        div({style:{textAlign:"center"}},
-          div({style:{fontSize:"24px",marginBottom:"6px"}},"🤖"),
-          div({style:{fontFamily:"'Noto Serif JP',serif",fontSize:"13px",fontWeight:"700",marginBottom:"5px"}},"智慧行程建議"),
-          div({style:{fontSize:"11px",color:"#9A8F7E",marginBottom:"12px",lineHeight:"1.6"}},"AI 分析景點給最佳地鐵動線 + 美食推薦")
-        ),
-        btn({className:"btn-red",style:{width:"100%",marginBottom:"8px"},onClick:runAI,disabled:S.aiLoad},S.aiLoad?"⏳ 規劃中…":"✨ 一鍵 AI 行程規劃"),
-        btn({style:{width:"100%",padding:"11px",background:"#1A1008",color:"#F5F0E8",border:"none",borderRadius:"8px",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",cursor:"pointer"},onClick:runAIUpdate,disabled:S.aiUpdateLoad},
-          S.aiUpdateLoad?"⏳ 搜尋最新資訊中…":"🔄 一鍵更新最新 IG/網路推薦行程"
-        )
+      div({style:{display:'none'}},div({style:{}}),
+        span({style:{fontSize:"11px",color:"#9A8F7E"}},"💡 行程規劃請在 Claude App 中使用 AI 功能")
       ),
-      S.aiText?div({className:"ai-out",style:{marginTop:"10px"}},S.aiText):null
+      null
     );
   }
   return div({className:"fu"},div({className:"sec"},"SETTINGS"),settingsCard,subNav,sub);
@@ -674,7 +665,7 @@ async function runTransitAI(){
 格式要清晰易讀，像導遊手冊一樣詳細。`;
   try{
     const r=await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
+      method:"POST",headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,
         messages:[{role:"user",content:prompt}]})
     });
@@ -790,12 +781,9 @@ function buildNav(){
             a({href:routeUrl,target:"_blank",style:{display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",background:"#F5F0E8",color:"#1A1008",borderRadius:"8px",padding:"11px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"8px"}},
               "🗺 一鍵規劃所有景點完整路線"
             ),
-            btn({style:{width:"100%",padding:"11px",background:"rgba(255,255,255,.1)",color:"#F5F0E8",border:"1px solid rgba(255,255,255,.2)",borderRadius:"8px",fontSize:"12px",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",cursor:"pointer"},
-              onClick:runTransitAI,disabled:S.aiTransitLoad},
-              S.aiTransitLoad?"⏳ AI 規劃交通路線中…":"🤖 AI 生成詳細地鐵換乘指南"
-            )
+            span({})
           ),
-          S.aiTransitText?div({className:"ai-out",style:{marginTop:"10px"}},S.aiTransitText):null
+          null
         )
     );
   }
@@ -933,7 +921,7 @@ async function runAI(){
   S.aiLoad=true;render();
   const D=derived();const list=D.allAdded.map(s=>s.name+"("+s.area+")").join("、");
   const prompt=list?`東京${S.numDays}天，景點：${list}。繁體中文，地鐵效率最佳動線、出發時間、美食推薦，分天清晰列出。`:`規劃東京${S.numDays}天IG打卡行程2026，繁體中文，分天列景點、地鐵路線、美食推薦。`;
-  try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1200,messages:[{role:"user",content:prompt}]})});const d=await r.json();S.aiText=d.content?.map(c=>c.text||"").join("")||"生成失敗";}
+  try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1200,messages:[{role:"user",content:prompt}]})});const d=await r.json();S.aiText=d.content?.map(c=>c.text||"").join("")||"生成失敗";}
   catch(_){S.aiText="AI 連線失敗";}
   S.aiLoad=false;render();
 }
@@ -958,7 +946,7 @@ async function runAIUpdate(){
 以繁體中文分類清楚列出，每項加上為何值得去。`;
   try{
     const r=await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
+      method:"POST",headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
       body:JSON.stringify({
         model:"claude-sonnet-4-20250514",max_tokens:2000,
         tools:[{type:"web_search_20250305",name:"web_search"}],

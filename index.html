@@ -172,32 +172,161 @@ async function dbSave(data) {
 //  DATA
 // ═══════════════════════════════════════════
 const SPOTS=[
-  {id:1,name:"淺草寺 & 雷門",area:"淺草",type:"文化",cost:0,dur:90,icon:"⛩️",ig:"必拍",hot:true,subway:"銀座線 淺草站",lat:35.7148,lng:139.7967,tip:"早上8點前到，雷門空景不排隊"},
-  {id:2,name:"東京晴空塔",area:"押上",type:"展望台",cost:3100,dur:120,icon:"🗼",ig:"必拍",hot:true,subway:"東武 押上站",lat:35.7101,lng:139.8107,tip:"黃昏時段日夜景都能拍到"},
-  {id:3,name:"SHIBUYA SKY",area:"澀谷",type:"展望台",cost:2200,dur:90,icon:"🌅",ig:"爆紅",hot:true,subway:"JR 澀谷站（共構）",lat:35.6585,lng:139.7024,tip:"吊床打卡超熱門！黃昏兩週前搶票"},
-  {id:4,name:"澀谷十字路口",area:"澀谷",type:"景點",cost:0,dur:30,icon:"🚦",ig:"必拍",hot:true,subway:"JR 澀谷站",lat:35.6595,lng:139.7004,tip:"Starbucks二樓俯拍最佳角度"},
-  {id:5,name:"teamLab Borderless",area:"麻布台",type:"藝術",cost:3800,dur:180,icon:"🌊",ig:"爆紅",hot:true,subway:"日比谷線 神谷町站",lat:35.6588,lng:139.7438,tip:"穿白衣效果最好，預留3小時"},
-  {id:6,name:"teamLab Planets 豐洲",area:"豐洲",type:"藝術",cost:3200,dur:120,icon:"💧",ig:"必拍",hot:true,subway:"ゆりかもめ 新豐洲站",lat:35.6427,lng:139.7842,tip:"穿短褲或短裙，需涉水體驗"},
-  {id:7,name:"麻布台之丘",area:"麻布台",type:"新景點",cost:0,dur:90,icon:"🏙️",ig:"新爆紅",hot:true,subway:"日比谷線 神谷町站",lat:35.6592,lng:139.7434,tip:"33F俯瞰東京鐵塔，日本最高大樓"},
-  {id:8,name:"東京鐵塔",area:"芝公園",type:"景點",cost:1200,dur:60,icon:"🗽",ig:"必拍",hot:true,subway:"都營三田線 芝公園站",lat:35.6586,lng:139.7454,tip:"夜間紅色燈光最浪漫"},
-  {id:9,name:"原宿 HARAKADO",area:"原宿",type:"新景點",cost:0,dur:90,icon:"🏗️",ig:"新爆紅",hot:true,subway:"JR 原宿站",lat:35.6692,lng:139.7037,tip:"2024新開幕！地下銭湯超特別"},
-  {id:10,name:"原宿竹下通",area:"原宿",type:"購物",cost:3000,dur:90,icon:"🍦",ig:"熱點",hot:false,subway:"JR 原宿站",lat:35.6702,lng:139.7026,tip:"可麗餅+彩虹棉花糖必拍"},
-  {id:11,name:"明治神宮",area:"原宿",type:"文化",cost:0,dur:60,icon:"🌿",ig:"拍照",hot:false,subway:"JR 原宿站",lat:35.6763,lng:139.6993,tip:"都市森林芬多精，早晨光線最美"},
-  {id:12,name:"豐洲千客萬來",area:"豐洲",type:"美食",cost:3000,dur:120,icon:"🐟",ig:"新爆紅",hot:true,subway:"ゆりかもめ 市場前站",lat:35.6459,lng:139.7834,tip:"2024新開幕！海鮮丼超新鮮"},
-  {id:13,name:"哈利波特影城",area:"練馬",type:"主題樂園",cost:6800,dur:300,icon:"🧙",ig:"必拍",hot:true,subway:"西武鐵道 豐島園站",lat:35.7347,lng:139.6561,tip:"亞洲首座！奶油啤酒必喝，留5小時"},
-  {id:14,name:"吉卜力美術館",area:"三鷹",type:"主題樂園",cost:1000,dur:180,icon:"🐱",ig:"必拍",hot:true,subway:"JR中央線 三鷹站+巴士",lat:35.6962,lng:139.5703,tip:"需提前一個月搶票！"},
-  {id:15,name:"秋葉原電器街",area:"秋葉原",type:"購物",cost:5000,dur:120,icon:"🎮",ig:"拍照",hot:false,subway:"JR 秋葉原站",lat:35.7022,lng:139.7741,tip:"動漫扭蛋天堂，女僕咖啡廳體驗"},
-  {id:16,name:"銀座 Sony Park",area:"銀座",type:"新景點",cost:0,dur:60,icon:"📱",ig:"新爆紅",hot:true,subway:"銀座線 銀座站",lat:35.6717,lng:139.7639,tip:"免費互動藝術裝置，科技感十足"},
-  {id:17,name:"上野阿美橫丁",area:"上野",type:"美食",cost:1500,dur:90,icon:"🌸",ig:"拍照",hot:false,subway:"JR 上野站",lat:35.7122,lng:139.7741,tip:"平價美食挖寶，春天賞櫻聖地"},
-  {id:18,name:"新宿歌舞伎町一番街",area:"新宿",type:"新景點",cost:0,dur:60,icon:"🎭",ig:"新爆紅",hot:true,subway:"JR 新宿站",lat:35.6962,lng:139.7037,tip:"東急歌舞伎町Tower霓虹夜景爆紅"},
-  {id:19,name:"台場彩虹橋",area:"台場",type:"景點",cost:0,dur:60,icon:"🌈",ig:"拍照",hot:false,subway:"ゆりかもめ 台場站",lat:35.6227,lng:139.7753,tip:"晚上8點燈光最美，對岸拍攝佳"},
-  {id:20,name:"築地場外市場",area:"築地",type:"美食",cost:2500,dur:90,icon:"🍣",ig:"拍照",hot:false,subway:"都營大江戶線 築地市場站",lat:35.6654,lng:139.7707,tip:"早上6點開市，玉子燒必買"},
+  {id:1,name:"淺草寺 & 雷門",area:"淺草",type:"⛩️ 文化古蹟",cost:0,dur:90,icon:"⛩️",ig:"必拍",hot:true,subway:"銀座線 淺草站",lat:35.7148,lng:139.7967,tip:"早上8點前到，雷門空景不排隊"},
+  {id:2,name:"東京晴空塔",area:"押上",type:"🌅 展望台",cost:3100,dur:120,icon:"🗼",ig:"必拍",hot:true,subway:"東武 押上站",lat:35.7101,lng:139.8107,tip:"黃昏時段日夜景都能拍到"},
+  {id:3,name:"SHIBUYA SKY",area:"澀谷",type:"🌅 展望台",cost:2200,dur:90,icon:"🌅",ig:"爆紅",hot:true,subway:"JR 澀谷站（共構）",lat:35.6585,lng:139.7024,tip:"吊床打卡超熱門！黃昏兩週前搶票"},
+  {id:4,name:"澀谷十字路口",area:"澀谷",type:"🌆 熱門景點",cost:0,dur:30,icon:"🚦",ig:"必拍",hot:true,subway:"JR 澀谷站",lat:35.6595,lng:139.7004,tip:"Starbucks二樓俯拍最佳角度"},
+  {id:5,name:"teamLab Borderless",area:"麻布台",type:"🎨 藝術體驗",cost:3800,dur:180,icon:"🌊",ig:"爆紅",hot:true,subway:"日比谷線 神谷町站",lat:35.6588,lng:139.7438,tip:"穿白衣效果最好，預留3小時"},
+  {id:6,name:"teamLab Planets 豐洲",area:"豐洲",type:"🎨 藝術體驗",cost:3200,dur:120,icon:"💧",ig:"必拍",hot:true,subway:"ゆりかもめ 新豐洲站",lat:35.6427,lng:139.7842,tip:"穿短褲或短裙，需涉水體驗"},
+  {id:7,name:"麻布台之丘",area:"麻布台",type:"🆕 新地標",cost:0,dur:90,icon:"🏙️",ig:"新爆紅",hot:true,subway:"日比谷線 神谷町站",lat:35.6592,lng:139.7434,tip:"33F俯瞰東京鐵塔，日本最高大樓"},
+  {id:8,name:"東京鐵塔",area:"芝公園",type:"🌆 熱門景點",cost:1200,dur:60,icon:"🗽",ig:"必拍",hot:true,subway:"都營三田線 芝公園站",lat:35.6586,lng:139.7454,tip:"夜間紅色燈光最浪漫"},
+  {id:9,name:"原宿 HARAKADO",area:"原宿",type:"🆕 新地標",cost:0,dur:90,icon:"🏗️",ig:"新爆紅",hot:true,subway:"JR 原宿站",lat:35.6692,lng:139.7037,tip:"2024新開幕！地下銭湯超特別"},
+  {id:10,name:"原宿竹下通",area:"原宿",type:"🛍️ 一般購物",cost:3000,dur:90,icon:"🍦",ig:"熱點",hot:false,subway:"JR 原宿站",lat:35.6702,lng:139.7026,tip:"可麗餅+彩虹棉花糖必拍"},
+  {id:11,name:"明治神宮",area:"原宿",type:"⛩️ 文化古蹟",cost:0,dur:60,icon:"🌿",ig:"拍照",hot:false,subway:"JR 原宿站",lat:35.6763,lng:139.6993,tip:"都市森林芬多精，早晨光線最美"},
+  {id:12,name:"豐洲千客萬來",area:"豐洲",type:"🍣 必吃美食",cost:3000,dur:120,icon:"🐟",ig:"新爆紅",hot:true,subway:"ゆりかもめ 市場前站",lat:35.6459,lng:139.7834,tip:"2024新開幕！海鮮丼超新鮮"},
+  {id:13,name:"哈利波特影城",area:"練馬",type:"🎢 主題樂園",cost:6800,dur:300,icon:"🧙",ig:"必拍",hot:true,subway:"西武鐵道 豐島園站",lat:35.7347,lng:139.6561,tip:"亞洲首座！奶油啤酒必喝，留5小時"},
+  {id:14,name:"吉卜力美術館",area:"三鷹",type:"🎢 主題樂園",cost:1000,dur:180,icon:"🐱",ig:"必拍",hot:true,subway:"JR中央線 三鷹站+巴士",lat:35.6962,lng:139.5703,tip:"需提前一個月搶票！"},
+  {id:15,name:"秋葉原電器街",area:"秋葉原",type:"🛍️ 一般購物",cost:5000,dur:120,icon:"🎮",ig:"拍照",hot:false,subway:"JR 秋葉原站",lat:35.7022,lng:139.7741,tip:"動漫扭蛋天堂，女僕咖啡廳體驗"},
+  {id:16,name:"銀座 Sony Park",area:"銀座",type:"🆕 新地標",cost:0,dur:60,icon:"📱",ig:"新爆紅",hot:true,subway:"銀座線 銀座站",lat:35.6717,lng:139.7639,tip:"免費互動藝術裝置，科技感十足"},
+  {id:17,name:"上野阿美橫丁",area:"上野",type:"🍣 必吃美食",cost:1500,dur:90,icon:"🌸",ig:"拍照",hot:false,subway:"JR 上野站",lat:35.7122,lng:139.7741,tip:"平價美食挖寶，春天賞櫻聖地"},
+  {id:18,name:"新宿歌舞伎町一番街",area:"新宿",type:"🆕 新地標",cost:0,dur:60,icon:"🎭",ig:"新爆紅",hot:true,subway:"JR 新宿站",lat:35.6962,lng:139.7037,tip:"東急歌舞伎町Tower霓虹夜景爆紅"},
+  {id:19,name:"台場彩虹橋",area:"台場",type:"🌆 熱門景點",cost:0,dur:60,icon:"🌈",ig:"拍照",hot:false,subway:"ゆりかもめ 台場站",lat:35.6227,lng:139.7753,tip:"晚上8點燈光最美，對岸拍攝佳"},
+  {id:20,name:"築地場外市場",area:"築地",type:"🍣 必吃美食",cost:2500,dur:90,icon:"🍣",ig:"拍照",hot:false,subway:"都營大江戶線 築地市場站",lat:35.6654,lng:139.7707,tip:"早上6點開市，玉子燒必買"},
+  // ── 公仔 & 玩具 ──
+  {id:21,name:"Mandarake Complex 秋葉原",area:"秋葉原",type:"🎎 公仔玩具",cost:5000,dur:120,icon:"🎎",ig:"必去",hot:true,subway:"JR 秋葉原站 徒步5分",lat:35.7022,lng:139.7741,tip:"8層樓日本最大動漫藏品店！漫畫/公仔/模型/稀有限定品，挖寶天堂"},
+  {id:22,name:"中野百老匯 Mandarake",area:"中野",type:"🎎 公仔玩具",cost:8000,dur:150,icon:"🏬",ig:"必去",hot:true,subway:"JR中央線 中野站 徒步5分",lat:35.7078,lng:139.6653,tip:"老字號二手公仔聖地，稀有古董玩具比秋葉原更好挖寶，建議留2-3小時"},
+  {id:23,name:"駿河屋 秋葉原本店",area:"秋葉原",type:"🎎 公仔玩具",cost:5000,dur:90,icon:"🎮",ig:"熱門",hot:true,subway:"JR 秋葉原站 徒步3分",lat:35.6995,lng:139.7733,tip:"中古遊戲/公仔超大量，價格比台灣便宜，記得帶護照退稅"},
+  {id:24,name:"秋葉原扭蛋會館",area:"秋葉原",type:"🎎 公仔玩具",cost:3000,dur:60,icon:"🟡",ig:"爆紅",hot:true,subway:"JR 秋葉原站 徒步5分",lat:35.7020,lng:139.7738,tip:"超過500台扭蛋機！寶可夢/鬼滅/海賊王/角落生物全都有，每月50種新扭蛋"},
+  {id:25,name:"GiGO 秋葉原 夾娃娃",area:"秋葉原",type:"🎎 公仔玩具",cost:2000,dur:60,icon:"🕹️",ig:"熱門",hot:false,subway:"JR 秋葉原站 徒步3分",lat:35.7016,lng:139.7735,tip:"原SEGA旗下，100台以上夾娃娃機，限定公仔只有這裡有"},
+  {id:26,name:"寶可夢中心 Mega Tokyo",area:"池袋",type:"🎎 公仔玩具",cost:4000,dur:90,icon:"⚡",ig:"必拍",hot:true,subway:"JR山手線 池袋站 東口徒步2分",lat:35.7300,lng:139.7109,tip:"🔥全日本最大寶可夢中心！池袋限定皮卡丘周邊，門口有超夢可拍照"},
+  {id:27,name:"寶可夢中心 澀谷",area:"澀谷",type:"🎎 公仔玩具",cost:3000,dur:60,icon:"🔴",ig:"熱門",hot:false,subway:"JR山手線 澀谷站 徒步5分",lat:35.6617,lng:139.6990,tip:"澀谷Parco 6F，澀谷限定皮卡丘，逛完澀谷順道拜訪"},
+  {id:28,name:"LEGO 旗艦店 新宿",area:"新宿",type:"🎎 公仔玩具",cost:5000,dur:60,icon:"🧱",ig:"必拍",hot:true,subway:"JR山手線 新宿站 徒步5分",lat:35.6915,lng:139.7008,tip:"日本最大LEGO旗艦店！限定款/大型展示積木/現場組裝體驗，必拍照"},
+  {id:29,name:"Disney Store 銀座旗艦",area:"銀座",type:"🎎 公仔玩具",cost:5000,dur:60,icon:"🐭",ig:"熱門",hot:false,subway:"東京Metro銀座線 銀座站 徒步3分",lat:35.6717,lng:139.7658,tip:"銀座限定迪士尼商品，裝潢超精美，逛銀座必順道"},
+  {id:30,name:"Jump Shop 東京晴空塔",area:"押上",type:"🎎 公仔玩具",cost:4000,dur:60,icon:"📕",ig:"熱門",hot:false,subway:"東武 押上站 徒步3分",lat:35.7100,lng:139.8096,tip:"少年JUMP官方店，海賊王/火影/龍珠限定商品，週邊超齊全"},
+  {id:31,name:"Hobby Japan 秋葉原",area:"秋葉原",type:"🎎 公仔玩具",cost:6000,dur:90,icon:"🤖",ig:"熱門",hot:false,subway:"JR 秋葉原站 徒步3分",lat:35.7010,lng:139.7730,tip:"鋼彈模型/figma/高達模型超齊全，模型控必朝聖"},
+  {id:32,name:"Animate 池袋本店",area:"池袋",type:"🎎 公仔玩具",cost:4000,dur:90,icon:"✨",ig:"熱門",hot:false,subway:"JR山手線 池袋站 徒步5分",lat:35.7295,lng:139.7121,tip:"動漫周邊/聲優CD/漫畫最齊全連鎖店，池袋本店共8層樓"},
+
+  // ── 精品包 ──
+  {id:33,name:"Louis Vuitton 表參道旗艦",area:"表參道",type:"👜 精品包",cost:0,dur:60,icon:"👜",ig:"必拍",hot:true,subway:"東京Metro銀座線 表參道站 徒步2分",lat:35.6653,lng:139.7127,tip:"🔥青木淳設計的建築本身就是藝術！即使不買也值得拍照，日本限定款比台灣好找"},
+  {id:34,name:"Chanel 銀座旗艦",area:"銀座",type:"👜 精品包",cost:0,dur:60,icon:"🖤",ig:"必拍",hot:true,subway:"東京Metro銀座線 銀座站 徒步2分",lat:35.6705,lng:139.7637,tip:"銀座最美精品店之一，外牆LED燈光秀夜間必拍，日本限定香水值得入手"},
+  {id:35,name:"Hermès 銀座",area:"銀座",type:"👜 精品包",cost:0,dur:45,icon:"🟠",ig:"熱門",hot:false,subway:"東京Metro銀座線 銀座站 徒步3分",lat:35.6703,lng:139.7633,tip:"銀座旗艦，Birkin/Kelly等候名單，絲巾/小皮件較易入手，環境優雅"},
+  {id:36,name:"Gucci 表參道",area:"表參道",type:"👜 精品包",cost:0,dur:45,icon:"🟢",ig:"熱門",hot:false,subway:"東京Metro銀座線 表參道站 徒步3分",lat:35.6646,lng:139.7124,tip:"表參道精品街必逛，日本限定聯名款要提早關注官網"},
+  {id:37,name:"Dior 表參道",area:"表參道",type:"👜 精品包",cost:0,dur:45,icon:"💙",ig:"必拍",hot:true,subway:"東京Metro銀座線 表參道站 徒步2分",lat:35.6649,lng:139.7130,tip:"建築設計超美，Dior Beauty日本限定色號必買，拍照聖地"},
+  {id:38,name:"二手精品 Brand Off 銀座",area:"銀座",type:"👜 精品包",cost:30000,dur:90,icon:"💎",ig:"熱門",hot:true,subway:"東京Metro銀座線 銀座站 徒步5分",lat:35.6715,lng:139.7650,tip:"🔥日本二手精品CP值最高！LV/Chanel/Hermès 比台灣便宜20-30%，帶護照免稅"},
+  {id:39,name:"KOMEHYO 新宿",area:"新宿",type:"👜 精品包",cost:20000,dur:90,icon:"🏷️",ig:"熱門",hot:true,subway:"JR山手線 新宿站 徒步5分",lat:35.6940,lng:139.7025,tip:"老字號二手精品名錶，價格透明公道，Rolex/AP二手款選擇多"},
+
+  // ── 精品錶 ──
+  {id:40,name:"Rolex 銀座 Lexia 精品錶店",area:"銀座",type:"⌚ 精品錶",cost:0,dur:45,icon:"⌚",ig:"必朝聖",hot:true,subway:"東京Metro銀座線 銀座站 徒步2分",lat:35.6712,lng:139.7643,tip:"🔥日本最大Rolex官方精品店！Submariner/Daytona正規管道，買錶記得帶護照"},
+  {id:41,name:"AP Royal Oak 表參道 AP House",area:"表參道",type:"⌚ 精品錶",cost:0,dur:45,icon:"⌚",ig:"必朝聖",hot:true,subway:"東京Metro銀座線 表參道站 徒步3分",lat:35.6658,lng:139.7135,tip:"Audemars Piguet官方體驗空間，Royal Oak全系列展示，錶迷朝聖必去"},
+  {id:42,name:"Patek Philippe 銀座",area:"銀座",type:"⌚ 精品錶",cost:0,dur:30,icon:"⌚",ig:"熱門",hot:false,subway:"東京Metro銀座線 銀座站 徒步3分",lat:35.6718,lng:139.7640,tip:"百達翡麗官方沙龍，Calatrava/Nautilus展示，感受頂級鐘錶工藝"},
+  {id:43,name:"Cartier 銀座",area:"銀座",type:"⌚ 精品錶",cost:0,dur:45,icon:"💍",ig:"必拍",hot:false,subway:"東京Metro銀座線 銀座站 徒步2分",lat:35.6710,lng:139.7638,tip:"Tank/Santos日本限定款，銀座旗艦建築夜間燈光超美，首飾&錶都值得看"},
+  {id:44,name:"Watch Fever 中古錶 渋谷",area:"澀谷",type:"⌚ 精品錶",cost:0,dur:60,icon:"🔍",ig:"熱門",hot:true,subway:"JR山手線 澀谷站 徒步5分",lat:35.6600,lng:139.6988,tip:"二手名錶挖寶勝地，Rolex/Omega/Tudor價格比台灣透明，店員懂錶好溝通"},
+  {id:45,name:"大黑屋 二手名錶 銀座",area:"銀座",type:"⌚ 精品錶",cost:0,dur:60,icon:"🕐",ig:"熱門",hot:false,subway:"東京Metro銀座線 銀座站 徒步5分",lat:35.6720,lng:139.7655,tip:"老字號二手名錶，Omega/Rolex/IWC選擇多，保固完整價格合理"},
+  // ── 在地隱藏景點 ──
+  {id:46,name:"谷根千 下町老街",area:"谷中",type:"🏮 私藏秘境",cost:500,dur:150,icon:"🏮",ig:"秘境",hot:true,subway:"JR 日暮里站 徒步5分",lat:35.7261,lng:139.7659,tip:"🔥在地人最愛！谷中銀座商店街+昭和老街，遠離觀光客，銅鑼燒+炸肉餅邊走邊吃必試"},
+  {id:47,name:"清澄白河 咖啡文青街",area:"清澄白河",type:"🏮 私藏秘境",cost:1500,dur:120,icon:"☕",ig:"秘境",hot:true,subway:"東京Metro半藏門線 清澄白河站",lat:35.6786,lng:139.7972,tip:"東京Brooklyn！Blue Bottle等精品咖啡聚集地，藝廊+選物店散落巷弄間，最適合文青慢遊"},
+  {id:48,name:"豪德寺 招財貓聖地",area:"世田谷",type:"🏮 私藏秘境",cost:0,dur:60,icon:"🐱",ig:"秘境",hot:true,subway:"東急世田谷線 宮の坂站 徒步5分",lat:35.6572,lng:139.6366,tip:"🔥數千隻招財貓小雕像！貓奴朝聖必去，遊客超少，寧靜美麗，IG秘境"},
+  {id:49,name:"下北澤 古著&咖哩街",area:"下北澤",type:"🏮 私藏秘境",cost:3000,dur:150,icon:"🎸",ig:"在地推薦",hot:true,subway:"小田急線/京王井之頭線 下北澤站",lat:35.6614,lng:139.6680,tip:"東京次文化中心！日本最密集古著店+全日本最多咖哩店，週末有獨立音樂表演"},
+  {id:50,name:"代官山蔦屋書店",area:"代官山",type:"🏮 私藏秘境",cost:0,dur:90,icon:"📚",ig:"秘境",hot:true,subway:"東急東橫線 代官山站 徒步5分",lat:35.6491,lng:139.7026,tip:"全球最美書店！深夜開到凌晨2點，附設lounge bar，慢慢翻書配咖啡最享受"},
+  {id:51,name:"自由之丘 甜點天堂",area:"自由之丘",type:"🏮 私藏秘境",cost:2000,dur:120,icon:"🎂",ig:"在地推薦",hot:false,subway:"東急東橫線 自由が丘站",lat:35.6086,lng:139.6685,tip:"歐風甜點小鎮，蒙布朗發源地！在地上班族的秘密甜點街，人潮比澀谷少得多"},
+  {id:52,name:"吉祥寺 井之頭公園",area:"吉祥寺",type:"🏮 私藏秘境",cost:0,dur:120,icon:"🌳",ig:"在地推薦",hot:false,subway:"JR中央線 吉祥寺站 徒步5分",lat:35.7027,lng:139.5778,tip:"日本人票選最想居住地區！公園+商店街+薩太郎炸牛肉丸，悠閒一整天"},
+  {id:53,name:"中目黑 運河咖啡街",area:"中目黑",type:"🏮 私藏秘境",cost:1500,dur:120,icon:"🌊",ig:"秘境",hot:true,subway:"東急東橫線 中目黑站",lat:35.6440,lng:139.6987,tip:"目黑川沿岸精品咖啡+選物店！Starbucks Reserve Roastery世界最美分店就在這，春天賞櫻超夢幻"},
+  {id:54,name:"藏前 手作職人街",area:"藏前",type:"🏮 私藏秘境",cost:1000,dur:90,icon:"🏺",ig:"秘境",hot:false,subway:"都營淺草線/大江戶線 藏前站",lat:35.7055,lng:139.7922,tip:"東京Brooklyn！皮革/文具/陶器手作職人工房，每間都是獨立小店，好拍好逛"},
+  {id:55,name:"新宿思い出横丁",area:"新宿",type:"🏮 私藏秘境",cost:3000,dur:90,icon:"🏮",ig:"在地推薦",hot:true,subway:"JR山手線 新宿站 西口徒步2分",lat:35.6939,lng:139.6999,tip:"昭和風燒烤橫丁！50年老店聚集，烤內臟+燒鳥+啤酒，深夜氣氛絕佳，在地人下班必去"},
+  {id:56,name:"麻布十番 百年商店街",area:"麻布十番",type:"🏮 私藏秘境",cost:2000,dur:90,icon:"⛩️",ig:"在地推薦",hot:false,subway:"東京Metro南北線 麻布十番站",lat:35.6552,lng:139.7369,tip:"可以看到東京鐵塔的百年老街，豆源仙貝+浪花家鯛魚燒是必吃老店，觀光客少"},
+
+  // ── 隱藏美食 ──
+  {id:57,name:"AFURI 柚子鹽拉麵",area:"原宿",type:"🔍 隱藏美食",cost:1500,dur:60,icon:"🍜",ig:"必吃",hot:true,subway:"JR山手線 原宿站 徒步5分",lat:35.6691,lng:139.7047,tip:"PTT/Dcard評價超高！柚子清香湯頭，清爽不膩，和一般濃厚拉麵完全不同，炎夏也能吃"},
+  {id:58,name:"天金 天丼名店 築地",area:"築地",type:"🔍 隱藏美食",cost:1200,dur:45,icon:"🍤",ig:"必吃",hot:true,subway:"都營大江戶線 築地市場站 徒步3分",lat:35.6659,lng:139.7701,tip:"¥1000內整尾星鰻+炸蝦+炸花枝+半熟蛋！連日本人排隊的天丼始祖，建議早上去"},
+  {id:59,name:"Mercer Brunch 法式吐司 銀座",area:"銀座",type:"🔍 隱藏美食",cost:2000,dur:60,icon:"🍞",ig:"爆紅",hot:true,subway:"東京Metro銀座線 銀座站 徒步3分",lat:35.6713,lng:139.7636,tip:"🔥Dcard評論爆炸多！法式吐司入口即化，打卡必點，假日建議提早預約"},
+  {id:60,name:"吉祥寺 Satou 炸牛肉丸",area:"吉祥寺",type:"🔍 隱藏美食",cost:800,dur:20,icon:"🥩",ig:"必吃",hot:true,subway:"JR中央線 吉祥寺站 徒步3分",lat:35.7025,lng:139.5796,tip:"排隊名物！外酥內嫩juicy，一顆¥240，5顆以上¥200，邊走邊吃最爽，常賣到下午就售完"},
+  {id:61,name:"蟻月 牛腸鍋 中目黑",area:"中目黑",type:"🔍 隱藏美食",cost:4000,dur:90,icon:"🫕",ig:"必吃",hot:true,subway:"東急東橫線 中目黑站 徒步5分",lat:35.6437,lng:139.6980,tip:"東京版福岡名物！牛腸鍋湯底香醇，味噌和醬油各有擁護者，吃完配白飯絕配"},
+  {id:62,name:"大和家 天丼 人形町",area:"人形町",type:"🔍 隱藏美食",cost:1000,dur:45,icon:"🍚",ig:"在地推薦",hot:false,subway:"東京Metro日比谷線 人形町站 徒步2分",lat:35.6840,lng:139.7775,tip:"在地上班族午餐秘密！古早味天丼老店，分量超大，¥1000以內，觀光客很少知道"},
+  {id:63,name:"豐洲市場 大江戶海鮮丼",area:"豐洲",type:"🔍 隱藏美食",cost:3500,dur:60,icon:"🐡",ig:"必吃",hot:true,subway:"ゆりかもめ 市場前站 徒步5分",lat:35.6459,lng:139.7831,tip:"豐洲市場內隱藏版！5種以上海膽食べ比べ丼，早上7點開始，新鮮程度比千客萬來更高"},
+  {id:64,name:"新宿 思い出横丁 燒烤",area:"新宿",type:"🔍 隱藏美食",cost:3000,dur:90,icon:"🍺",ig:"在地推薦",hot:true,subway:"JR山手線 新宿站 西口",lat:35.6938,lng:138.6998,tip:"昭和50年老店烤內臟！日本本地人的深夜食堂，啤酒配串烤，氣氛超好"},
+  {id:65,name:"RURU SHIBUYA 抹茶甜點",area:"澀谷",type:"🔍 隱藏美食",cost:1800,dur:45,icon:"🍵",ig:"爆紅",hot:true,subway:"JR山手線 澀谷站 徒步5分",lat:35.6600,lng:139.6995,tip:"2024爆紅抹茶咖啡廳！流水抹茶裝置超夢幻，IG打卡必去，記得提早排隊"},
+  {id:66,name:"谷中銀座 銅鑼燒老店",area:"谷中",type:"🔍 隱藏美食",cost:500,dur:20,icon:"🍡",ig:"在地推薦",hot:false,subway:"JR 日暮里站 徒步7分",lat:35.7256,lng:139.7659,tip:"在地阿嬤級甜點！現包熱騰騰銅鑼燒+草糰子，¥200-300，昭和風情老街邊走邊吃"},
+
+
 ];
 const DAYS5=["DAY 1","DAY 2","DAY 3","DAY 4","DAY 5"];
 const PC=["#C84B31","#2E86AB","#A23B72","#F18F01","#3BB273","#7B2D8B"];
-const TC={"文化":"#8B6F47","購物":"#C84B31","展望台":"#2E86AB","藝術":"#A23B72","美食":"#D4622A","新景點":"#3BB273","主題樂園":"#7B2D8B","景點":"#888"};
+const TC={"⛩️ 文化古蹟":"#8B6F47","🌆 熱門景點":"#6B7280","🌅 展望台":"#0EA5E9","🎨 藝術體驗":"#A23B72","🆕 新地標":"#10B981","🎢 主題樂園":"#7C3AED","🍣 必吃美食":"#DC2626","🔍 隱藏美食":"#D97706","🛍️ 一般購物":"#C84B31","🎎 公仔玩具":"#E8541A","👜 精品包":"#8B5CF6","⌚ 精品錶":"#0369A1","🏮 私藏秘境":"#059669"};
 const EXP_CATS=["✈️ 機票","🏨 住宿","🚇 交通","🍜 餐飲","🛍️ 購物","🎡 門票","💊 藥妝","📦 其他"];
 const BP_DEF={economy:{label:"省錢背包客",icon:"🎒",flight:8000,hotel:1800,food:600,misc:2000},standard:{label:"標準舒適",icon:"🧳",flight:11000,hotel:3500,food:900,misc:4000},premium:{label:"享受優質",icon:"✨",flight:15000,hotel:6000,food:1500,misc:8000}};
+
+// ══════════════════════════════
+//  TOKYO TRANSIT DATA
+// ══════════════════════════════
+const TRANSIT_LINES = {
+  metro: {
+    name:"東京Metro", color:"#F15A22", icon:"🟠",
+    lines:["銀座線","丸之內線","日比谷線","東西線","千代田線","有樂町線","半藏門線","南北線","副都心線"],
+    pass: {name:"Metro 24小時券", price:800, tip:"24小時內Metro全線無限搭乘，觀光客最划算"},
+  },
+  toei: {
+    name:"都營地鐵", color:"#007AC0", icon:"🔵",
+    lines:["淺草線","三田線","新宿線","大江戶線"],
+    pass: {name:"都營一日券", price:700, tip:"都營全線無限搭乘（含都電荒川線）"},
+  },
+  combo: {
+    name:"Metro+都營聯合", color:"#6B21A8", icon:"🟣",
+    pass: {name:"Metro+都營一日券", price:1000, tip:"Metro+都營全線無限搭乘，最全面"},
+  },
+  jr: {
+    name:"JR東日本", color:"#00A550", icon:"🟢",
+    lines:["山手線","中央線","埼京線","京浜東北線","総武線","横須賀線"],
+    pass: {name:"JR都區內一日券", price:800, tip:"東京23區內JR全線無限搭乘，山手線全涵蓋"},
+  },
+  yurikamome: {
+    name:"百合海鷗線", color:"#00AEEF", icon:"🚟",
+    lines:["百合海鷗線"],
+    pass: {name:"百合海鷗一日券", price:820, tip:"台場往返必備，汐留～豐洲全線"},
+  },
+  private: {
+    name:"私鐵各線", color:"#8B4513", icon:"🚃",
+    lines:["東急","小田急","京王","西武","東武","京急","京成"],
+    tip:"Suica/PASMO刷卡搭乘，依距離計費",
+  },
+  suica: {
+    name:"Suica / PASMO", color:"#1A7F5A", icon:"💳",
+    tip:"所有路線都能刷！綁定Apple Pay最方便，不需要換券",
+  },
+};
+
+const PASS_RECOMMEND = [
+  {
+    id:"metro24", name:"Metro 24小時券", price:800, icon:"🟠",
+    cover:"Metro 9條線全線", best:"市區觀光為主",
+    good:["淺草","上野","銀座","表參道","澀谷","六本木","麻布台"],
+    tip:"2025年起可用信用卡感應入場，最方便",
+  },
+  {
+    id:"jr1day", name:"JR都區內一日券", price:800, icon:"🟢",
+    cover:"東京23區JR全線", best:"山手線沿線移動多",
+    good:["原宿","澀谷","新宿","池袋","上野","秋葉原","品川"],
+    tip:"山手線+中央線+埼京線全涵蓋",
+  },
+  {
+    id:"combo", name:"Metro+都營一日券", price:1000, icon:"🟣",
+    cover:"Metro+都營13條線", best:"跨區移動最靈活",
+    good:["淺草","築地","押上","六本木","新宿","澀谷","台場附近"],
+    tip:"最全面的地鐵通票，觀光客首選",
+  },
+  {
+    id:"yurikamome", name:"百合海鷗一日券", price:820, icon:"🚟",
+    cover:"台場↔豐洲↔汐留", best:"台場、豐洲行程必備",
+    good:["台場","豐洲市場","千客萬來","teamLab Planets"],
+    tip:"配合Metro券使用效果最佳",
+  },
+  {
+    id:"suica", name:"Suica / PASMO", price:0, icon:"💳",
+    cover:"所有路線通用", best:"混搭各線最彈性",
+    good:["全部景點"],
+    tip:"Apple Pay綁定，不需換券，按次計費最靈活",
+  },
+];
+
 const fmtY=n=>`¥${Number(n).toLocaleString()}`;
 const fmtN=n=>`NT$${Math.round(n).toLocaleString()}`;
 const j2t=n=>Math.round(n*0.22);
@@ -215,7 +344,7 @@ let S={
   flightForm:{direction:"去程",flightNo:"",airline:"",from:"TPE",fromCity:"台灣桃園",to:"NRT",toCity:"東京成田",date:"",departTime:"",arriveTime:"",terminal:"",gate:"",seat:"",ticketPrice:""},
   expenses:[],expForm:{label:"",category:"🍜 餐飲",amount:"",currency:"TWD",paidBy:1,splitWith:[],date:"",note:""},
   preset:"standard",budget:{...BP_DEF.standard},
-  filter:"全部",search:"",modal:null,mSpot:null,aiText:"",aiLoad:false,
+  filter:"全部",search:"",navFilter:"全部",transitTab:"route",selectedPass:"combo",modal:null,mSpot:null,aiText:"",aiLoad:false,aiUpdateLoad:false,aiTransitLoad:false,aiTransitText:"",
   syncStatus:"cloud", // cloud | saving | saved | error
   newName:""
 };
@@ -303,7 +432,7 @@ function derived(){
     return{...p,total:Math.round(t)};
   });
   const grand=perPerson.reduce((a,p)=>a+p.total,0);
-  const TYPES=["全部",...new Set(SPOTS.map(s=>s.type))];
+  const TYPE_ORDER=["全部","🌆 熱門景點","⛩️ 文化古蹟","🌅 展望台","🎨 藝術體驗","🆕 新地標","🎢 主題樂園","🍣 必吃美食","🔍 隱藏美食","🛍️ 一般購物","🎎 公仔玩具","👜 精品包","⌚ 精品錶","🏮 私藏秘境"];const TYPES=TYPE_ORDER.filter(t=>t==="全部"||SPOTS.some(s=>s.type===t));
   const filtered=SPOTS.filter(s=>(S.filter==="全部"||s.type===S.filter)&&(S.search===""||s.name.includes(S.search)||s.area.includes(S.search)));
   return{dayKeys,allAdded,addedIds,spotJPY,transTWD,flightTotal,expTWD,bpp,perPerson,grand,TYPES,filtered};
 }
@@ -445,7 +574,17 @@ function buildPlan(D){
         );
       }),
       div({className:"sec"},"AI 行程優化"),
-      div({className:"card",style:{textAlign:"center",background:"linear-gradient(135deg,#FDF8F0,#F8EDE0)",border:"1px solid #E8D8C0"}},div({style:{fontSize:"24px",marginBottom:"6px"}},"🤖"),div({style:{fontFamily:"'Noto Serif JP',serif",fontSize:"13px",fontWeight:"700",marginBottom:"5px"}},"智慧行程建議"),div({style:{fontSize:"11px",color:"#9A8F7E",marginBottom:"12px",lineHeight:"1.6"}},"AI 分析景點給最佳地鐵動線"),btn({className:"btn-red",style:{width:"100%"},onClick:runAI,disabled:S.aiLoad},S.aiLoad?"⏳ 規劃中…":"✨ 一鍵 AI 規劃")),
+      div({className:"card",style:{background:"linear-gradient(135deg,#FDF8F0,#F8EDE0)",border:"1px solid #E8D8C0"}},
+        div({style:{textAlign:"center"}},
+          div({style:{fontSize:"24px",marginBottom:"6px"}},"🤖"),
+          div({style:{fontFamily:"'Noto Serif JP',serif",fontSize:"13px",fontWeight:"700",marginBottom:"5px"}},"智慧行程建議"),
+          div({style:{fontSize:"11px",color:"#9A8F7E",marginBottom:"12px",lineHeight:"1.6"}},"AI 分析景點給最佳地鐵動線 + 美食推薦")
+        ),
+        btn({className:"btn-red",style:{width:"100%",marginBottom:"8px"},onClick:runAI,disabled:S.aiLoad},S.aiLoad?"⏳ 規劃中…":"✨ 一鍵 AI 行程規劃"),
+        btn({style:{width:"100%",padding:"11px",background:"#1A1008",color:"#F5F0E8",border:"none",borderRadius:"8px",fontSize:"13px",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",cursor:"pointer"},onClick:runAIUpdate,disabled:S.aiUpdateLoad},
+          S.aiUpdateLoad?"⏳ 搜尋最新資訊中…":"🔄 一鍵更新最新 IG/網路推薦行程"
+        )
+      ),
       S.aiText?div({className:"ai-out",style:{marginTop:"10px"}},S.aiText):null
     );
   }
@@ -502,11 +641,248 @@ function buildBudget(D){
 }
 
 // ── NAV ──
-function buildNav(){
-  return div({className:"fu"},div({className:"sec"},"QUICK NAV"),...SPOTS.map(s=>div({className:"card",style:{display:"flex",alignItems:"center",gap:"11px",marginBottom:"6px",padding:"11px 13px"}},div({className:"sico",style:{width:"37px",height:"37px",fontSize:"17px"}},s.icon),div({style:{flex:"1",minWidth:"0"}},div({style:{fontSize:"13px",fontWeight:"600",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},s.name),div({style:{fontSize:"10px",color:"#C84B31",fontWeight:"600",marginTop:"2px"}},"🚇 "+s.subway)),div({style:{display:"flex",gap:"5px"}},a({className:"nbtn g",href:gmapSearch(s),target:"_blank"},"📍"),a({className:"nbtn b",href:gmapNav(s),target:"_blank"},"🚇")))));
+function buildRouteUrl(spots){
+  if(spots.length===0) return null;
+  if(spots.length===1) return gmapNav(spots[0]);
+  const origin = encodeURIComponent(spots[0].name+" "+spots[0].area+" 東京");
+  const dest   = encodeURIComponent(spots[spots.length-1].name+" "+spots[spots.length-1].area+" 東京");
+  const waypts = spots.slice(1,-1).map(s=>encodeURIComponent(s.name+" "+s.area+" 東京")).join("|");
+  let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}&travelmode=transit`;
+  if(waypts) url += `&waypoints=${waypts}`;
+  return url;
 }
 
-// ── MODALS ──
+// ── Transit AI ──
+async function runTransitAI(){
+  S.aiTransitLoad=true; S.aiTransitText=""; render();
+  const D=derived();
+  const allSpots=D.allAdded.map(s=>`${s.name}(${s.subway})`).join("、");
+  const pass=PASS_RECOMMEND.find(p=>p.id===S.selectedPass);
+  const prompt=`你是東京交通達人，請為以下${S.numDays}天行程規劃最詳細的交通路線：
+
+景點清單：${allSpots||"尚未選擇景點"}
+選擇票券：${pass?pass.name:"Suica/PASMO"}
+
+請以繁體中文，每天分開列出：
+1. 🚇 建議出發時間與路線（列出具體線路名稱）
+2. 🚉 各段搭乘方式（地鐵線名→換乘→目的站）
+3. ⏱ 各段預估時間
+4. 💰 用${pass?pass.name:"Suica"}時的費用估算
+5. ⚡ 省時換乘技巧
+6. ⚠️ 注意事項（尖峰時段等）
+
+格式要清晰易讀，像導遊手冊一樣詳細。`;
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,
+        messages:[{role:"user",content:prompt}]})
+    });
+    const d=await r.json();
+    S.aiTransitText=d.content?.map(c=>c.text||"").join("")||"規劃失敗";
+  }catch(_){S.aiTransitText="連線失敗，請確認網路";}
+  S.aiTransitLoad=false; render();
+}
+
+function buildNav(){
+  const D=derived();
+  const allAdded=D.allAdded;
+  const routeUrl=buildRouteUrl(allAdded);
+
+  // ── Sub tabs ──
+  const subTabs=div({style:{display:"flex",gap:"6px",marginBottom:"14px"}},
+    ...[ ["route","🗺 路線規劃"], ["pass","🎫 票券選擇"], ["spots","📍 景點導航"] ].map(([k,l])=>
+      btn({className:"btn-sm"+(S.transitTab===k?" active":""),style:{flex:"1",padding:"8px",fontSize:"11px"},
+        onClick:()=>{S.transitTab=k;render();}},l)
+    )
+  );
+
+  // ══ TAB: ROUTE ══
+  if(S.transitTab==="route"){
+    const passInfo = PASS_RECOMMEND.find(p=>p.id===S.selectedPass);
+    return div({className:"fu"},
+      div({className:"sec"},"智慧路線規劃"),
+      subTabs,
+
+      // Pass selector strip
+      div({style:{marginBottom:"12px"}},
+        div({style:{fontSize:"10px",color:"#9A8F7E",fontWeight:"600",marginBottom:"6px"}},"使用票券 →"),
+        div({style:{display:"flex",gap:"5px",overflowX:"auto",paddingBottom:"4px",WebkitOverflowScrolling:"touch"}},
+          ...PASS_RECOMMEND.map(p=>span({
+            style:{flexShrink:"0",padding:"6px 11px",borderRadius:"20px",fontSize:"10px",fontWeight:"600",
+              cursor:"pointer",fontFamily:"'DM Sans',sans-serif",whiteSpace:"nowrap",
+              background:S.selectedPass===p.id?"#1A1008":"#FDFAF5",
+              color:S.selectedPass===p.id?"#F5F0E8":"#6B5D4A",
+              border:`1.5px solid ${S.selectedPass===p.id?"#1A1008":"#E0D5C0"}`},
+            onClick:()=>{S.selectedPass=p.id;render();}
+          }, p.icon+" "+p.name))
+        )
+      ),
+
+      // Selected pass info
+      passInfo?div({className:"card",style:{background:"#F0FDF4",border:"1px solid #BBF7D0",marginBottom:"12px",padding:"12px 14px"}},
+        div({style:{display:"flex",alignItems:"center",gap:"8px",marginBottom:"6px"}},
+          span({style:{fontSize:"20px"}},passInfo.icon),
+          div({},
+            div({style:{fontSize:"13px",fontWeight:"700"}},passInfo.name),
+            div({style:{fontSize:"11px",color:"#6B5D4A"}},passInfo.cover)
+          ),
+          passInfo.price>0?div({style:{marginLeft:"auto",fontFamily:"'Zen Dots',cursive",fontSize:"13px",color:"#C84B31"}},"¥"+passInfo.price):
+            div({style:{marginLeft:"auto",fontSize:"11px",color:"#059669",fontWeight:"600"}},"按次計費")
+        ),
+        div({style:{fontSize:"10px",color:"#6B5D4A",background:"#DCFCE7",borderRadius:"6px",padding:"5px 8px"}},
+          "💡 "+passInfo.tip
+        )
+      ):null,
+
+      // Per-day route cards
+      allAdded.length===0
+        ?div({className:"card"},div({className:"empty"},
+            div({style:{fontSize:"28px",marginBottom:"6px"}},"🗺"),
+            div({},"先在「行程」頁加入景點"),
+            div({style:{fontSize:"10px",color:"#C0B8A8",marginTop:"4px"}},"加入後可一鍵規劃完整交通路線")
+          ))
+        :div({},
+          ...D.dayKeys.map(day=>{
+            const spots=S.days[day]||[];
+            if(spots.length===0)return null;
+            const url=buildRouteUrl(spots);
+            return div({className:"card",style:{marginBottom:"10px"}},
+              // Day header
+              div({style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"10px"}},
+                div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px",color:"#1A1008"}},day),
+                div({style:{fontSize:"10px",color:"#9A8F7E"}},spots.length+" 個景點")
+              ),
+              // Spot flow with arrows
+              div({style:{marginBottom:"10px"}},
+                ...spots.map((s,i)=>div({},
+                  div({style:{display:"flex",alignItems:"center",gap:"8px",padding:"7px 10px",background:"#F8F5F0",borderRadius:"8px",marginBottom:"2px"}},
+                    div({style:{width:"22px",height:"22px",borderRadius:"50%",background:"#C84B31",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Zen Dots',cursive",fontSize:"9px",color:"#fff",flexShrink:"0"}},i+1),
+                    span({style:{fontSize:"15px"}},"  "+s.icon),
+                    div({style:{flex:"1",minWidth:"0"}},
+                      div({style:{fontSize:"12px",fontWeight:"600",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},s.name),
+                      div({style:{fontSize:"9px",color:"#C84B31",marginTop:"1px"}},s.subway)
+                    ),
+                    a({href:gmapNav(s),target:"_blank",style:{flexShrink:"0",padding:"4px 8px",background:"#2E86AB18",color:"#2E86AB",border:"1px solid #2E86AB40",borderRadius:"6px",fontSize:"10px",fontWeight:"600",textDecoration:"none"}},"導航")
+                  ),
+                  i<spots.length-1?div({style:{display:"flex",alignItems:"center",gap:"6px",padding:"3px 12px",marginBottom:"2px"}},
+                    div({style:{width:"1px",height:"16px",background:"#E0D5C0",marginLeft:"10px"}}),
+                    div({style:{fontSize:"9px",color:"#9A8F7E",marginLeft:"6px"}},"🚇 搭乘地鐵前往")
+                  ):null
+                ))
+              ),
+              // Action buttons
+              div({style:{display:"flex",gap:"7px"}},
+                a({href:url,target:"_blank",style:{flex:"2",display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",background:"#C84B31",color:"#fff",borderRadius:"8px",padding:"10px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",boxShadow:"0 2px 8px #C84B3130"}},
+                  "🗺 "+day+" 一鍵Google Maps路線"
+                ),
+                a({href:"https://www.google.com/maps/dir/?api=1&origin="+encodeURIComponent((spots[0]||{name:"",area:""}).name+" "+spots[0].area+" 東京")+"&destination="+encodeURIComponent((spots[spots.length-1]||{name:"",area:""}).name+" "+spots[spots.length-1].area+" 東京")+"&travelmode=walking",target:"_blank",
+                  style:{flex:"1",display:"flex",alignItems:"center",justifyContent:"center",background:"#F0EBE0",color:"#6B5D4A",borderRadius:"8px",padding:"10px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"11px",border:"1px solid #E0D5C0"}},
+                  "🚶 步行"
+                )
+              )
+            );
+          }).filter(Boolean),
+
+          // All days combined
+          div({className:"card",style:{background:"linear-gradient(135deg,#1A1008,#2D1F0A)",border:"none",marginTop:"6px"}},
+            div({style:{fontSize:"9px",color:"#8B7355",letterSpacing:"2px",marginBottom:"8px",fontFamily:"'Zen Dots',cursive"}},"FULL TRIP · ALL "+allAdded.length+" SPOTS"),
+            a({href:routeUrl,target:"_blank",style:{display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",background:"#F5F0E8",color:"#1A1008",borderRadius:"8px",padding:"11px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"8px"}},
+              "🗺 一鍵規劃所有景點完整路線"
+            ),
+            btn({style:{width:"100%",padding:"11px",background:"rgba(255,255,255,.1)",color:"#F5F0E8",border:"1px solid rgba(255,255,255,.2)",borderRadius:"8px",fontSize:"12px",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",cursor:"pointer"},
+              onClick:runTransitAI,disabled:S.aiTransitLoad},
+              S.aiTransitLoad?"⏳ AI 規劃交通路線中…":"🤖 AI 生成詳細地鐵換乘指南"
+            )
+          ),
+          S.aiTransitText?div({className:"ai-out",style:{marginTop:"10px"}},S.aiTransitText):null
+        )
+    );
+  }
+
+  // ══ TAB: PASS ══
+  if(S.transitTab==="pass"){
+    return div({className:"fu"},
+      div({className:"sec"},"票券選擇指南"),
+      subTabs,
+      div({style:{fontSize:"11px",color:"#9A8F7E",marginBottom:"12px",lineHeight:"1.7"}},"根據你的行程景點，推薦最划算票券 👇"),
+
+      ...PASS_RECOMMEND.map(p=>{
+        const isSel = S.selectedPass===p.id;
+        const hasSpots = allAdded.some(s=>p.good.includes("全部景點")||p.good.some(g=>s.name.includes(g)||s.area.includes(g)));
+        return div({style:{background:"#FDFAF5",border:`2px solid ${isSel?"#C84B31":"#E8DFD0"}`,borderRadius:"14px",padding:"13px",marginBottom:"9px",cursor:"pointer",boxShadow:isSel?"0 3px 12px #C84B3120":"0 1px 3px rgba(0,0,0,.04)"},
+          onClick:()=>{S.selectedPass=p.id;render();}},
+          div({style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"8px"}},
+            span({style:{fontSize:"22px"}},p.icon),
+            div({style:{flex:"1"}},
+              div({style:{fontSize:"13px",fontWeight:"700"}},p.name),
+              div({style:{fontSize:"10px",color:"#9A8F7E",marginTop:"1px"}},p.cover)
+            ),
+            div({style:{textAlign:"right"}},
+              p.price>0
+                ?div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"14px",color:"#C84B31"}},"¥"+p.price)
+                :div({style:{fontSize:"11px",color:"#059669",fontWeight:"700"}},"按次計費"),
+              div({style:{fontSize:"9px",color:"#9A8F7E",marginTop:"1px"}},"per person/day")
+            )
+          ),
+          div({style:{background:"#F0EBE0",borderRadius:"8px",padding:"7px 10px",marginBottom:"8px"}},
+            div({style:{fontSize:"10px",color:"#C84B31",fontWeight:"700",marginBottom:"3px"}},"✅ 最適合"),
+            div({style:{fontSize:"11px",color:"#6B5D4A"}},p.best)
+          ),
+          div({style:{fontSize:"10px",color:"#6B5D4A",lineHeight:"1.6",marginBottom:"8px"}},"💡 "+p.tip),
+          hasSpots&&p.good[0]!=="全部景點"?div({style:{display:"flex",gap:"4px",flexWrap:"wrap"}},
+            div({style:{fontSize:"9px",color:"#059669",fontWeight:"700",marginRight:"2px"}},"你的行程可用："),
+            ...p.good.filter(g=>allAdded.some(s=>s.name.includes(g)||s.area.includes(g))).map(g=>
+              span({style:{fontSize:"9px",background:"#DCFCE7",color:"#166534",borderRadius:"12px",padding:"2px 7px"}},g)
+            )
+          ):null,
+          div({style:{display:"flex",justifyContent:"flex-end",marginTop:"8px"}},
+            isSel
+              ?span({style:{fontSize:"11px",color:"#C84B31",fontWeight:"700"}},"✓ 已選擇")
+              :span({style:{fontSize:"11px",color:"#9A8F7E"}},p.good[0]==="全部景點"?"通用":"點擊選擇")
+          )
+        );
+      }),
+
+      // Transport line info
+      div({className:"sec"},"各交通工具說明"),
+      div({className:"card"},
+        ...Object.values(TRANSIT_LINES).map(t=>div({style:{display:"flex",gap:"10px",marginBottom:"12px",alignItems:"flex-start"}},
+          span({style:{fontSize:"18px",flexShrink:"0"}},t.icon),
+          div({},
+            div({style:{fontSize:"12px",fontWeight:"700",marginBottom:"2px"}},t.name),
+            t.lines?div({style:{fontSize:"10px",color:"#9A8F7E",marginBottom:"3px"}},"路線："+t.lines.join("・")):null,
+            t.pass?div({style:{fontSize:"10px",color:"#C84B31"}},"票券："+t.pass.name+" ¥"+t.pass.price+" — "+t.pass.tip):null,
+            t.tip?div({style:{fontSize:"10px",color:"#9A8F7E"}},t.tip):null
+          )
+        ))
+      )
+    );
+  }
+
+  // ══ TAB: SPOTS (Quick Nav) ══
+  const navTypes=TYPE_ORDER.filter(t=>t==="全部"||SPOTS.some(s=>s.type===t));
+  const navFilter=S.navFilter||"全部";
+  const navFiltered=SPOTS.filter(s=>navFilter==="全部"||s.type===navFilter);
+  return div({className:"fu"},
+    div({className:"sec"},"景點快速導航"),
+    subTabs,
+    div({className:"pills",style:{marginBottom:"12px"}},...navTypes.map(t=>span({className:"pill"+(navFilter===t?" on":""),onClick:()=>{S.navFilter=t;render();}},t))),
+    div({style:{fontSize:"11px",color:"#B0A090",marginBottom:"8px"}},navFiltered.length+" 個景點"),
+    ...navFiltered.map(s=>div({className:"card",style:{display:"flex",alignItems:"center",gap:"11px",marginBottom:"6px",padding:"11px 13px"}},
+      div({className:"sico",style:{width:"37px",height:"37px",fontSize:"17px"}},s.icon),
+      div({style:{flex:"1",minWidth:"0"}},
+        div({style:{fontSize:"13px",fontWeight:"600",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},s.name),
+        div({style:{fontSize:"10px",color:"#C84B31",fontWeight:"600",marginTop:"2px"}},"🚇 "+s.subway)
+      ),
+      div({style:{display:"flex",gap:"5px"}},
+        a({className:"nbtn g",href:gmapSearch(s),target:"_blank"},"📍"),
+        a({className:"nbtn b",href:gmapNav(s),target:"_blank"},"🚇")
+      )
+    ))
+  );
+}
+
 function buildModal(){
   if(!S.modal)return null;
   let inner;
@@ -560,6 +936,40 @@ async function runAI(){
   try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1200,messages:[{role:"user",content:prompt}]})});const d=await r.json();S.aiText=d.content?.map(c=>c.text||"").join("")||"生成失敗";}
   catch(_){S.aiText="AI 連線失敗";}
   S.aiLoad=false;render();
+}
+
+async function runAIUpdate(){
+  S.aiUpdateLoad=true;S.aiText="";render();
+  const D=derived();
+  const list=D.allAdded.map(s=>s.name+"("+s.area+")").join("、");
+  const prompt=`你是東京旅遊達人，請搜尋並整合2025-2026年最新的IG、Dcard、PTT、部落客推薦資訊，為以下行程提供最新升級建議：
+
+現有景點：${list||"尚未加入景點"}
+行程天數：${S.numDays}天
+
+請提供：
+1. 🆕 2025-2026最新爆紅景點（含原因）
+2. 🍜 各區域最新隱藏版美食推薦（含價位）
+3. ☕ 最新網美咖啡廳打卡點
+4. 🏮 在地人才知道的隱藏景點
+5. ⚡ 最新地鐵效率路線建議
+6. 💡 2026年最新省錢技巧
+
+以繁體中文分類清楚列出，每項加上為何值得去。`;
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",max_tokens:2000,
+        tools:[{type:"web_search_20250305",name:"web_search"}],
+        messages:[{role:"user",content:prompt}]
+      })
+    });
+    const d=await r.json();
+    const text=d.content?.filter(c=>c.type==="text").map(c=>c.text).join("") || "搜尋完成，請查看結果";
+    S.aiText=text;
+  }catch(_){S.aiText="更新失敗，請確認網路連線。";}
+  S.aiUpdateLoad=false;render();
 }
 
 // ── RENDER ──

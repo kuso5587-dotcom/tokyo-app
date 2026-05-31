@@ -384,22 +384,34 @@ let S={
 };
 
 let saveTimer=null;
+let isSaving=false;
 function persist(){
   clearTimeout(saveTimer);
-  S.syncStatus="saving"; render();
   saveTimer=setTimeout(async()=>{
+    if(isSaving) return;
+    isSaving=true;
+    S.syncStatus="saving";
+    // Only update the badge, don't re-render entire UI
+    const badge=document.querySelector(".sync-badge");
+    if(badge){badge.className="sync-badge sync-saving";badge.textContent="💾 儲存中…";}
     try{
       await dbSave({
         flights:S.flights, days:S.days, persons:S.persons, pexp:S.pexp,
         expenses:S.expenses, preset:S.preset, budget:S.budget,
         num_days:S.numDays, day_pass:S.dayPass
       });
-      S.syncStatus="saved"; render();
-      setTimeout(()=>{S.syncStatus="cloud";render();},2500);
+      S.syncStatus="saved";
+      if(badge){badge.className="sync-badge sync-ok";badge.textContent="✓ 已儲存";}
+      setTimeout(()=>{
+        S.syncStatus="cloud";
+        if(badge){badge.className="sync-badge sync-cloud";badge.textContent="☁️ 雲端同步";}
+      },2500);
     } catch(_){
-      S.syncStatus="error"; render();
+      S.syncStatus="error";
+      if(badge){badge.className="sync-badge sync-err";badge.textContent="✗ 同步失敗";}
     }
-  },800);
+    isSaving=false;
+  },1000);
 }
 
 // ═══════════════════════════════════════════

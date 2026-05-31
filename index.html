@@ -543,6 +543,7 @@ function h(tag,props,...children){
   for(const[k,v]of Object.entries(props||{})){
     if(k==="className")el.className=v;
     else if(k==="defaultValue"){el.value=v;}
+    else if(k==="value"){el.value=v;}
     else if(k.startsWith("on"))el.addEventListener(k.slice(2).toLowerCase(),v);
     else if(k==="style"&&typeof v==="object")Object.assign(el.style,v);
     else el.setAttribute(k,v);
@@ -943,7 +944,7 @@ function buildNav(){
 function buildAddSpotModal(){
   if(!S.showAddSpot) return null;
   const f=S.addSpotForm;
-  const sf=(k,v)=>{S.addSpotForm={...S.addSpotForm,[k]:v};render();};
+  const sf=(k,v)=>{S.addSpotForm={...S.addSpotForm,[k]:v};};
   const allTypes=[...TYPE_ORDER.filter(t=>t!=="全部"),"＋ 新增分類"];
   const ICONS=["📍","🍜","🍣","🍺","🍵","☕","🛍️","🎮","🎎","⛩️","🌸","🏖️","🎡","🚗","🏨","💆","🎵","🎨","🏃","🌿"];
   return div({className:"ov",onClick:()=>{S.showAddSpot=false;render();}},
@@ -953,14 +954,14 @@ function buildAddSpotModal(){
       // Name
       div({style:{marginBottom:"10px"}},
         h("label",{className:"flabel"},"景點名稱 *"),
-        inp({className:"inp",placeholder:"例：三鷹之森 吉卜力美術館",defaultValue:f.name,
-          onBlur:e=>sf("name",e.target.value),onKeyDown:e=>e.stopPropagation()})
+        inp({className:"inp",placeholder:"例：三鷹之森 吉卜力美術館",value:S.addSpotForm.name,
+          onInput:e=>{S.addSpotForm.name=e.target.value},onKeyDown:e=>e.stopPropagation()})
       ),
       // Area
       div({style:{marginBottom:"10px"}},
         h("label",{className:"flabel"},"區域"),
-        inp({className:"inp",placeholder:"例：三鷹 / 新宿 / 澀谷",defaultValue:f.area,
-          onBlur:e=>sf("area",e.target.value),onKeyDown:e=>e.stopPropagation()})
+        inp({className:"inp",placeholder:"例：三鷹 / 新宿 / 澀谷",value:S.addSpotForm.area,
+          onInput:e=>{S.addSpotForm.area=e.target.value},onKeyDown:e=>e.stopPropagation()})
       ),
       // Type selector
       div({style:{marginBottom:"10px"}},
@@ -971,12 +972,12 @@ function buildAddSpotModal(){
               background:f.type===t?"#1A1008":"#F0EBE0",
               color:f.type===t?"#F5F0E8":"#6B5D4A",
               border:`1px solid ${f.type===t?"#1A1008":"#E0D5C0"}`},
-            onClick:()=>{sf("type",t==="＋ 新增分類"?"":t);if(t==="＋ 新增分類")sf("customType","");}
+            onClick:()=>{sf("type",t==="＋ 新增分類"?"":t);if(t==="＋ 新增分類")sf("customType","");render();}
           },t))
         ),
         f.type===""||(f.type===""&&f.customType!=="")?
-          inp({className:"inp",placeholder:"輸入新分類名稱（例：🎭 特殊體驗）",defaultValue:f.customType,
-            onBlur:e=>sf("customType",e.target.value),onKeyDown:e=>e.stopPropagation()}):null
+          inp({className:"inp",placeholder:"輸入新分類名稱（例：🎭 特殊體驗）",value:S.addSpotForm.customType,
+            onInput:e=>{S.addSpotForm.customType=e.target.value},onKeyDown:e=>e.stopPropagation()}):null
       ),
       // Icon picker
       div({style:{marginBottom:"10px"}},
@@ -986,32 +987,32 @@ function buildAddSpotModal(){
             style:{fontSize:"22px",cursor:"pointer",padding:"4px",borderRadius:"8px",
               background:f.icon===ic?"#F0EBE0":"transparent",
               border:`1px solid ${f.icon===ic?"#C84B31":"transparent"}`},
-            onClick:()=>sf("icon",ic)
+            onClick:()=>{sf("icon",ic);render();}
           },ic))
         )
       ),
       // Cost + Duration
       div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},
         div({style:{flex:"1"}},h("label",{className:"flabel"},"費用 (¥)"),
-          inp({className:"inp",type:"number",placeholder:"0=免費",defaultValue:f.cost,
-            onBlur:e=>sf("cost",e.target.value),onKeyDown:e=>e.stopPropagation()})
+          inp({className:"inp",type:"number",placeholder:"0=免費",value:S.addSpotForm.cost,
+            onInput:e=>{S.addSpotForm.cost=e.target.value},onKeyDown:e=>e.stopPropagation()})
         ),
         div({style:{flex:"1"}},h("label",{className:"flabel"},"建議時間(分)"),
-          inp({className:"inp",type:"number",placeholder:"90",defaultValue:f.dur,
+          inp({className:"inp",type:"number",placeholder:"90",value:S.addSpotForm.dur,
             onBlur:e=>sf("dur",e.target.value),onKeyDown:e=>e.stopPropagation()})
         )
       ),
       // Subway
       div({style:{marginBottom:"10px"}},
         h("label",{className:"flabel"},"最近地鐵站"),
-        inp({className:"inp",placeholder:"例：JR 三鷹站 徒步10分",defaultValue:f.subway,
-          onBlur:e=>sf("subway",e.target.value),onKeyDown:e=>e.stopPropagation()})
+        inp({className:"inp",placeholder:"例：JR 三鷹站 徒步10分",value:S.addSpotForm.subway,
+          onInput:e=>{S.addSpotForm.subway=e.target.value},onKeyDown:e=>e.stopPropagation()})
       ),
       // Tip
       div({style:{marginBottom:"14px"}},
         h("label",{className:"flabel"},"備註小貼士"),
-        inp({className:"inp",placeholder:"例：需提前預約，週一公休",defaultValue:f.tip,
-          onBlur:e=>sf("tip",e.target.value),onKeyDown:e=>e.stopPropagation()})
+        inp({className:"inp",placeholder:"例：需提前預約，週一公休",value:S.addSpotForm.tip,
+          onInput:e=>{S.addSpotForm.tip=e.target.value},onKeyDown:e=>e.stopPropagation()})
       ),
       div({style:{fontSize:"10px",color:"#9A8F7E",marginBottom:"12px",background:"#F0EBE0",borderRadius:"8px",padding:"8px 10px"}},
         "📍 系統會自動根據景點名稱+區域搜尋座標，加入後可直接點導航"
@@ -1033,29 +1034,29 @@ function buildModal(){
   return div({className:"ov",onClick:()=>{S.modal=null;render();}},div({className:"modal",onClick:e=>e.stopPropagation()},div({className:"modal-bar"}),inner));
 }
 function buildFlightModal(){
-  const f=S.flightForm;const sf=(k,v)=>{S.flightForm={...S.flightForm,[k]:v};render();};
+  const f=S.flightForm;const sf=(k,v)=>{S.flightForm={...S.flightForm,[k]:v};};
   return div({},div({className:"modal-title"},S.editFlight?"編輯航班":"新增航班 ✈️"),
     div({style:{display:"flex",gap:"6px",marginBottom:"12px"}},...[["去程","🛫 去程"],["回程","🛬 回程"]].map(([d,l])=>span({className:"seg"+(f.direction===d?" on":""),onClick:()=>{S.flightForm={...S.flightForm,direction:d,from:d==="去程"?"TPE":"NRT",fromCity:d==="去程"?"台灣桃園":"東京成田",to:d==="去程"?"NRT":"TPE",toCity:d==="去程"?"東京成田":"台灣桃園"};render();}},l))),
-    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"航班號"),inp({className:"inp",placeholder:"BR197",value:f.flightNo,onInput:e=>sf("flightNo",e.target.value.toUpperCase())})),div({style:{flex:"1"}},h("label",{className:"flabel"},"航空公司"),inp({className:"inp",placeholder:"長榮航空",defaultValue:f.airline,onBlur:e=>sf("airline",e.target.value)}))),
-    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"出發地"),inp({className:"inp",placeholder:"TPE",value:f.from,onInput:e=>sf("from",e.target.value.toUpperCase())})),div({style:{flex:"1"}},h("label",{className:"flabel"},"目的地"),inp({className:"inp",placeholder:"NRT",value:f.to,onInput:e=>sf("to",e.target.value.toUpperCase())}))),
+    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"航班號"),inp({className:"inp",placeholder:"BR197",value:S.flightForm.flightNo,onInput:e=>{S.flightForm.flightNo=e.target.value.toUpperCase()}})),div({style:{flex:"1"}},h("label",{className:"flabel"},"航空公司"),inp({className:"inp",placeholder:"長榮航空",value:S.flightForm.airline,onInput:e=>{S.flightForm.airline=e.target.value}}))),
+    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"出發地"),inp({className:"inp",placeholder:"TPE",value:S.flightForm.from,onInput:e=>{S.flightForm.from=e.target.value.toUpperCase()}})),div({style:{flex:"1"}},h("label",{className:"flabel"},"目的地"),inp({className:"inp",placeholder:"NRT",value:S.flightForm.to,onInput:e=>{S.flightForm.to=e.target.value.toUpperCase()}}))),
     div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"日期"),inp({className:"inp",type:"date",defaultValue:f.date,onBlur:e=>sf("date",e.target.value)})),
     div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"起飛"),inp({className:"inp",type:"time",defaultValue:f.departTime,onBlur:e=>sf("departTime",e.target.value)})),div({style:{flex:"1"}},h("label",{className:"flabel"},"抵達"),inp({className:"inp",type:"time",defaultValue:f.arriveTime,onBlur:e=>sf("arriveTime",e.target.value)}))),
-    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"航廈"),sel({className:"inp",value:f.terminal,onChange:e=>sf("terminal",e.target.value)},opt("","–"),opt("1","第1航廈"),opt("2","第2航廈"),opt("3","第3航廈"))),div({style:{flex:"1"}},h("label",{className:"flabel"},"登機門"),inp({className:"inp",placeholder:"A12",value:f.gate,onInput:e=>sf("gate",e.target.value.toUpperCase())})),div({style:{flex:"1"}},h("label",{className:"flabel"},"座位"),inp({className:"inp",placeholder:"24A",value:f.seat,onInput:e=>sf("seat",e.target.value.toUpperCase())}))),
+    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"航廈"),sel({className:"inp",value:f.terminal,onChange:e=>sf("terminal",e.target.value)},opt("","–"),opt("1","第1航廈"),opt("2","第2航廈"),opt("3","第3航廈"))),div({style:{flex:"1"}},h("label",{className:"flabel"},"登機門"),inp({className:"inp",placeholder:"A12",value:S.flightForm.gate,onInput:e=>{S.flightForm.gate=e.target.value.toUpperCase()}})),div({style:{flex:"1"}},h("label",{className:"flabel"},"座位"),inp({className:"inp",placeholder:"24A",value:S.flightForm.seat,onInput:e=>{S.flightForm.seat=e.target.value.toUpperCase()}}))),
     div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"機票金額 NT$（每人）"),inp({className:"inp",type:"number",placeholder:"11000",defaultValue:f.ticketPrice,onBlur:e=>sf("ticketPrice",e.target.value)})),
     div({style:{display:"flex",gap:"8px",marginTop:"6px"}},btn({className:"btn-sm",style:{flex:"1",padding:"12px"},onClick:()=>{S.modal=null;render();}},"取消"),btn({className:"btn-red",style:{flex:"2",padding:"12px"},onClick:saveFlight},S.editFlight?"儲存修改":"確認新增"))
   );
 }
 function buildExpenseModal(){
-  const f=S.expForm;const sf=(k,v)=>{S.expForm={...S.expForm,[k]:v};render();};
+  const f=S.expForm;const sf=(k,v)=>{S.expForm={...S.expForm,[k]:v};};
   const pcbs=S.persons.map(p=>{const sw=f.splitWith;const checked=sw.length===0||sw.includes(p.id);return lbl({style:{display:"flex",alignItems:"center",gap:"6px",background:checked?p.color+"15":"transparent",border:`1.5px solid ${checked?p.color+"50":"#E0D5C0"}`,borderRadius:"8px",padding:"5px 10px",cursor:"pointer",fontSize:"12px",fontWeight:"500"}},inp({type:"checkbox",checked,style:{accentColor:p.color},onChange:()=>{const cur=sw.length===0?S.persons.map(x=>x.id):sw;const next=cur.includes(p.id)?cur.filter(x=>x!==p.id):[...cur,p.id];sf("splitWith",next.length===S.persons.length?[]:next);}}),avatar(p.name,p.color,22)," ",p.name);});
   return div({},div({className:"modal-title"},"新增消費 🧾"),
-    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"消費名稱"),inp({className:"inp",placeholder:"例：一蘭拉麵",defaultValue:f.label,onBlur:e=>sf("label",e.target.value)})),
+    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"消費名稱"),inp({className:"inp",placeholder:"例：一蘭拉麵",defaultValue:f.label,onInput:e=>{S.expForm.label=e.target.value}})),
     div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1.2"}},h("label",{className:"flabel"},"分類"),sel({className:"inp",value:f.category,onChange:e=>sf("category",e.target.value)},...EXP_CATS.map(c=>opt(c,c)))),div({style:{flex:"1"}},h("label",{className:"flabel"},"日期"),inp({className:"inp",type:"date",defaultValue:f.date,onBlur:e=>sf("date",e.target.value)}))),
     div({style:{display:"flex",gap:"8px",marginBottom:"4px"}},div({style:{flex:"1.5"}},h("label",{className:"flabel"},"金額"),inp({className:"inp",type:"number",placeholder:"0",defaultValue:f.amount,onBlur:e=>sf("amount",e.target.value)})),div({style:{flex:"1"}},h("label",{className:"flabel"},"幣別"),sel({className:"inp",value:f.currency,onChange:e=>sf("currency",e.target.value)},opt("TWD","🇹🇼 TWD"),opt("JPY","🇯🇵 JPY")))),
     f.currency==="JPY"&&f.amount?div({style:{fontSize:"11px",color:"#9A8F7E",marginBottom:"8px"}},"≈ NT$"+j2t(Number(f.amount)).toLocaleString()):null,
     div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"由誰付款"),sel({className:"inp",value:f.paidBy,onChange:e=>sf("paidBy",Number(e.target.value))},...S.persons.map(p=>opt(p.id,p.name)))),
     div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"分攤（不選＝全員均分）"),div({style:{display:"flex",gap:"6px",flexWrap:"wrap",marginTop:"5px"}},...pcbs)),
-    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"備註"),inp({className:"inp",placeholder:"例：含服務費",defaultValue:f.note,onBlur:e=>sf("note",e.target.value)})),
+    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"備註"),inp({className:"inp",placeholder:"例：含服務費",defaultValue:f.note,onInput:e=>{S.expForm.note=e.target.value}})),
     div({style:{display:"flex",gap:"8px",marginTop:"4px"}},btn({className:"btn-sm",style:{flex:"1",padding:"12px"},onClick:()=>{S.modal=null;render();}},"取消"),btn({className:"btn-red",style:{flex:"2",padding:"12px"},onClick:saveExpense},"確認記帳"))
   );
 }
@@ -1175,6 +1176,11 @@ function render(){
       try{ el.setSelectionRange(selStart,selEnd); } catch(_){}
     }
   }
+  // Mark all inputs to track typing state
+  document.querySelectorAll("input,textarea").forEach(inp=>{
+    inp.addEventListener("focus",()=>{ inp._userTyping=true; },true);
+    inp.addEventListener("blur",()=>{ inp._userTyping=false; },true);
+  });
 }
 
 init();

@@ -241,6 +241,9 @@ function persist(){
 //  INIT — load from Supabase
 // ═══════════════════════════════════════════
 async function init(){
+  const MIN_LOAD_MS = 2800;
+  const startTime = Date.now();
+
   try {
     const d = await dbLoad();
     if(d){
@@ -255,8 +258,24 @@ async function init(){
       if(d.day_pass!==null&&d.day_pass!==undefined) S.dayPass = d.day_pass;
     }
   } catch(_){ /* 離線時用預設值 */ }
-  document.getElementById("loadingScreen").style.display="none";
-  document.getElementById("app").style.display="flex";
+
+  // 確保 loading 畫面至少顯示 MIN_LOAD_MS 毫秒
+  const elapsed = Date.now() - startTime;
+  const remain  = MIN_LOAD_MS - elapsed;
+  if(remain > 0) await new Promise(r => setTimeout(r, remain));
+
+  // 淡出 loading 畫面
+  const ls = document.getElementById("loadingScreen");
+  ls.style.transition = "opacity .6s ease";
+  ls.style.opacity = "0";
+  await new Promise(r => setTimeout(r, 620));
+  ls.style.display = "none";
+
+  document.getElementById("app").style.display = "flex";
+  document.getElementById("app").style.opacity = "0";
+  document.getElementById("app").style.transition = "opacity .4s ease";
+  setTimeout(()=>{ document.getElementById("app").style.opacity="1"; }, 30);
+
   S.syncStatus="cloud";
   render();
 }

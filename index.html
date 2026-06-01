@@ -418,6 +418,7 @@ async function init(){
 const TYPE_ORDER=["全部","🌆 熱門景點","⛩️ 文化古蹟","🌅 展望台","🎨 藝術體驗","🆕 新地標","🎢 主題樂園","🍣 必吃美食","🔍 隱藏美食","🛍️ 一般購物","🎎 公仔玩具","👜 精品包","⌚ 精品錶","🏮 私藏秘境","🌟 宜庭私藏"];
 
 function derived(){
+  const ALL_SPOTS=[...SPOTS,...(S.customSpots||[])];
   const dayKeys=DAYS5.slice(0,S.numDays);
   const allAdded=dayKeys.flatMap(d=>S.days[d]||[]);
   const addedIds=new Set(allAdded.map(s=>s.id));

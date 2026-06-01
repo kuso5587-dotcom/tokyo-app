@@ -543,7 +543,11 @@ function h(tag,props,...children){
   for(const[k,v]of Object.entries(props||{})){
     if(k==="className")el.className=v;
     else if(k==="defaultValue"){el.value=v;}
-    else if(k==="value"){el.value=v;}
+    else if(k==="value"){
+      // Only set if not currently focused (user typing)
+      if(document.activeElement!==el){ el.value=(v==null?"":v); }
+      else if(el.value===""){ el.value=(v==null?"":v); }
+    }
     else if(k.startsWith("on"))el.addEventListener(k.slice(2).toLowerCase(),v);
     else if(k==="style"&&typeof v==="object")Object.assign(el.style,v);
     else el.setAttribute(k,v);
@@ -972,7 +976,7 @@ function buildAddSpotModal(){
               background:f.type===t?"#1A1008":"#F0EBE0",
               color:f.type===t?"#F5F0E8":"#6B5D4A",
               border:`1px solid ${f.type===t?"#1A1008":"#E0D5C0"}`},
-            onClick:()=>{sf("type",t==="＋ 新增分類"?"":t);if(t==="＋ 新增分類")sf("customType","");render();}
+            onClick:()=>{S.addSpotForm={...S.addSpotForm,type:t==="＋ 新增分類"?"":t,customType:t==="＋ 新增分類"?"":S.addSpotForm.customType};render();}
           },t))
         ),
         f.type===""||(f.type===""&&f.customType!=="")?
@@ -987,7 +991,7 @@ function buildAddSpotModal(){
             style:{fontSize:"22px",cursor:"pointer",padding:"4px",borderRadius:"8px",
               background:f.icon===ic?"#F0EBE0":"transparent",
               border:`1px solid ${f.icon===ic?"#C84B31":"transparent"}`},
-            onClick:()=>{sf("icon",ic);render();}
+            onClick:()=>{S.addSpotForm={...S.addSpotForm,icon:ic};render();}
           },ic))
         )
       ),
@@ -1072,13 +1076,19 @@ async function saveCustomSpot(){
   const f=S.addSpotForm;
   if(!f.name.trim()) return;
   const type=f.customType.trim()||f.type||"📍 自訂景點";
-  // Add custom type to TYPE_ORDER if new
   if(!TYPE_ORDER.includes(type)) TYPE_ORDER.push(type);
-  // Geocode the location
-  const searchName = f.area ? f.name+" "+f.area : f.name;
-  const{lat,lng}=await geocodePlace(searchName);
+
+  // Geocode with timeout - if fails, use Tokyo center
+  let lat=35.6762, lng=139.6503;
+  try{
+    const timeout=new Promise((_,rej)=>setTimeout(()=>rej("timeout"),3000));
+    const result=geocodePlace(f.area?f.name+" "+f.area:f.name);
+    const pos=await Promise.race([result,timeout]);
+    lat=pos.lat; lng=pos.lng;
+  }catch(_){}
+
   const newSpot={
-    id: Date.now(),
+    id:Date.now(),
     name:f.name.trim(),
     area:f.area.trim()||"東京",
     type,
@@ -1088,11 +1098,11 @@ async function saveCustomSpot(){
     ig:"自訂",
     hot:false,
     subway:f.subway.trim()||"請查詢最近車站",
-    lat, lng,
+    lat,lng,
     tip:f.tip.trim()||f.name,
     custom:true,
   };
-  S.customSpots=[...S.customSpots, newSpot];
+  S.customSpots=[...S.customSpots,newSpot];
   S.addSpotForm={name:"",area:"",type:"",customType:"",cost:"",dur:"90",icon:"📍",tip:"",subway:""};
   S.showAddSpot=false;
   persist();

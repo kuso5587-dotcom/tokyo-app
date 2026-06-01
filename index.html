@@ -922,40 +922,34 @@ function buildAddSpotModal(){
 }
 function buildModal(){
   if(!S.modal)return null;
-  
   const ov=document.createElement("div");
   ov.className="ov";
   ov.addEventListener("click",()=>{S.modal=null;render();});
-  
   const modal=document.createElement("div");
   modal.className="modal";
   modal.addEventListener("click",e=>e.stopPropagation());
-  
   const bar=document.createElement("div");
   bar.className="modal-bar";
   modal.appendChild(bar);
-  
   let inner;
   if(S.modal==="flight")inner=buildFlightModal();
   else if(S.modal==="expense")inner=buildExpenseModal();
   else if(S.modal==="spot")inner=buildSpotModal();
-  
   if(inner)modal.appendChild(inner);
   ov.appendChild(modal);
   return ov;
 }
 function buildFlightModal(){
-  const wrap = document.createElement("div");
-  const f = S.flightForm;
-
-  wrap.innerHTML = `
+  const wrap=document.createElement("div");
+  const f=S.flightForm;
+  wrap.innerHTML=`
     <div class="modal-title">${S.editFlight?"編輯航班":"新增航班 ✈️"}</div>
     <div style="display:flex;gap:6px;margin-bottom:12px">
       <span id="btn-dep" class="seg ${f.direction==='去程'?'on':''}" style="cursor:pointer">🛫 去程</span>
       <span id="btn-ret" class="seg ${f.direction==='回程'?'on':''}" style="cursor:pointer">🛬 回程</span>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:10px">
-      <div style="flex:1"><label class="flabel">航班號</label><input class="inp" id="fi-flightNo" placeholder="BR197" value="${f.flightNo||''}"></div>
+      <div style="flex:1"><label class="flabel">航班號</label><input class="inp" id="fi-no" placeholder="BR197" value="${f.flightNo||''}"></div>
       <div style="flex:1"><label class="flabel">航空公司</label><input class="inp" id="fi-airline" placeholder="長榮航空" value="${f.airline||''}"></div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:10px">
@@ -969,7 +963,7 @@ function buildFlightModal(){
     </div>
     <div style="display:flex;gap:8px;margin-bottom:10px">
       <div style="flex:1"><label class="flabel">航廈</label>
-        <select class="inp" id="fi-terminal">
+        <select class="inp" id="fi-term">
           <option value="">–</option>
           <option value="1" ${f.terminal==='1'?'selected':''}>第1航廈</option>
           <option value="2" ${f.terminal==='2'?'selected':''}>第2航廈</option>
@@ -983,82 +977,61 @@ function buildFlightModal(){
     <div style="display:flex;gap:8px;margin-top:6px">
       <button class="btn-sm" id="fi-cancel" style="flex:1;padding:12px">取消</button>
       <button class="btn-red" id="fi-save" style="flex:2;padding:12px">${S.editFlight?"儲存修改":"確認新增"}</button>
-    </div>
-  `;
-
-  // Direction buttons
-  wrap.querySelector("#btn-dep").onclick=()=>{
-    S.flightForm.direction="去程";S.flightForm.from="TPE";S.flightForm.fromCity="台灣桃園";S.flightForm.to="NRT";S.flightForm.toCity="東京成田";
-    render();
-  };
-  wrap.querySelector("#btn-ret").onclick=()=>{
-    S.flightForm.direction="回程";S.flightForm.from="NRT";S.flightForm.fromCity="東京成田";S.flightForm.to="TPE";S.flightForm.toCity="台灣桃園";
-    render();
-  };
-
-  // Save
+    </div>`;
+  wrap.querySelector("#btn-dep").onclick=()=>{S.flightForm.direction="去程";S.flightForm.from="TPE";S.flightForm.fromCity="台灣桃園";S.flightForm.to="NRT";S.flightForm.toCity="東京成田";render();};
+  wrap.querySelector("#btn-ret").onclick=()=>{S.flightForm.direction="回程";S.flightForm.from="NRT";S.flightForm.fromCity="東京成田";S.flightForm.to="TPE";S.flightForm.toCity="台灣桃園";render();};
   wrap.querySelector("#fi-save").onclick=()=>{
-    S.flightForm.flightNo   = wrap.querySelector("#fi-flightNo").value;
-    S.flightForm.airline    = wrap.querySelector("#fi-airline").value;
-    S.flightForm.from       = wrap.querySelector("#fi-from").value;
-    S.flightForm.to         = wrap.querySelector("#fi-to").value;
-    S.flightForm.date       = wrap.querySelector("#fi-date").value;
-    S.flightForm.departTime = wrap.querySelector("#fi-dep").value;
-    S.flightForm.arriveTime = wrap.querySelector("#fi-arr").value;
-    S.flightForm.terminal   = wrap.querySelector("#fi-terminal").value;
-    S.flightForm.gate       = wrap.querySelector("#fi-gate").value;
-    S.flightForm.seat       = wrap.querySelector("#fi-seat").value;
-    S.flightForm.ticketPrice= wrap.querySelector("#fi-price").value;
+    S.flightForm.flightNo   =wrap.querySelector("#fi-no").value;
+    S.flightForm.airline    =wrap.querySelector("#fi-airline").value;
+    S.flightForm.from       =wrap.querySelector("#fi-from").value;
+    S.flightForm.to         =wrap.querySelector("#fi-to").value;
+    S.flightForm.date       =wrap.querySelector("#fi-date").value;
+    S.flightForm.departTime =wrap.querySelector("#fi-dep").value;
+    S.flightForm.arriveTime =wrap.querySelector("#fi-arr").value;
+    S.flightForm.terminal   =wrap.querySelector("#fi-term").value;
+    S.flightForm.gate       =wrap.querySelector("#fi-gate").value;
+    S.flightForm.seat       =wrap.querySelector("#fi-seat").value;
+    S.flightForm.ticketPrice=wrap.querySelector("#fi-price").value;
     saveFlight();
   };
-
   wrap.querySelector("#fi-cancel").onclick=()=>{S.modal=null;render();};
   return wrap;
 }
 function buildExpenseModal(){
-  const wrap = document.createElement("div");
-  const f = S.expForm;
-
-  const personOpts = S.persons.map(p=>`<option value="${p.id}" ${f.paidBy==p.id?'selected':''}>${p.name}</option>`).join('');
-  const catOpts = EXP_CATS.map(c=>`<option value="${c}" ${f.category===c?'selected':''}>${c}</option>`).join('');
-
-  wrap.innerHTML = `
+  const wrap=document.createElement("div");
+  const f=S.expForm;
+  const personOpts=S.persons.map(p=>`<option value="${p.id}" ${f.paidBy==p.id?'selected':''}>${p.name}</option>`).join('');
+  const catOpts=EXP_CATS.map(c=>`<option value="${c}" ${f.category===c?'selected':''}>${c}</option>`).join('');
+  wrap.innerHTML=`
     <div class="modal-title">新增消費 🧾</div>
     <div style="margin-bottom:10px"><label class="flabel">消費名稱</label>
       <input class="inp" id="ex-label" placeholder="例：一蘭拉麵" value="${f.label||''}"></div>
     <div style="display:flex;gap:8px;margin-bottom:10px">
-      <div style="flex:1.2"><label class="flabel">分類</label>
-        <select class="inp" id="ex-cat">${catOpts}</select></div>
-      <div style="flex:1"><label class="flabel">日期</label>
-        <input class="inp" id="ex-date" type="date" value="${f.date||''}"></div>
+      <div style="flex:1.2"><label class="flabel">分類</label><select class="inp" id="ex-cat">${catOpts}</select></div>
+      <div style="flex:1"><label class="flabel">日期</label><input class="inp" id="ex-date" type="date" value="${f.date||''}"></div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:10px">
-      <div style="flex:1.5"><label class="flabel">金額</label>
-        <input class="inp" id="ex-amount" type="number" placeholder="0" value="${f.amount||''}"></div>
+      <div style="flex:1.5"><label class="flabel">金額</label><input class="inp" id="ex-amount" type="number" placeholder="0" value="${f.amount||''}"></div>
       <div style="flex:1"><label class="flabel">幣別</label>
-        <select class="inp" id="ex-currency">
+        <select class="inp" id="ex-cur">
           <option value="TWD" ${f.currency==='TWD'?'selected':''}>🇹🇼 TWD</option>
           <option value="JPY" ${f.currency==='JPY'?'selected':''}>🇯🇵 JPY</option>
         </select></div>
     </div>
-    <div style="margin-bottom:10px"><label class="flabel">由誰付款</label>
-      <select class="inp" id="ex-payer">${personOpts}</select></div>
-    <div style="margin-bottom:10px"><label class="flabel">備註</label>
-      <input class="inp" id="ex-note" placeholder="例：含服務費" value="${f.note||''}"></div>
+    <div style="margin-bottom:10px"><label class="flabel">由誰付款</label><select class="inp" id="ex-payer">${personOpts}</select></div>
+    <div style="margin-bottom:10px"><label class="flabel">備註</label><input class="inp" id="ex-note" placeholder="例：含服務費" value="${f.note||''}"></div>
     <div style="display:flex;gap:8px;margin-top:4px">
       <button class="btn-sm" id="ex-cancel" style="flex:1;padding:12px">取消</button>
       <button class="btn-red" id="ex-save" style="flex:2;padding:12px">確認記帳</button>
-    </div>
-  `;
-
+    </div>`;
   wrap.querySelector("#ex-save").onclick=()=>{
-    S.expForm.label    = wrap.querySelector("#ex-label").value;
-    S.expForm.category = wrap.querySelector("#ex-cat").value;
-    S.expForm.date     = wrap.querySelector("#ex-date").value;
-    S.expForm.amount   = wrap.querySelector("#ex-amount").value;
-    S.expForm.currency = wrap.querySelector("#ex-currency").value;
-    S.expForm.paidBy   = Number(wrap.querySelector("#ex-payer").value);
-    S.expForm.note     = wrap.querySelector("#ex-note").value;
+    S.expForm.label   =wrap.querySelector("#ex-label").value;
+    S.expForm.category=wrap.querySelector("#ex-cat").value;
+    S.expForm.date    =wrap.querySelector("#ex-date").value;
+    S.expForm.amount  =wrap.querySelector("#ex-amount").value;
+    S.expForm.currency=wrap.querySelector("#ex-cur").value;
+    S.expForm.paidBy  =Number(wrap.querySelector("#ex-payer").value);
+    S.expForm.note    =wrap.querySelector("#ex-note").value;
     saveExpense();
   };
   wrap.querySelector("#ex-cancel").onclick=()=>{S.modal=null;render();};

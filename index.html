@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>測試</title>
+<style>
+body{font-family:sans-serif;padding:20px;background:#f5f0e8;}
+.inp{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:8px;font-size:16px;box-sizing:border-box;}
+.btn{background:#c84b31;color:#fff;border:none;padding:12px 24px;border-radius:8px;font-size:14px;cursor:pointer;width:100%;margin-top:8px;}
+.result{background:#fff;border:1px solid #ddd;border-radius:8px;padding:12px;margin-top:12px;font-size:13px;}
+</style>
+</head>
+<body>
+<h3>✈️ 航班輸入測試</h3>
+<input id="flightNo" class="inp" placeholder="航班號 例：BR197">
+<input id="airline" class="inp" placeholder="航空公司 例：長榮航空">
+<input id="date" class="inp" type="date">
+<input id="price" class="inp" type="number" placeholder="票價 例：11000">
+<button class="btn" onclick="save()">確認儲存</button>
+<div class="result" id="result">尚未儲存</div>
+
+<script>
+function save(){
+  const flightNo = document.getElementById('flightNo').value;
+  const airline  = document.getElementById('airline').value;
+  const date     = document.getElementById('date').value;
+  const price    = document.getElementById('price').value;
+  
+  if(!flightNo && !date){
+    alert('請至少填寫航班號或日期');
+    return;
+  }
+  
+  const data = {flightNo, airline, date, price};
+  localStorage.setItem('test_flight', JSON.stringify(data));
+  
+  document.getElementById('result').innerHTML = 
+    '✅ 已儲存！<br>' +
+    '航班號：' + flightNo + '<br>' +
+    '航空：' + airline + '<br>' +
+    '日期：' + date + '<br>' +
+    '票價：NT$' + price;
+}
+
+// 載入已儲存資料
+const saved = localStorage.getItem('test_flight');
+if(saved){
+  const d = JSON.parse(saved);
+  document.getElementById('flightNo').value = d.flightNo || '';
+  document.getElementById('airline').value  = d.airline  || '';
+  document.getElementById('date').value     = d.date     || '';
+  document.getElementById('price').value    = d.price    || '';
+  document.getElementById('result').textContent = '上次儲存：' + JSON.stringify(d);
+}
+</script>
+</body>
+</html>

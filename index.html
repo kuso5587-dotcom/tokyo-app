@@ -955,78 +955,61 @@ function buildNav(){
 function buildAddSpotModal(){
   if(!S.showAddSpot) return null;
   const f=S.addSpotForm;
-  const sf=(k,v)=>{S.addSpotForm={...S.addSpotForm,[k]:v};};
-  const allTypes=[...TYPE_ORDER.filter(t=>t!=="全部"),"＋ 新增分類"];
   const ICONS=["📍","🍜","🍣","🍺","🍵","☕","🛍️","🎮","🎎","⛩️","🌸","🏖️","🎡","🚗","🏨","💆","🎵","🎨","🏃","🌿"];
+
+  function ni(placeholder,field,opts={}){
+    const el=document.createElement("input");
+    el.className="inp";
+    el.placeholder=placeholder;
+    el.value=S.addSpotForm[field]||"";
+    if(opts.type) el.type=opts.type;
+    el.addEventListener("input",e=>{S.addSpotForm[field]=e.target.value;});
+    return el;
+  }
+
+  const allTypes=TYPE_ORDER.filter(t=>t!=="全部");
+  const typeRow=div({style:{display:"flex",gap:"5px",flexWrap:"wrap",marginBottom:"6px"}},
+    ...[...allTypes,"＋ 新增分類"].map(t=>span({
+      style:{padding:"5px 10px",borderRadius:"16px",fontSize:"10px",fontWeight:"600",cursor:"pointer",
+        background:f.type===t?"#1A1008":"#F0EBE0",
+        color:f.type===t?"#F5F0E8":"#6B5D4A",
+        border:`1px solid ${f.type===t?"#1A1008":"#E0D5C0"}`},
+      onClick:()=>{
+        S.addSpotForm.type=t==="＋ 新增分類"?"":t;
+        S.addSpotForm.customType="";
+        render();
+      }
+    },t))
+  );
+
+  const iconRow=div({style:{display:"flex",gap:"6px",flexWrap:"wrap"}},
+    ...ICONS.map(ic=>span({
+      style:{fontSize:"22px",cursor:"pointer",padding:"4px",borderRadius:"8px",
+        background:f.icon===ic?"#F0EBE0":"transparent",
+        border:`1px solid ${f.icon===ic?"#C84B31":"transparent"}`},
+      onClick:()=>{S.addSpotForm.icon=ic;render();}
+    },ic))
+  );
+
   return div({className:"ov",onClick:()=>{S.showAddSpot=false;render();}},
     div({className:"modal",onClick:e=>e.stopPropagation()},
       div({className:"modal-bar"}),
       div({className:"modal-title"},"✏️ 自訂新增景點"),
-      // Name
+      div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"景點名稱 *"),ni("例：三鷹之森 吉卜力美術館","name")),
+      div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"區域"),ni("例：三鷹 / 新宿 / 澀谷","area")),
       div({style:{marginBottom:"10px"}},
-        h("label",{className:"flabel"},"景點名稱 *"),
-        inp({className:"inp",placeholder:"例：三鷹之森 吉卜力美術館","data-field":"name",value:S.addSpotForm.name,
-          onInput:e=>{S.addSpotForm.name=e.target.value},onKeyDown:e=>e.stopPropagation()})
+        h("label",{className:"flabel"},"分類"),typeRow,
+        f.type===""?ni("輸入新分類名稱（例：🎭 特殊體驗）","customType"):null
       ),
-      // Area
-      div({style:{marginBottom:"10px"}},
-        h("label",{className:"flabel"},"區域"),
-        inp({className:"inp",placeholder:"例：三鷹 / 新宿 / 澀谷","data-field":"area",value:S.addSpotForm.area,
-          onInput:e=>{S.addSpotForm.area=e.target.value},onKeyDown:e=>e.stopPropagation()})
-      ),
-      // Type selector
-      div({style:{marginBottom:"10px"}},
-        h("label",{className:"flabel"},"分類"),
-        div({style:{display:"flex",gap:"5px",flexWrap:"wrap",marginBottom:"6px"}},
-          ...allTypes.map(t=>span({
-            style:{padding:"5px 10px",borderRadius:"16px",fontSize:"10px",fontWeight:"600",cursor:"pointer",
-              background:f.type===t?"#1A1008":"#F0EBE0",
-              color:f.type===t?"#F5F0E8":"#6B5D4A",
-              border:`1px solid ${f.type===t?"#1A1008":"#E0D5C0"}`},
-            onClick:()=>{S.addSpotForm={...S.addSpotForm,type:t==="＋ 新增分類"?"":t,customType:t==="＋ 新增分類"?"":S.addSpotForm.customType};render();}
-          },t))
-        ),
-        f.type===""||(f.type===""&&f.customType!=="")?
-          inp({className:"inp",placeholder:"輸入新分類名稱（例：🎭 特殊體驗）","data-field":"customType",value:S.addSpotForm.customType,
-            onInput:e=>{S.addSpotForm.customType=e.target.value},onKeyDown:e=>e.stopPropagation()}):null
-      ),
-      // Icon picker
-      div({style:{marginBottom:"10px"}},
-        h("label",{className:"flabel"},"圖示"),
-        div({style:{display:"flex",gap:"6px",flexWrap:"wrap"}},
-          ...ICONS.map(ic=>span({
-            style:{fontSize:"22px",cursor:"pointer",padding:"4px",borderRadius:"8px",
-              background:f.icon===ic?"#F0EBE0":"transparent",
-              border:`1px solid ${f.icon===ic?"#C84B31":"transparent"}`},
-            onClick:()=>{S.addSpotForm={...S.addSpotForm,icon:ic};render();}
-          },ic))
-        )
-      ),
-      // Cost + Duration
+      div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"圖示"),iconRow),
       div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},
-        div({style:{flex:"1"}},h("label",{className:"flabel"},"費用 (¥)"),
-          inp({className:"inp",type:"number",placeholder:"0=免費","data-field":"cost",value:S.addSpotForm.cost,
-            onInput:e=>{S.addSpotForm.cost=e.target.value},onKeyDown:e=>e.stopPropagation()})
-        ),
-        div({style:{flex:"1"}},h("label",{className:"flabel"},"建議時間(分)"),
-          inp({className:"inp",type:"number",placeholder:"90","data-field":"dur",value:S.addSpotForm.dur,
-            onBlur:e=>sf("dur",e.target.value),onKeyDown:e=>e.stopPropagation()})
-        )
+        div({style:{flex:"1"}},h("label",{className:"flabel"},"費用 (¥)"),ni("0=免費","cost",{type:"number"})),
+        div({style:{flex:"1"}},h("label",{className:"flabel"},"建議時間(分)"),ni("90","dur",{type:"number"}))
       ),
-      // Subway
-      div({style:{marginBottom:"10px"}},
-        h("label",{className:"flabel"},"最近地鐵站"),
-        inp({className:"inp",placeholder:"例：JR 三鷹站 徒步10分","data-field":"subway",value:S.addSpotForm.subway,
-          onInput:e=>{S.addSpotForm.subway=e.target.value},onKeyDown:e=>e.stopPropagation()})
-      ),
-      // Tip
-      div({style:{marginBottom:"14px"}},
-        h("label",{className:"flabel"},"備註小貼士"),
-        inp({className:"inp",placeholder:"例：需提前預約，週一公休","data-field":"tip",value:S.addSpotForm.tip,
-          onInput:e=>{S.addSpotForm.tip=e.target.value},onKeyDown:e=>e.stopPropagation()})
-      ),
+      div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"最近地鐵站"),ni("例：JR 三鷹站 徒步10分","subway")),
+      div({style:{marginBottom:"14px"}},h("label",{className:"flabel"},"備註小貼士"),ni("例：需提前預約，週一公休","tip")),
       div({style:{fontSize:"10px",color:"#9A8F7E",marginBottom:"12px",background:"#F0EBE0",borderRadius:"8px",padding:"8px 10px"}},
-        "📍 系統會自動根據景點名稱+區域搜尋座標，加入後可直接點導航"
+        "📍 系統會自動根據景點名稱+區域搜尋座標"
       ),
       div({style:{display:"flex",gap:"8px"}},
         btn({className:"btn-sm",style:{flex:"1",padding:"12px"},onClick:()=>{S.showAddSpot=false;render();}},"取消"),
@@ -1045,30 +1028,110 @@ function buildModal(){
   return div({className:"ov",onClick:()=>{S.modal=null;render();}},div({className:"modal",onClick:e=>e.stopPropagation()},div({className:"modal-bar"}),inner));
 }
 function buildFlightModal(){
-  const f=S.flightForm;const sf=(k,v)=>{S.flightForm={...S.flightForm,[k]:v};};
-  return div({},div({className:"modal-title"},S.editFlight?"編輯航班":"新增航班 ✈️"),
-    div({style:{display:"flex",gap:"6px",marginBottom:"12px"}},...[["去程","🛫 去程"],["回程","🛬 回程"]].map(([d,l])=>span({className:"seg"+(f.direction===d?" on":""),onClick:()=>{S.flightForm={...S.flightForm,direction:d,from:d==="去程"?"TPE":"NRT",fromCity:d==="去程"?"台灣桃園":"東京成田",to:d==="去程"?"NRT":"TPE",toCity:d==="去程"?"東京成田":"台灣桃園"};render();}},l))),
-    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"航班號"),inp({className:"inp",placeholder:"BR197","data-field":"flightNo",value:S.flightForm.flightNo,onInput:e=>{S.flightForm.flightNo=e.target.value.toUpperCase()}})),div({style:{flex:"1"}},h("label",{className:"flabel"},"航空公司"),inp({className:"inp",placeholder:"長榮航空","data-field":"airline",value:S.flightForm.airline,onInput:e=>{S.flightForm.airline=e.target.value}}))),
-    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"出發地"),inp({className:"inp",placeholder:"TPE","data-field":"from",value:S.flightForm.from,onInput:e=>{S.flightForm.from=e.target.value.toUpperCase()}})),div({style:{flex:"1"}},h("label",{className:"flabel"},"目的地"),inp({className:"inp",placeholder:"NRT","data-field":"to",value:S.flightForm.to,onInput:e=>{S.flightForm.to=e.target.value.toUpperCase()}}))),
-    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"日期"),inp({className:"inp",type:"date","data-field":"date",defaultValue:f.date,onBlur:e=>{S.expForm.date=e.target.value}})),
-    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"起飛"),inp({className:"inp",type:"time","data-field":"departTime",defaultValue:f.departTime,onBlur:e=>{S.flightForm.departTime=e.target.value}})),div({style:{flex:"1"}},h("label",{className:"flabel"},"抵達"),inp({className:"inp",type:"time","data-field":"arriveTime",defaultValue:f.arriveTime,onBlur:e=>{S.flightForm.arriveTime=e.target.value}}))),
-    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"航廈"),sel({className:"inp",value:f.terminal,onChange:e=>sf("terminal",e.target.value)},opt("","–"),opt("1","第1航廈"),opt("2","第2航廈"),opt("3","第3航廈"))),div({style:{flex:"1"}},h("label",{className:"flabel"},"登機門"),inp({className:"inp",placeholder:"A12","data-field":"gate",value:S.flightForm.gate,onInput:e=>{S.flightForm.gate=e.target.value.toUpperCase()}})),div({style:{flex:"1"}},h("label",{className:"flabel"},"座位"),inp({className:"inp",placeholder:"24A","data-field":"seat",value:S.flightForm.seat,onInput:e=>{S.flightForm.seat=e.target.value.toUpperCase()}}))),
-    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"機票金額 NT$（每人）"),inp({className:"inp",type:"number",placeholder:"11000",defaultValue:f.ticketPrice,onBlur:e=>sf("ticketPrice",e.target.value)})),
-    div({style:{display:"flex",gap:"8px",marginTop:"6px"}},btn({className:"btn-sm",style:{flex:"1",padding:"12px"},onClick:()=>{S.modal=null;render();}},"取消"),btn({className:"btn-red",style:{flex:"2",padding:"12px"},onClick:saveFlight},S.editFlight?"儲存修改":"確認新增"))
+  const f=S.flightForm;
+  const dirRow=div({style:{display:"flex",gap:"6px",marginBottom:"12px"}},
+    ...[["去程","🛫 去程"],["回程","🛬 回程"]].map(([d,l])=>
+      span({className:"seg"+(f.direction===d?" on":""),
+        onClick:()=>{
+          S.flightForm.direction=d;
+          S.flightForm.from=d==="去程"?"TPE":"NRT";
+          S.flightForm.fromCity=d==="去程"?"台灣桃園":"東京成田";
+          S.flightForm.to=d==="去程"?"NRT":"TPE";
+          S.flightForm.toCity=d==="去程"?"東京成田":"台灣桃園";
+          render();
+        }},l)
+    )
+  );
+  // Use native input elements - no value binding
+  function ni(placeholder,field,opts={}){
+    const el=document.createElement("input");
+    el.className="inp";
+    el.placeholder=placeholder;
+    el.value=S.flightForm[field]||"";
+    if(opts.type) el.type=opts.type;
+    el.addEventListener("input",e=>{S.flightForm[field]=e.target.value;});
+    return el;
+  }
+  function nr(sel_el,field){
+    sel_el.addEventListener("change",e=>{S.flightForm[field]=e.target.value;});
+    return sel_el;
+  }
+  const termSel=sel({className:"inp",value:f.terminal,onChange:e=>{S.flightForm.terminal=e.target.value;}},
+    opt("","–"),opt("1","第1航廈"),opt("2","第2航廈"),opt("3","第3航廈"));
+
+  return div({},
+    div({className:"modal-title"},S.editFlight?"編輯航班":"新增航班 ✈️"),
+    dirRow,
+    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},
+      div({style:{flex:"1"}},h("label",{className:"flabel"},"航班號"),ni("BR197","flightNo")),
+      div({style:{flex:"1"}},h("label",{className:"flabel"},"航空公司"),ni("長榮航空","airline"))
+    ),
+    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},
+      div({style:{flex:"1"}},h("label",{className:"flabel"},"出發地"),ni("TPE","from")),
+      div({style:{flex:"1"}},h("label",{className:"flabel"},"目的地"),ni("NRT","to"))
+    ),
+    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"日期"),ni("","date",{type:"date"})),
+    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},
+      div({style:{flex:"1"}},h("label",{className:"flabel"},"起飛"),ni("","departTime",{type:"time"})),
+      div({style:{flex:"1"}},h("label",{className:"flabel"},"抵達"),ni("","arriveTime",{type:"time"}))
+    ),
+    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},
+      div({style:{flex:"1"}},h("label",{className:"flabel"},"航廈"),termSel),
+      div({style:{flex:"1"}},h("label",{className:"flabel"},"登機門"),ni("A12","gate")),
+      div({style:{flex:"1"}},h("label",{className:"flabel"},"座位"),ni("24A","seat"))
+    ),
+    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"機票金額 NT$（每人）"),ni("11000","ticketPrice",{type:"number"})),
+    div({style:{display:"flex",gap:"8px",marginTop:"6px"}},
+      btn({className:"btn-sm",style:{flex:"1",padding:"12px"},onClick:()=>{S.modal=null;render();}},"取消"),
+      btn({className:"btn-red",style:{flex:"2",padding:"12px"},onClick:saveFlight},S.editFlight?"儲存修改":"確認新增")
+    )
   );
 }
 function buildExpenseModal(){
-  const f=S.expForm;const sf=(k,v)=>{S.expForm={...S.expForm,[k]:v};};
-  const pcbs=S.persons.map(p=>{const sw=f.splitWith;const checked=sw.length===0||sw.includes(p.id);return lbl({style:{display:"flex",alignItems:"center",gap:"6px",background:checked?p.color+"15":"transparent",border:`1.5px solid ${checked?p.color+"50":"#E0D5C0"}`,borderRadius:"8px",padding:"5px 10px",cursor:"pointer",fontSize:"12px",fontWeight:"500"}},inp({type:"checkbox",checked,style:{accentColor:p.color},onChange:()=>{const cur=sw.length===0?S.persons.map(x=>x.id):sw;const next=cur.includes(p.id)?cur.filter(x=>x!==p.id):[...cur,p.id];sf("splitWith",next.length===S.persons.length?[]:next);}}),avatar(p.name,p.color,22)," ",p.name);});
-  return div({},div({className:"modal-title"},"新增消費 🧾"),
-    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"消費名稱"),inp({className:"inp",placeholder:"例：一蘭拉麵",defaultValue:f.label,onInput:e=>{S.expForm.label=e.target.value}})),
-    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1.2"}},h("label",{className:"flabel"},"分類"),sel({className:"inp",value:f.category,onChange:e=>sf("category",e.target.value)},...EXP_CATS.map(c=>opt(c,c)))),div({style:{flex:"1"}},h("label",{className:"flabel"},"日期"),inp({className:"inp",type:"date","data-field":"date",defaultValue:f.date,onBlur:e=>{S.expForm.date=e.target.value}}))),
-    div({style:{display:"flex",gap:"8px",marginBottom:"4px"}},div({style:{flex:"1.5"}},h("label",{className:"flabel"},"金額"),inp({className:"inp",type:"number",placeholder:"0",defaultValue:f.amount,onBlur:e=>sf("amount",e.target.value)})),div({style:{flex:"1"}},h("label",{className:"flabel"},"幣別"),sel({className:"inp",value:f.currency,onChange:e=>sf("currency",e.target.value)},opt("TWD","🇹🇼 TWD"),opt("JPY","🇯🇵 JPY")))),
-    f.currency==="JPY"&&f.amount?div({style:{fontSize:"11px",color:"#9A8F7E",marginBottom:"8px"}},"≈ NT$"+j2t(Number(f.amount)).toLocaleString()):null,
-    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"由誰付款"),sel({className:"inp",value:f.paidBy,onChange:e=>sf("paidBy",Number(e.target.value))},...S.persons.map(p=>opt(p.id,p.name)))),
-    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"分攤（不選＝全員均分）"),div({style:{display:"flex",gap:"6px",flexWrap:"wrap",marginTop:"5px"}},...pcbs)),
-    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"備註"),inp({className:"inp",placeholder:"例：含服務費",defaultValue:f.note,onInput:e=>{S.expForm.note=e.target.value}})),
-    div({style:{display:"flex",gap:"8px",marginTop:"4px"}},btn({className:"btn-sm",style:{flex:"1",padding:"12px"},onClick:()=>{S.modal=null;render();}},"取消"),btn({className:"btn-red",style:{flex:"2",padding:"12px"},onClick:saveExpense},"確認記帳"))
+  const f=S.expForm;
+  function ni(placeholder,field,opts={}){
+    const el=document.createElement("input");
+    el.className="inp";
+    el.placeholder=placeholder;
+    el.value=S.expForm[field]||"";
+    if(opts.type) el.type=opts.type;
+    el.addEventListener("input",e=>{S.expForm[field]=e.target.value;});
+    return el;
+  }
+  const catSel=sel({className:"inp",value:f.category,onChange:e=>{S.expForm.category=e.target.value;}},...EXP_CATS.map(c=>opt(c,c)));
+  const curSel=sel({className:"inp",value:f.currency,onChange:e=>{S.expForm.currency=e.target.value;}},opt("TWD","🇹🇼 TWD"),opt("JPY","🇯🇵 JPY"));
+  const payerSel=sel({className:"inp",value:f.paidBy,onChange:e=>{S.expForm.paidBy=Number(e.target.value);}},...S.persons.map(p=>opt(p.id,p.name)));
+  const pcbs=S.persons.map(p=>{
+    const sw=f.splitWith;const checked=sw.length===0||sw.includes(p.id);
+    return lbl({style:{display:"flex",alignItems:"center",gap:"6px",background:checked?p.color+"15":"transparent",border:`1.5px solid ${checked?p.color+"50":"#E0D5C0"}`,borderRadius:"8px",padding:"5px 10px",cursor:"pointer",fontSize:"12px",fontWeight:"500"}},
+      inp({type:"checkbox",checked,style:{accentColor:p.color},onChange:()=>{
+        const cur=S.expForm.splitWith.length===0?S.persons.map(x=>x.id):S.expForm.splitWith;
+        const next=cur.includes(p.id)?cur.filter(x=>x!==p.id):[...cur,p.id];
+        S.expForm.splitWith=next.length===S.persons.length?[]:next;
+        render();
+      }}),avatar(p.name,p.color,22)," ",p.name
+    );
+  });
+  return div({},
+    div({className:"modal-title"},"新增消費 🧾"),
+    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"消費名稱"),ni("例：一蘭拉麵","label")),
+    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},
+      div({style:{flex:"1.2"}},h("label",{className:"flabel"},"分類"),catSel),
+      div({style:{flex:"1"}},h("label",{className:"flabel"},"日期"),ni("","date",{type:"date"}))
+    ),
+    div({style:{display:"flex",gap:"8px",marginBottom:"4px"}},
+      div({style:{flex:"1.5"}},h("label",{className:"flabel"},"金額"),ni("0","amount",{type:"number"})),
+      div({style:{flex:"1"}},h("label",{className:"flabel"},"幣別"),curSel)
+    ),
+    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"由誰付款"),payerSel),
+    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"分攤（不選＝全員均分）"),
+      div({style:{display:"flex",gap:"6px",flexWrap:"wrap",marginTop:"5px"}},...pcbs)
+    ),
+    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"備註"),ni("例：含服務費","note")),
+    div({style:{display:"flex",gap:"8px",marginTop:"4px"}},
+      btn({className:"btn-sm",style:{flex:"1",padding:"12px"},onClick:()=>{S.modal=null;render();}},"取消"),
+      btn({className:"btn-red",style:{flex:"2",padding:"12px"},onClick:saveExpense},"確認記帳")
+    )
   );
 }
 function buildSpotModal(){
@@ -1080,8 +1143,6 @@ function buildSpotModal(){
 function openNewFlight(){S.editFlight=null;S.flightForm={direction:"去程",flightNo:"",airline:"",from:"TPE",fromCity:"台灣桃園",to:"NRT",toCity:"東京成田",date:"",departTime:"",arriveTime:"",terminal:"",gate:"",seat:"",ticketPrice:""};S.modal="flight";render();}
 function openEditFlight(f){S.editFlight=f.id;S.flightForm={...f};S.modal="flight";render();}
 async function saveCustomSpot(){
-  // Sync DOM inputs to state first
-  document.querySelectorAll(".modal [data-field]").forEach(el=>{S.addSpotForm[el.getAttribute("data-field")]=el.value;});
   const f=S.addSpotForm;
   if(!f.name.trim()) return;
   const type=f.customType.trim()||f.type||"📍 自訂景點";
@@ -1125,23 +1186,9 @@ function deleteCustomSpot(id){
   persist();render();
 }
 
-function saveFlight(){
-  // Sync all tagged inputs to state
-  document.querySelectorAll(".modal [data-field]").forEach(el=>{
-    S.flightForm[el.getAttribute("data-field")]=el.value;
-  });
-  if(!S.flightForm.flightNo&&!S.flightForm.date)return;
-  if(S.editFlight)S.flights=S.flights.map(f=>f.id===S.editFlight?{...S.flightForm,id:S.editFlight}:f);
-  else S.flights=[...S.flights,{...S.flightForm,id:Date.now()}];
-  S.modal=null;persist();render();
-}
+function saveFlight(){if(!S.flightForm.flightNo&&!S.flightForm.date)return;if(S.editFlight)S.flights=S.flights.map(f=>f.id===S.editFlight?{...S.flightForm,id:S.editFlight}:f);else S.flights=[...S.flights,{...S.flightForm,id:Date.now()}];S.modal=null;persist();render();}
 function openExpense(){S.expForm={label:"",category:"🍜 餐飲",amount:"",currency:"TWD",paidBy:S.persons[0]?.id||1,splitWith:[],date:"",note:""};S.modal="expense";render();}
-function saveExpense(){
-  document.querySelectorAll(".modal [data-field]").forEach(el=>{S.expForm[el.getAttribute("data-field")]=el.value;});
-  if(!S.expForm.label||!S.expForm.amount)return;
-  S.expenses=[...S.expenses,{...S.expForm,id:Date.now()}];
-  S.modal=null;persist();render();
-}
+function saveExpense(){if(!S.expForm.label||!S.expForm.amount)return;S.expenses=[...S.expenses,{...S.expForm,id:Date.now()}];S.modal=null;persist();render();}
 async function runAI(){
   S.aiLoad=true;render();
   const D=derived();const list=D.allAdded.map(s=>s.name+"("+s.area+")").join("、");

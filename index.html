@@ -3,9 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="東京旅遊">
@@ -195,8 +192,7 @@ const SPOTS=[
   {id:18,name:"新宿歌舞伎町一番街",area:"新宿",type:"🆕 新地標",cost:0,dur:60,icon:"🎭",ig:"新爆紅",hot:true,subway:"JR 新宿站",lat:35.6962,lng:139.7037,tip:"東急歌舞伎町Tower霓虹夜景爆紅"},
   {id:19,name:"台場彩虹橋",area:"台場",type:"🌆 熱門景點",cost:0,dur:60,icon:"🌈",ig:"拍照",hot:false,subway:"ゆりかもめ 台場站",lat:35.6227,lng:139.7753,tip:"晚上8點燈光最美，對岸拍攝佳"},
   {id:20,name:"築地場外市場",area:"築地",type:"🍣 必吃美食",cost:2500,dur:90,icon:"🍣",ig:"拍照",hot:false,subway:"都營大江戶線 築地市場站",lat:35.6654,lng:139.7707,tip:"早上6點開市，玉子燒必買"},
-  // ── 公仔 & 玩具 ──
-  {id:21,name:"Mandarake Complex 秋葉原",area:"秋葉原",type:"🎎 公仔玩具",cost:5000,dur:120,icon:"🎎",ig:"必去",hot:true,subway:"JR 秋葉原站 徒步5分",lat:35.7022,lng:139.7741,tip:"8層樓日本最大動漫藏品店！漫畫/公仔/模型/稀有限定品，挖寶天堂"},
+{id:21,name:"Mandarake Complex 秋葉原",area:"秋葉原",type:"🎎 公仔玩具",cost:5000,dur:120,icon:"🎎",ig:"必去",hot:true,subway:"JR 秋葉原站 徒步5分",lat:35.7022,lng:139.7741,tip:"8層樓日本最大動漫藏品店！漫畫/公仔/模型/稀有限定品，挖寶天堂"},
   {id:22,name:"中野百老匯 Mandarake",area:"中野",type:"🎎 公仔玩具",cost:8000,dur:150,icon:"🏬",ig:"必去",hot:true,subway:"JR中央線 中野站 徒步5分",lat:35.7078,lng:139.6653,tip:"老字號二手公仔聖地，稀有古董玩具比秋葉原更好挖寶，建議留2-3小時"},
   {id:23,name:"駿河屋 秋葉原本店",area:"秋葉原",type:"🎎 公仔玩具",cost:5000,dur:90,icon:"🎮",ig:"熱門",hot:true,subway:"JR 秋葉原站 徒步3分",lat:35.6995,lng:139.7733,tip:"中古遊戲/公仔超大量，價格比台灣便宜，記得帶護照退稅"},
   {id:24,name:"秋葉原扭蛋會館",area:"秋葉原",type:"🎎 公仔玩具",cost:3000,dur:60,icon:"🟡",ig:"爆紅",hot:true,subway:"JR 秋葉原站 徒步5分",lat:35.7020,lng:139.7738,tip:"超過500台扭蛋機！寶可夢/鬼滅/海賊王/角落生物全都有，每月50種新扭蛋"},
@@ -267,10 +263,67 @@ const SPOTS=[
 
 
 
+
+  // ── 公仔 & 玩具 ──
+  {id:21,name:"Mandarake Complex 秋葉原",area:"秋葉原",type:"🎎 公仔玩具",cost:5000,dur:120,icon:"🎎",ig:"必去",hot:true,subway:"JR 秋葉原站 徒步5分",lat:35.7022,lng:139.7741,tip:"8層樓日本最大動漫藏品店！漫畫/公仔/模型/稀有限定品，挖寶天堂"},
+  {id:22,name:"中野百老匯 Mandarake",area:"中野",type:"🎎 公仔玩具",cost:8000,dur:150,icon:"🏬",ig:"必去",hot:true,subway:"JR中央線 中野站 徒步5分",lat:35.7078,lng:139.6653,tip:"老字號二手公仔聖地，稀有古董玩具比秋葉原更好挖寶，建議留2-3小時"},
+  {id:23,name:"駿河屋 秋葉原本店",area:"秋葉原",type:"🎎 公仔玩具",cost:5000,dur:90,icon:"🎮",ig:"熱門",hot:true,subway:"JR 秋葉原站 徒步3分",lat:35.6995,lng:139.7733,tip:"中古遊戲/公仔超大量，價格比台灣便宜，記得帶護照退稅"},
+  {id:24,name:"秋葉原扭蛋會館",area:"秋葉原",type:"🎎 公仔玩具",cost:3000,dur:60,icon:"🟡",ig:"爆紅",hot:true,subway:"JR 秋葉原站 徒步5分",lat:35.7020,lng:139.7738,tip:"超過500台扭蛋機！寶可夢/鬼滅/海賊王/角落生物全都有，每月50種新扭蛋"},
+  {id:25,name:"GiGO 秋葉原 夾娃娃",area:"秋葉原",type:"🎎 公仔玩具",cost:2000,dur:60,icon:"🕹️",ig:"熱門",hot:false,subway:"JR 秋葉原站 徒步3分",lat:35.7016,lng:139.7735,tip:"原SEGA旗下，100台以上夾娃娃機，限定公仔只有這裡有"},
+  {id:26,name:"寶可夢中心 Mega Tokyo",area:"池袋",type:"🎎 公仔玩具",cost:4000,dur:90,icon:"⚡",ig:"必拍",hot:true,subway:"JR山手線 池袋站 東口徒步2分",lat:35.7300,lng:139.7109,tip:"🔥全日本最大寶可夢中心！池袋限定皮卡丘周邊，門口有超夢可拍照"},
+  {id:27,name:"寶可夢中心 澀谷",area:"澀谷",type:"🎎 公仔玩具",cost:3000,dur:60,icon:"🔴",ig:"熱門",hot:false,subway:"JR山手線 澀谷站 徒步5分",lat:35.6617,lng:139.6990,tip:"澀谷Parco 6F，澀谷限定皮卡丘，逛完澀谷順道拜訪"},
+  {id:28,name:"LEGO 旗艦店 新宿",area:"新宿",type:"🎎 公仔玩具",cost:5000,dur:60,icon:"🧱",ig:"必拍",hot:true,subway:"JR山手線 新宿站 徒步5分",lat:35.6915,lng:139.7008,tip:"日本最大LEGO旗艦店！限定款/大型展示積木/現場組裝體驗，必拍照"},
+  {id:29,name:"Disney Store 銀座旗艦",area:"銀座",type:"🎎 公仔玩具",cost:5000,dur:60,icon:"🐭",ig:"熱門",hot:false,subway:"東京Metro銀座線 銀座站 徒步3分",lat:35.6717,lng:139.7658,tip:"銀座限定迪士尼商品，裝潢超精美，逛銀座必順道"},
+  {id:30,name:"Jump Shop 東京晴空塔",area:"押上",type:"🎎 公仔玩具",cost:4000,dur:60,icon:"📕",ig:"熱門",hot:false,subway:"東武 押上站 徒步3分",lat:35.7100,lng:139.8096,tip:"少年JUMP官方店，海賊王/火影/龍珠限定商品，週邊超齊全"},
+  {id:31,name:"Hobby Japan 秋葉原",area:"秋葉原",type:"🎎 公仔玩具",cost:6000,dur:90,icon:"🤖",ig:"熱門",hot:false,subway:"JR 秋葉原站 徒步3分",lat:35.7010,lng:139.7730,tip:"鋼彈模型/figma/高達模型超齊全，模型控必朝聖"},
+  {id:32,name:"Animate 池袋本店",area:"池袋",type:"🎎 公仔玩具",cost:4000,dur:90,icon:"✨",ig:"熱門",hot:false,subway:"JR山手線 池袋站 徒步5分",lat:35.7295,lng:139.7121,tip:"動漫周邊/聲優CD/漫畫最齊全連鎖店，池袋本店共8層樓"},
+
+  // ── 精品包 ──
+  {id:33,name:"Louis Vuitton 表參道旗艦",area:"表參道",type:"👜 精品包",cost:0,dur:60,icon:"👜",ig:"必拍",hot:true,subway:"東京Metro銀座線 表參道站 徒步2分",lat:35.6653,lng:139.7127,tip:"🔥青木淳設計的建築本身就是藝術！即使不買也值得拍照，日本限定款比台灣好找"},
+  {id:34,name:"Chanel 銀座旗艦",area:"銀座",type:"👜 精品包",cost:0,dur:60,icon:"🖤",ig:"必拍",hot:true,subway:"東京Metro銀座線 銀座站 徒步2分",lat:35.6705,lng:139.7637,tip:"銀座最美精品店之一，外牆LED燈光秀夜間必拍，日本限定香水值得入手"},
+  {id:35,name:"Hermès 銀座",area:"銀座",type:"👜 精品包",cost:0,dur:45,icon:"🟠",ig:"熱門",hot:false,subway:"東京Metro銀座線 銀座站 徒步3分",lat:35.6703,lng:139.7633,tip:"銀座旗艦，Birkin/Kelly等候名單，絲巾/小皮件較易入手，環境優雅"},
+  {id:36,name:"Gucci 表參道",area:"表參道",type:"👜 精品包",cost:0,dur:45,icon:"🟢",ig:"熱門",hot:false,subway:"東京Metro銀座線 表參道站 徒步3分",lat:35.6646,lng:139.7124,tip:"表參道精品街必逛，日本限定聯名款要提早關注官網"},
+  {id:37,name:"Dior 表參道",area:"表參道",type:"👜 精品包",cost:0,dur:45,icon:"💙",ig:"必拍",hot:true,subway:"東京Metro銀座線 表參道站 徒步2分",lat:35.6649,lng:139.7130,tip:"建築設計超美，Dior Beauty日本限定色號必買，拍照聖地"},
+  {id:38,name:"二手精品 Brand Off 銀座",area:"銀座",type:"👜 精品包",cost:30000,dur:90,icon:"💎",ig:"熱門",hot:true,subway:"東京Metro銀座線 銀座站 徒步5分",lat:35.6715,lng:139.7650,tip:"🔥日本二手精品CP值最高！LV/Chanel/Hermès 比台灣便宜20-30%，帶護照免稅"},
+  {id:39,name:"KOMEHYO 新宿",area:"新宿",type:"👜 精品包",cost:20000,dur:90,icon:"🏷️",ig:"熱門",hot:true,subway:"JR山手線 新宿站 徒步5分",lat:35.6940,lng:139.7025,tip:"老字號二手精品名錶，價格透明公道，Rolex/AP二手款選擇多"},
+
+  // ── 精品錶 ──
+  {id:40,name:"Rolex 銀座 Lexia 精品錶店",area:"銀座",type:"⌚ 精品錶",cost:0,dur:45,icon:"⌚",ig:"必朝聖",hot:true,subway:"東京Metro銀座線 銀座站 徒步2分",lat:35.6712,lng:139.7643,tip:"🔥日本最大Rolex官方精品店！Submariner/Daytona正規管道，買錶記得帶護照"},
+  {id:41,name:"AP Royal Oak 表參道 AP House",area:"表參道",type:"⌚ 精品錶",cost:0,dur:45,icon:"⌚",ig:"必朝聖",hot:true,subway:"東京Metro銀座線 表參道站 徒步3分",lat:35.6658,lng:139.7135,tip:"Audemars Piguet官方體驗空間，Royal Oak全系列展示，錶迷朝聖必去"},
+  {id:42,name:"Patek Philippe 銀座",area:"銀座",type:"⌚ 精品錶",cost:0,dur:30,icon:"⌚",ig:"熱門",hot:false,subway:"東京Metro銀座線 銀座站 徒步3分",lat:35.6718,lng:139.7640,tip:"百達翡麗官方沙龍，Calatrava/Nautilus展示，感受頂級鐘錶工藝"},
+  {id:43,name:"Cartier 銀座",area:"銀座",type:"⌚ 精品錶",cost:0,dur:45,icon:"💍",ig:"必拍",hot:false,subway:"東京Metro銀座線 銀座站 徒步2分",lat:35.6710,lng:139.7638,tip:"Tank/Santos日本限定款，銀座旗艦建築夜間燈光超美，首飾&錶都值得看"},
+  {id:44,name:"Watch Fever 中古錶 渋谷",area:"澀谷",type:"⌚ 精品錶",cost:0,dur:60,icon:"🔍",ig:"熱門",hot:true,subway:"JR山手線 澀谷站 徒步5分",lat:35.6600,lng:139.6988,tip:"二手名錶挖寶勝地，Rolex/Omega/Tudor價格比台灣透明，店員懂錶好溝通"},
+  {id:45,name:"大黑屋 二手名錶 銀座",area:"銀座",type:"⌚ 精品錶",cost:0,dur:60,icon:"🕐",ig:"熱門",hot:false,subway:"東京Metro銀座線 銀座站 徒步5分",lat:35.6720,lng:139.7655,tip:"老字號二手名錶，Omega/Rolex/IWC選擇多，保固完整價格合理"},
+  // ── 在地隱藏景點 ──
+  {id:46,name:"谷根千 下町老街",area:"谷中",type:"🏮 私藏秘境",cost:500,dur:150,icon:"🏮",ig:"秘境",hot:true,subway:"JR 日暮里站 徒步5分",lat:35.7261,lng:139.7659,tip:"🔥在地人最愛！谷中銀座商店街+昭和老街，遠離觀光客，銅鑼燒+炸肉餅邊走邊吃必試"},
+  {id:47,name:"清澄白河 咖啡文青街",area:"清澄白河",type:"🏮 私藏秘境",cost:1500,dur:120,icon:"☕",ig:"秘境",hot:true,subway:"東京Metro半藏門線 清澄白河站",lat:35.6786,lng:139.7972,tip:"東京Brooklyn！Blue Bottle等精品咖啡聚集地，藝廊+選物店散落巷弄間，最適合文青慢遊"},
+  {id:48,name:"豪德寺 招財貓聖地",area:"世田谷",type:"🏮 私藏秘境",cost:0,dur:60,icon:"🐱",ig:"秘境",hot:true,subway:"東急世田谷線 宮の坂站 徒步5分",lat:35.6572,lng:139.6366,tip:"🔥數千隻招財貓小雕像！貓奴朝聖必去，遊客超少，寧靜美麗，IG秘境"},
+  {id:49,name:"下北澤 古著&咖哩街",area:"下北澤",type:"🏮 私藏秘境",cost:3000,dur:150,icon:"🎸",ig:"在地推薦",hot:true,subway:"小田急線/京王井之頭線 下北澤站",lat:35.6614,lng:139.6680,tip:"東京次文化中心！日本最密集古著店+全日本最多咖哩店，週末有獨立音樂表演"},
+  {id:50,name:"代官山蔦屋書店",area:"代官山",type:"🏮 私藏秘境",cost:0,dur:90,icon:"📚",ig:"秘境",hot:true,subway:"東急東橫線 代官山站 徒步5分",lat:35.6491,lng:139.7026,tip:"全球最美書店！深夜開到凌晨2點，附設lounge bar，慢慢翻書配咖啡最享受"},
+  {id:51,name:"自由之丘 甜點天堂",area:"自由之丘",type:"🏮 私藏秘境",cost:2000,dur:120,icon:"🎂",ig:"在地推薦",hot:false,subway:"東急東橫線 自由が丘站",lat:35.6086,lng:139.6685,tip:"歐風甜點小鎮，蒙布朗發源地！在地上班族的秘密甜點街，人潮比澀谷少得多"},
+  {id:52,name:"吉祥寺 井之頭公園",area:"吉祥寺",type:"🏮 私藏秘境",cost:0,dur:120,icon:"🌳",ig:"在地推薦",hot:false,subway:"JR中央線 吉祥寺站 徒步5分",lat:35.7027,lng:139.5778,tip:"日本人票選最想居住地區！公園+商店街+薩太郎炸牛肉丸，悠閒一整天"},
+  {id:53,name:"中目黑 運河咖啡街",area:"中目黑",type:"🏮 私藏秘境",cost:1500,dur:120,icon:"🌊",ig:"秘境",hot:true,subway:"東急東橫線 中目黑站",lat:35.6440,lng:139.6987,tip:"目黑川沿岸精品咖啡+選物店！Starbucks Reserve Roastery世界最美分店就在這，春天賞櫻超夢幻"},
+  {id:54,name:"藏前 手作職人街",area:"藏前",type:"🏮 私藏秘境",cost:1000,dur:90,icon:"🏺",ig:"秘境",hot:false,subway:"都營淺草線/大江戶線 藏前站",lat:35.7055,lng:139.7922,tip:"東京Brooklyn！皮革/文具/陶器手作職人工房，每間都是獨立小店，好拍好逛"},
+  {id:55,name:"新宿思い出横丁",area:"新宿",type:"🏮 私藏秘境",cost:3000,dur:90,icon:"🏮",ig:"在地推薦",hot:true,subway:"JR山手線 新宿站 西口徒步2分",lat:35.6939,lng:139.6999,tip:"昭和風燒烤橫丁！50年老店聚集，烤內臟+燒鳥+啤酒，深夜氣氛絕佳，在地人下班必去"},
+  {id:56,name:"麻布十番 百年商店街",area:"麻布十番",type:"🏮 私藏秘境",cost:2000,dur:90,icon:"⛩️",ig:"在地推薦",hot:false,subway:"東京Metro南北線 麻布十番站",lat:35.6552,lng:139.7369,tip:"可以看到東京鐵塔的百年老街，豆源仙貝+浪花家鯛魚燒是必吃老店，觀光客少"},
+
+  // ── 隱藏美食 ──
+  {id:57,name:"AFURI 柚子鹽拉麵",area:"原宿",type:"🔍 隱藏美食",cost:1500,dur:60,icon:"🍜",ig:"必吃",hot:true,subway:"JR山手線 原宿站 徒步5分",lat:35.6691,lng:139.7047,tip:"PTT/Dcard評價超高！柚子清香湯頭，清爽不膩，和一般濃厚拉麵完全不同，炎夏也能吃"},
+  {id:58,name:"天金 天丼名店 築地",area:"築地",type:"🔍 隱藏美食",cost:1200,dur:45,icon:"🍤",ig:"必吃",hot:true,subway:"都營大江戶線 築地市場站 徒步3分",lat:35.6659,lng:139.7701,tip:"¥1000內整尾星鰻+炸蝦+炸花枝+半熟蛋！連日本人排隊的天丼始祖，建議早上去"},
+  {id:59,name:"Mercer Brunch 法式吐司 銀座",area:"銀座",type:"🔍 隱藏美食",cost:2000,dur:60,icon:"🍞",ig:"爆紅",hot:true,subway:"東京Metro銀座線 銀座站 徒步3分",lat:35.6713,lng:139.7636,tip:"🔥Dcard評論爆炸多！法式吐司入口即化，打卡必點，假日建議提早預約"},
+  {id:60,name:"吉祥寺 Satou 炸牛肉丸",area:"吉祥寺",type:"🔍 隱藏美食",cost:800,dur:20,icon:"🥩",ig:"必吃",hot:true,subway:"JR中央線 吉祥寺站 徒步3分",lat:35.7025,lng:139.5796,tip:"排隊名物！外酥內嫩juicy，一顆¥240，5顆以上¥200，邊走邊吃最爽，常賣到下午就售完"},
+  {id:61,name:"蟻月 牛腸鍋 中目黑",area:"中目黑",type:"🔍 隱藏美食",cost:4000,dur:90,icon:"🫕",ig:"必吃",hot:true,subway:"東急東橫線 中目黑站 徒步5分",lat:35.6437,lng:139.6980,tip:"東京版福岡名物！牛腸鍋湯底香醇，味噌和醬油各有擁護者，吃完配白飯絕配"},
+  {id:62,name:"大和家 天丼 人形町",area:"人形町",type:"🔍 隱藏美食",cost:1000,dur:45,icon:"🍚",ig:"在地推薦",hot:false,subway:"東京Metro日比谷線 人形町站 徒步2分",lat:35.6840,lng:139.7775,tip:"在地上班族午餐秘密！古早味天丼老店，分量超大，¥1000以內，觀光客很少知道"},
+  {id:63,name:"豐洲市場 大江戶海鮮丼",area:"豐洲",type:"🔍 隱藏美食",cost:3500,dur:60,icon:"🐡",ig:"必吃",hot:true,subway:"ゆりかもめ 市場前站 徒步5分",lat:35.6459,lng:139.7831,tip:"豐洲市場內隱藏版！5種以上海膽食べ比べ丼，早上7點開始，新鮮程度比千客萬來更高"},
+  {id:64,name:"新宿 思い出横丁 燒烤",area:"新宿",type:"🔍 隱藏美食",cost:3000,dur:90,icon:"🍺",ig:"在地推薦",hot:true,subway:"JR山手線 新宿站 西口",lat:35.6938,lng:138.6998,tip:"昭和50年老店烤內臟！日本本地人的深夜食堂，啤酒配串烤，氣氛超好"},
+  {id:65,name:"RURU SHIBUYA 抹茶甜點",area:"澀谷",type:"🔍 隱藏美食",cost:1800,dur:45,icon:"🍵",ig:"爆紅",hot:true,subway:"JR山手線 澀谷站 徒步5分",lat:35.6600,lng:139.6995,tip:"2024爆紅抹茶咖啡廳！流水抹茶裝置超夢幻，IG打卡必去，記得提早排隊"},
+  {id:66,name:"谷中銀座 銅鑼燒老店",area:"谷中",type:"🔍 隱藏美食",cost:500,dur:20,icon:"🍡",ig:"在地推薦",hot:false,subway:"JR 日暮里站 徒步7分",lat:35.7256,lng:139.7659,tip:"在地阿嬤級甜點！現包熱騰騰銅鑼燒+草糰子，¥200-300，昭和風情老街邊走邊吃"},
+
+
 ];
 const DAYS5=["DAY 1","DAY 2","DAY 3","DAY 4","DAY 5"];
 const PC=["#C84B31","#2E86AB","#A23B72","#F18F01","#3BB273","#7B2D8B"];
-const TC={"⛩️ 文化古蹟":"#8B6F47","🌆 熱門景點":"#6B7280","🌅 展望台":"#0EA5E9","🎨 藝術體驗":"#A23B72","🆕 新地標":"#10B981","🎢 主題樂園":"#7C3AED","🍣 必吃美食":"#DC2626","🔍 隱藏美食":"#D97706","🛍️ 一般購物":"#C84B31","🎎 公仔玩具":"#E8541A","👜 精品包":"#8B5CF6","⌚ 精品錶":"#0369A1","🏮 私藏秘境":"#059669","🌟 宜庭私藏":"#E4A011","🎌 宜庭私藏":"#E11D48"};
+const TC={"文化":"#8B6F47","購物":"#C84B31","展望台":"#2E86AB","藝術":"#A23B72","美食":"#D4622A","新景點":"#3BB273","主題樂園":"#7C3AED","景點":"#888","⛩️ 文化古蹟":"#8B6F47","🌆 熱門景點":"#6B7280","🌅 展望台":"#0EA5E9","🎨 藝術體驗":"#A23B72","🆕 新地標":"#10B981","🎢 主題樂園":"#7C3AED","🍣 必吃美食":"#DC2626","🔍 隱藏美食":"#D97706","🛍️ 一般購物":"#C84B31","🎎 公仔玩具":"#E8541A","👜 精品包":"#8B5CF6","⌚ 精品錶":"#0369A1","🏮 私藏秘境":"#059669","🌟 宜庭私藏":"#E4A011"};
 const EXP_CATS=["✈️ 機票","🏨 住宿","🚇 交通","🍜 餐飲","🛍️ 購物","🎡 門票","💊 藥妝","📦 其他"];
 const BP_DEF={economy:{label:"省錢背包客",icon:"🎒",flight:8000,hotel:1800,food:600,misc:2000},standard:{label:"標準舒適",icon:"🧳",flight:11000,hotel:3500,food:900,misc:4000},premium:{label:"享受優質",icon:"✨",flight:15000,hotel:6000,food:1500,misc:8000}};
 
@@ -346,59 +399,6 @@ const PASS_RECOMMEND = [
   },
 ];
 
-
-const PASS_COVERAGE = {
-  metro24:   ["銀座線","丸之內線","日比谷線","東西線","千代田線","有樂町線","半藏門線","南北線","副都心線"],
-  jr1day:    ["JR","山手線","中央線","埼京線","京浜東北線","総武線","横須賀線"],
-  combo:     ["銀座線","丸之內線","日比谷線","東西線","千代田線","有樂町線","半藏門線","南北線","副都心線","都營","淺草線","三田線","新宿線","大江戶線","都電荒川線"],
-  yurikamome:["ゆりかもめ","百合海鷗"],
-  suica:     ["全部"],
-};
-
-function checkPassCoverage(spot, passId){
-  if(passId === "suica") return {ok:true, note:"Suica刷卡"};
-  const lines = PASS_COVERAGE[passId] || [];
-  const subway = spot.subway || "";
-  const matched = lines.some(l => subway.includes(l));
-  // Special checks
-  if(!matched){
-    // Check if needs extra ticket
-    if(subway.includes("ゆりかもめ") || subway.includes("百合海鷗")){
-      return {ok:false, note:"需另購百合海鷗券¥820"};
-    }
-    if(subway.includes("東急") || subway.includes("小田急") || subway.includes("東武") || subway.includes("西武") || subway.includes("京王") || subway.includes("京急") || subway.includes("京成")){
-      return {ok:false, note:"私鐵需Suica/另購票"};
-    }
-    if((passId==="metro24") && (subway.includes("都營") || subway.includes("三田線") || subway.includes("大江戶") || subway.includes("淺草線") || subway.includes("新宿線"))){
-      return {ok:false, note:"都營線需另購都營券¥700"};
-    }
-    if((passId==="jr1day") && (subway.includes("Metro") || subway.includes("銀座線") || subway.includes("日比谷") || subway.includes("半藏門") || subway.includes("千代田") || subway.includes("南北") || subway.includes("副都心"))){
-      return {ok:false, note:"地鐵線需另購Metro券¥800"};
-    }
-    return {ok:false, note:"需Suica按次付費"};
-  }
-  return {ok:true, note:"票券可搭"};
-}
-
-
-// ── Geocode: find lat/lng from place name ──
-async function geocodePlace(name){
-  try{
-    const q=encodeURIComponent(name+" 東京 日本");
-    const r=await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`,{headers:{"Accept-Language":"zh-TW"}});
-    const d=await r.json();
-    if(d&&d.length>0) return{lat:parseFloat(d[0].lat),lng:parseFloat(d[0].lon)};
-  }catch(_){}
-  return{lat:35.6762,lng:139.6503}; // fallback Tokyo center
-}
-
-
-function syncInputsToState(formObj, inputIdPrefix){
-  // Grab all inputs inside modal and sync to form object
-  document.querySelectorAll(".modal input:not([type=checkbox]):not([type=range])").forEach(el=>{
-    if(el.dataset&&el.dataset.field) formObj[el.dataset.field]=el.value;
-  });
-}
 const fmtY=n=>`¥${Number(n).toLocaleString()}`;
 const fmtN=n=>`NT$${Math.round(n).toLocaleString()}`;
 const j2t=n=>Math.round(n*0.22);
@@ -416,40 +416,28 @@ let S={
   flightForm:{direction:"去程",flightNo:"",airline:"",from:"TPE",fromCity:"台灣桃園",to:"NRT",toCity:"東京成田",date:"",departTime:"",arriveTime:"",terminal:"",gate:"",seat:"",ticketPrice:""},
   expenses:[],expForm:{label:"",category:"🍜 餐飲",amount:"",currency:"TWD",paidBy:1,splitWith:[],date:"",note:""},
   preset:"standard",budget:{...BP_DEF.standard},
-  filter:"全部",customSpots:[],showAddSpot:false,addSpotForm:{name:"",area:"",type:"",customType:"",cost:"",dur:"90",icon:"📍",tip:"",subway:""},navFilter:"全部",transitTab:"route",selectedPass:"combo",modal:null,mSpot:null,
+  filter:"全部",search:"",navFilter:"全部",transitTab:"route",selectedPass:"combo",modal:null,mSpot:null,aiText:"",aiLoad:false,aiUpdateLoad:false,aiTransitLoad:false,aiTransitText:"",
   syncStatus:"cloud", // cloud | saving | saved | error
   newName:""
 };
 
 let saveTimer=null;
-let isSaving=false;
 function persist(){
   clearTimeout(saveTimer);
+  S.syncStatus="saving"; render();
   saveTimer=setTimeout(async()=>{
-    if(isSaving) return;
-    isSaving=true;
-    S.syncStatus="saving";
-    // Only update the badge, don't re-render entire UI
-    const badge=document.querySelector(".sync-badge");
-    if(badge){badge.className="sync-badge sync-saving";badge.textContent="💾 儲存中…";}
     try{
       await dbSave({
         flights:S.flights, days:S.days, persons:S.persons, pexp:S.pexp, customSpots:S.customSpots||[],
         expenses:S.expenses, preset:S.preset, budget:S.budget,
         num_days:S.numDays, day_pass:S.dayPass
       });
-      S.syncStatus="saved";
-      if(badge){badge.className="sync-badge sync-ok";badge.textContent="✓ 已儲存";}
-      setTimeout(()=>{
-        S.syncStatus="cloud";
-        if(badge){badge.className="sync-badge sync-cloud";badge.textContent="☁️ 雲端同步";}
-      },2500);
+      S.syncStatus="saved"; render();
+      setTimeout(()=>{S.syncStatus="cloud";render();},2500);
     } catch(_){
-      S.syncStatus="error";
-      if(badge){badge.className="sync-badge sync-err";badge.textContent="✗ 同步失敗";}
+      S.syncStatus="error"; render();
     }
-    isSaving=false;
-  },1000);
+  },800);
 }
 
 // ═══════════════════════════════════════════
@@ -460,8 +448,7 @@ async function init(){
   const startTime = Date.now();
 
   try {
-    const timeout = new Promise((_,rej) => setTimeout(()=>rej(new Error("timeout")), 4000));
-    const d = await Promise.race([dbLoad(), timeout]);
+    const d = await dbLoad();
     if(d){
       if(d.flights?.length)   S.flights  = d.flights;
       if(d.customSpots?.length) S.customSpots = d.customSpots;
@@ -474,7 +461,7 @@ async function init(){
       if(d.num_days)          S.numDays  = d.num_days;
       if(d.day_pass!==null&&d.day_pass!==undefined) S.dayPass = d.day_pass;
     }
-  } catch(_){ /* 離線或超時，用預設值 */ }
+  } catch(_){ /* 離線時用預設值 */ }
 
   // 確保 loading 畫面至少顯示 MIN_LOAD_MS 毫秒
   const elapsed = Date.now() - startTime;
@@ -500,31 +487,13 @@ async function init(){
 // ═══════════════════════════════════════════
 //  DERIVED
 // ═══════════════════════════════════════════
-const TYPE_ORDER=["全部","🌆 熱門景點","⛩️ 文化古蹟","🌅 展望台","🎨 藝術體驗","🆕 新地標","🎢 主題樂園","🍣 必吃美食","🔍 隱藏美食","🛍️ 一般購物","🎎 公仔玩具","👜 精品包","⌚ 精品錶","🏮 私藏秘境","🎌 宜庭私藏"];
-
 function derived(){
-  const ALL_SPOTS = [...SPOTS, ...S.customSpots];
+  const ALL_SPOTS=[...SPOTS,...S.customSpots];
   const dayKeys=DAYS5.slice(0,S.numDays);
   const allAdded=dayKeys.flatMap(d=>S.days[d]||[]);
   const addedIds=new Set(allAdded.map(s=>s.id));
   const spotJPY=allAdded.reduce((a,x)=>a+x.cost,0);
-  // Transit cost based on selected pass
-  const passId = S.selectedPass || "suica";
-  let transTWD;
-  if(passId === "suica"){
-    transTWD = j2t(allAdded.length * 220 * S.persons.length);
-  } else if(passId === "metro24"){
-    transTWD = 800 * S.numDays * S.persons.length; // Metro day pass in TWD (800JPY * 0.22 already in j2t)
-    transTWD = j2t(800 * S.numDays) * S.persons.length;
-  } else if(passId === "jr1day"){
-    transTWD = j2t(800 * S.numDays) * S.persons.length;
-  } else if(passId === "combo"){
-    transTWD = j2t(1000 * S.numDays) * S.persons.length;
-  } else if(passId === "yurikamome"){
-    transTWD = j2t(820 * S.numDays) * S.persons.length;
-  } else {
-    transTWD = j2t(S.dayPass ? S.numDays*800*S.persons.length : allAdded.length*220*S.persons.length);
-  }
+  const transTWD=j2t(S.dayPass?S.numDays*800*S.persons.length:allAdded.length*220*S.persons.length);
   const flightTotal=S.flights.reduce((a,f)=>a+(Number(f.ticketPrice)||0)*S.persons.length,0);
   const expTWD=S.expenses.reduce((a,e)=>a+(e.currency==="JPY"?j2t(Number(e.amount)):Number(e.amount)),0);
   const bpp=S.budget.flight+S.budget.hotel*S.numDays+S.budget.food*3*S.numDays+S.budget.misc;
@@ -537,8 +506,8 @@ function derived(){
     return{...p,total:Math.round(t)};
   });
   const grand=perPerson.reduce((a,p)=>a+p.total,0);
-  const TYPES=TYPE_ORDER.filter(t=>t==="全部"||ALL_SPOTS.some(s=>s.type===t));
-  const filtered=ALL_SPOTS.filter(s=>(S.filter==="全部"||s.type===S.filter));
+  const TYPE_ORDER=["全部","🌆 熱門景點","⛩️ 文化古蹟","🌅 展望台","🎨 藝術體驗","🆕 新地標","🎢 主題樂園","🍣 必吃美食","🔍 隱藏美食","🛍️ 一般購物","🎎 公仔玩具","👜 精品包","⌚ 精品錶","🏮 私藏秘境","🌟 宜庭私藏"];const TYPES=TYPE_ORDER.filter(t=>t==="全部"||ALL_SPOTS.some(s=>s.type===t));
+  const filtered=SPOTS.filter(s=>(S.filter==="全部"||s.type===S.filter)&&(S.search===""||s.name.includes(S.search)||s.area.includes(S.search)));
   return{dayKeys,allAdded,addedIds,spotJPY,transTWD,flightTotal,expTWD,bpp,perPerson,grand,TYPES,filtered};
 }
 
@@ -549,12 +518,6 @@ function h(tag,props,...children){
   const el=document.createElement(tag);
   for(const[k,v]of Object.entries(props||{})){
     if(k==="className")el.className=v;
-    else if(k==="defaultValue"){el.value=v;}
-    else if(k==="value"){
-      // Only set if not currently focused (user typing)
-      if(document.activeElement!==el){ el.value=(v==null?"":v); }
-      else if(el.value===""){ el.value=(v==null?"":v); }
-    }
     else if(k.startsWith("on"))el.addEventListener(k.slice(2).toLowerCase(),v);
     else if(k==="style"&&typeof v==="object")Object.assign(el.style,v);
     else el.setAttribute(k,v);
@@ -606,7 +569,7 @@ function buildApp(){
   else if(S.tab==="plan")content=buildPlan(D);
   else if(S.tab==="expense")content=buildExpense(D);
   else if(S.tab==="budget")content=buildBudget(D);
-  else { try { content=buildNav(); } catch(e) { content=div({style:{padding:"20px",color:"#C84B31",fontSize:"12px"}},"導航載入錯誤: "+e.message); } }
+  else content=buildNav();
   return[hdr,h("main",{className:"content"},content)];
 }
 
@@ -654,12 +617,12 @@ function buildPlan(D){
   if(S.subTab==="lib"){
     sub=div({},
       div({style:{marginBottom:"10px"}},div({style:{fontSize:"11px",color:"#9A8F7E",fontWeight:"600",marginBottom:"6px"}},"加入到 →"),div({className:"day-strip"},...D.dayKeys.map(d=>span({className:"day-chip"+(S.selDay===d?" sel":""),onClick:()=>{S.selDay=d;render();}},d)))),
-      
+      inp({className:"inp",placeholder:"搜尋景點名稱、區域…",value:S.search,style:{marginBottom:"8px"},onInput:e=>{S.search=e.target.value;render();}}),
       div({className:"pills",style:{marginBottom:"11px"}},...D.TYPES.map(t=>span({className:"pill"+(S.filter===t?" on":""),onClick:()=>{S.filter=t;render();}},t))),
       div({style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"8px"}},
-        div({style:{fontSize:"11px",color:"#B0A090"}},""+D.filtered.length+" 個景點"),
+        div({style:{fontSize:"11px",color:"#B0A090"}},D.filtered.length+" 個景點"),
         btn({className:"btn-sm",style:{background:"#1A1008",color:"#F5F0E8",border:"none",fontSize:"11px",padding:"5px 12px"},
-          onClick:()=>{S.showAddSpot=true;render();}},"＋ 自訂新增")
+          onClick:()=>{S.showAddSpot=true;render();}},"＋ 自訂")
       ),
       ...D.filtered.map(s=>{
         const added=D.addedIds.has(s.id);
@@ -667,8 +630,7 @@ function buildPlan(D){
           s.hot&&!added?div({className:"hot-badge"},"🔥 HOT"):null,
           s.custom&&!added?div({className:"hot-badge",style:{background:"#8B5CF6"}},"✏️ 自訂"):null,
           added?div({className:"hot-badge",style:{background:"#3BB273"}},"✓ 已加入"):null,
-          s.custom&&!added?btn({style:{position:"absolute",bottom:"9px",right:"9px",background:"#FFF0EE",border:"1px solid #F0D0C8",borderRadius:"5px",color:"#C84B31",fontSize:"9px",padding:"2px 6px",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontWeight:"600"},
-            onClick:e=>{e.stopPropagation();deleteCustomSpot(s.id);}},"刪除"):null,
+          s.custom&&!added?btn({style:{position:"absolute",bottom:"9px",right:"9px",background:"#FFF0EE",border:"1px solid #F0D0C8",borderRadius:"5px",color:"#C84B31",fontSize:"9px",padding:"2px 6px",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontWeight:"600"},onClick:e=>{e.stopPropagation();deleteCustomSpot(s.id);}},"刪除"):null,
           div({style:{display:"flex",gap:"10px",alignItems:"flex-start"}},div({className:"sico"},s.icon),div({style:{flex:"1",minWidth:"0"}},div({style:{fontFamily:"'Noto Serif JP',serif",fontSize:"14px",fontWeight:"700",marginBottom:"3px"}},s.name),div({style:{fontSize:"11px",color:"#9A8F7E",marginBottom:"6px"}},s.area),div({style:{display:"flex",gap:"4px",flexWrap:"wrap"}},tag(s.type,TC[s.type]),tag(s.ig,s.ig.includes("爆紅")?"#C84B31":s.ig==="必拍"?"#A23B72":"#8B7355"),tag(s.cost===0?"免費":fmtY(s.cost),"#3BB273"),tag(s.dur+"分鐘","#2E86AB")),div({className:"tip"},s.tip),div({className:"sw"},"🚇 "+s.subway)))
         );
       })
@@ -736,37 +698,10 @@ function buildBudget(D){
   const ppCards=D.perPerson.map(p=>{const pct=D.grand?Math.round(p.total/D.grand*100):0;return div({className:"card",style:{marginBottom:"8px"}},div({style:{display:"flex",alignItems:"center",gap:"12px"}},avatar(p.name,p.color),div({style:{flex:"1"}},div({style:{fontSize:"13px",fontWeight:"600",marginBottom:"5px"}},p.name),div({className:"pbar-track"},div({className:"pbar-fill",style:{width:pct+"%",background:p.color}}))),div({style:{textAlign:"right"}},div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"16px",color:p.color}},`NT$${p.total.toLocaleString()}`),div({style:{fontSize:"10px",color:"#9A8F7E",marginTop:"2px"}},pct+"% of logged"))));});
   const spotJPYpp=D.spotJPY/S.persons.length;const transpp=j2t(S.dayPass?S.numDays*800:D.allAdded.length*220);
   const totalBars=S.budget.flight+S.budget.hotel*S.numDays+S.budget.food*3*S.numDays+j2t(spotJPYpp)+transpp+S.budget.misc;
-  const bars=[["✈️ 機票",S.budget.flight,"#C84B31"],["🏨 住宿",S.budget.hotel*S.numDays,"#F18F01"],["🍜 餐飲",S.budget.food*3*S.numDays,"#3BB273"],["🎡 景點",j2t(spotJPYpp),"#A23B72"],["🚇 交通 ("+( S.selectedPass==="suica"?"Suica":S.selectedPass==="metro24"?"Metro券":S.selectedPass==="jr1day"?"JR券":S.selectedPass==="combo"?"聯合券":S.selectedPass==="yurikamome"?"海鷗券":"通票")+")",transpp,"#2E86AB"],["🛍️ 購物等",S.budget.misc,"#9B8FC0"]].map(([l,v,c])=>{const pct=totalBars?Math.round(v/totalBars*100):0;return div({style:{marginBottom:"8px"}},div({style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"3px"}},div({style:{fontSize:"11px",color:"rgba(245,240,232,.8)",fontWeight:"600"}},l),div({style:{display:"flex",gap:"8px",alignItems:"center"}},div({style:{fontSize:"9px",color:"#8B7355"}},pct+"%"),div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px",color:c}},fmtN(v)))),div({style:{height:"4px",background:"rgba(255,255,255,.08)",borderRadius:"2px"}},div({style:{height:"100%",width:pct+"%",background:c,borderRadius:"2px"}})));});
+  const bars=[["✈️ 機票",S.budget.flight,"#C84B31"],["🏨 住宿",S.budget.hotel*S.numDays,"#F18F01"],["🍜 餐飲",S.budget.food*3*S.numDays,"#3BB273"],["🎡 景點",j2t(spotJPYpp),"#A23B72"],["🚇 交通",transpp,"#2E86AB"],["🛍️ 購物等",S.budget.misc,"#9B8FC0"]].map(([l,v,c])=>{const pct=totalBars?Math.round(v/totalBars*100):0;return div({style:{marginBottom:"8px"}},div({style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"3px"}},div({style:{fontSize:"11px",color:"rgba(245,240,232,.8)",fontWeight:"600"}},l),div({style:{display:"flex",gap:"8px",alignItems:"center"}},div({style:{fontSize:"9px",color:"#8B7355"}},pct+"%"),div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px",color:c}},fmtN(v)))),div({style:{height:"4px",background:"rgba(255,255,255,.08)",borderRadius:"2px"}},div({style:{height:"100%",width:pct+"%",background:c,borderRadius:"2px"}})));});
   const personsCard=div({className:"card"},...S.persons.map(p=>div({style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"9px"}},avatar(p.name,p.color),span({style:{flex:"1",fontSize:"13px",fontWeight:"600"}},p.name),S.persons.length>1?btn({className:"btn-danger",onClick:()=>{S.persons=S.persons.filter(x=>x.id!==p.id);persist();render();}},"移除"):null)),div({style:{display:"flex",gap:"7px",marginTop:"4px"}},inp({className:"inp",style:{flex:"1"},placeholder:"新增旅伴姓名",value:S.newName,onInput:e=>S.newName=e.target.value,onKeyDown:e=>{if(e.key==="Enter"&&S.newName.trim()){const id=Date.now();S.persons=[...S.persons,{id,name:S.newName.trim(),color:PC[S.persons.length%PC.length]}];S.newName="";persist();render();}}}),btn({className:"btn-sm",style:{padding:"9px 12px"},onClick:()=>{if(!S.newName.trim())return;const id=Date.now();S.persons=[...S.persons,{id,name:S.newName.trim(),color:PC[S.persons.length%PC.length]}];S.newName="";persist();render();}},"＋")));
   const presets=Object.entries(BP_DEF).map(([key,p])=>div({className:"bcard"+(S.preset===key?" sel":""),onClick:()=>{S.preset=key;S.budget={...p};persist();render();}},div({style:{display:"flex",alignItems:"center",justifyContent:"space-between"}},div({style:{display:"flex",alignItems:"center",gap:"10px"}},div({style:{fontSize:"28px"}},p.icon),div({},div({style:{fontSize:"13px",fontWeight:"700"}},p.label),div({style:{fontSize:"11px",color:"#9A8F7E"}},"每人約 NT$"+(p.flight+p.hotel*S.numDays+p.food*3*S.numDays+p.misc).toLocaleString()))),div({style:{width:"20px",height:"20px",borderRadius:"50%",border:`2px solid ${S.preset===key?"#C84B31":"#E0D5C0"}`,background:S.preset===key?"#C84B31":"transparent",display:"flex",alignItems:"center",justifyContent:"center"}},S.preset===key?div({style:{width:"8px",height:"8px",borderRadius:"50%",background:"#fff"}}):null)),S.preset===key?div({style:{display:"flex",gap:"5px",flexWrap:"wrap",marginTop:"10px"}},...[["✈️",p.flight],["🏨",p.hotel],["🍜",p.food],["🛍️",p.misc]].map(([ic,v])=>span({className:"cpill"},ic+" NT$"+v.toLocaleString()))):null));
-  const sliders=[
-    {key:"flight",label:"✈️ 來回機票",placeholder:"例：11000"},
-    {key:"hotel", label:"🏨 住宿/每晚",placeholder:"例：3500"},
-    {key:"food",  label:"🍜 餐費/每餐",placeholder:"例：900"},
-    {key:"misc",  label:"🛍️ 購物&其他",placeholder:"例：4000"},
-  ].map(({key,label,placeholder})=>
-    div({style:{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 0",borderBottom:"1px solid #EDE6D8"}},
-      div({style:{fontSize:"12px",fontWeight:"600",color:"#1A1008"}},"  "+label),
-      div({style:{display:"flex",alignItems:"center",gap:"4px"}},
-        div({style:{fontSize:"11px",color:"#9A8F7E"}},"NT$"),
-        inp({
-          type:"number",
-          className:"inp",
-          style:{width:"100px",textAlign:"right",padding:"6px 8px",fontSize:"13px",fontFamily:"'Zen Dots',cursive",color:"#C84B31"},
-          value:S.budget[key],
-          placeholder,
-          onBlur:e=>{
-            const v=Number(e.target.value);
-            if(v>0){S.budget={...S.budget,[key]:v};persist();render();}
-          },
-          onKeyDown:e=>{
-            if(e.key==="Enter"){e.target.blur();}
-            e.stopPropagation();
-          }
-        })
-      )
-    )
-  );
+  const sliders=[{key:"flight",label:"✈️ 來回機票",min:6000,max:25000,step:500},{key:"hotel",label:"🏨 住宿/每晚",min:1000,max:12000,step:200},{key:"food",label:"🍜 餐費/每餐",min:200,max:2000,step:50},{key:"misc",label:"🛍️ 購物&其他",min:500,max:20000,step:500}].map(({key,label,min,max,step})=>div({style:{marginBottom:"14px"}},div({style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"4px"}},div({style:{fontSize:"12px",fontWeight:"600"}},label),div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"13px",color:"#C84B31"}},"NT$"+Number(S.budget[key]).toLocaleString())),inp({type:"range",className:"slider",min,max,step,value:S.budget[key],onInput:e=>{S.budget={...S.budget,[key]:Number(e.target.value)};persist();render();}}),div({style:{display:"flex",justifyContent:"space-between",fontSize:"9px",color:"#C0B8A8"}},span({},"NT$"+min.toLocaleString()),span({},"NT$"+max.toLocaleString()))));
   return div({className:"fu"},
     div({className:"sec"},"旅伴設定"),personsCard,
     div({className:"sec"},"2026 預算等級"),...presets,
@@ -824,118 +759,183 @@ async function runTransitAI(){
 function buildNav(){
   const D=derived();
   const allAdded=D.allAdded;
-  const navFilter=S.navFilter||"全部";
-  const navTypes=TYPE_ORDER.filter(t=>t==="全部"||[...SPOTS,...S.customSpots].some(s=>s.type===t));
-  const navFiltered=[...SPOTS,...S.customSpots].filter(s=>navFilter==="全部"||s.type===navFilter);
+  const routeUrl=buildRouteUrl(allAdded);
 
+  // ── Sub tabs ──
   const subTabs=div({style:{display:"flex",gap:"6px",marginBottom:"14px"}},
-    ...[["route","🗺 路線規劃"],["pass","🎫 票券"],["spots","📍 景點"]].map(([k,l])=>
-      btn({className:"btn-sm"+(S.transitTab===k?" active":""),style:{flex:"1",padding:"8px",fontSize:"11px"},onClick:()=>{S.transitTab=k;render();}},l)
+    ...[ ["route","🗺 路線規劃"], ["pass","🎫 票券選擇"], ["spots","📍 景點導航"] ].map(([k,l])=>
+      btn({className:"btn-sm"+(S.transitTab===k?" active":""),style:{flex:"1",padding:"8px",fontSize:"11px"},
+        onClick:()=>{S.transitTab=k;render();}},l)
     )
   );
 
+  // ══ TAB: ROUTE ══
   if(S.transitTab==="route"){
-    const dayCards=D.dayKeys.map(day=>{
-      const spots=S.days[day]||[];
-      if(!spots.length) return null;
-      const url=buildRouteUrl(spots);
-      return div({className:"card",style:{marginBottom:"10px"}},
-        div({style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"10px"}},
-          div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px"}},day),
-          div({style:{fontSize:"10px",color:"#9A8F7E"}},spots.length+" 景點")
-        ),
-        div({style:{marginBottom:"10px"}},
-          ...spots.map((s,i)=>div({style:{display:"flex",alignItems:"center",gap:"8px",padding:"6px 8px",background:"#F8F5F0",borderRadius:"8px",marginBottom:"3px"}},
-            div({style:{width:"20px",height:"20px",borderRadius:"50%",background:"#C84B31",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"9px",color:"#fff",flexShrink:"0",fontFamily:"'Zen Dots',cursive"}},String(i+1)),
-            span({style:{fontSize:"14px"}}," "+s.icon),
-            div({style:{flex:"1",minWidth:"0"}},
-              div({style:{fontSize:"11px",fontWeight:"600",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},s.name),
-              div({style:{fontSize:"9px",color:"#C84B31"}},s.subway)
-            ),
-            (()=>{
-              const cov = checkPassCoverage(s, S.selectedPass||"suica");
-              return div({style:{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:"3px",flexShrink:"0"}},
-                span({style:{fontSize:"9px",padding:"2px 6px",borderRadius:"10px",fontWeight:"600",
-                  background:cov.ok?"#DCFCE7":"#FEF3C7",
-                  color:cov.ok?"#166534":"#92400E",
-                  whiteSpace:"nowrap"}},
-                  cov.ok?"✓ 可搭":"⚠️ "+cov.note
-                ),
-                a({href:gmapNav(s),target:"_blank",style:{padding:"4px 8px",background:"#2E86AB18",color:"#2E86AB",border:"1px solid #2E86AB40",borderRadius:"6px",fontSize:"10px",fontWeight:"600",textDecoration:"none"}},"導航")
-              );
-            })()
-          ))
-        ),
-        url?a({href:url,target:"_blank",style:{display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",background:"#C84B31",color:"#fff",borderRadius:"8px",padding:"10px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",boxShadow:"0 2px 8px #C84B3130"}},"🗺 "+day+" 一鍵路線"):null
-      );
-    }).filter(Boolean);
-
-    const allUrl=buildRouteUrl(allAdded);
-    const curPass = PASS_RECOMMEND.find(p=>p.id===(S.selectedPass||"suica"));
-    const passStrip = div({style:{marginBottom:"12px"}},
-      div({style:{fontSize:"10px",color:"#9A8F7E",fontWeight:"600",marginBottom:"6px"}},"使用票券 →"),
-      div({style:{display:"flex",gap:"5px",overflowX:"auto",paddingBottom:"4px",WebkitOverflowScrolling:"touch"}},
-        ...PASS_RECOMMEND.map(p=>span({
-          style:{flexShrink:"0",padding:"5px 11px",borderRadius:"20px",fontSize:"10px",fontWeight:"600",cursor:"pointer",whiteSpace:"nowrap",fontFamily:"'DM Sans',sans-serif",
-            background:S.selectedPass===p.id?"#1A1008":"#FDFAF5",
-            color:S.selectedPass===p.id?"#F5F0E8":"#6B5D4A",
-            border:`1.5px solid ${S.selectedPass===p.id?"#1A1008":"#E0D5C0"}`},
-          onClick:()=>{S.selectedPass=p.id;render();}
-        },p.icon+" "+p.name))
-      ),
-      curPass?div({style:{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:"10px",padding:"8px 12px",marginTop:"6px",display:"flex",gap:"8px",alignItems:"center"}},
-        span({style:{fontSize:"16px"}},curPass.icon),
-        div({},
-          div({style:{fontSize:"11px",fontWeight:"700",color:"#166534"}},curPass.name+" — "+curPass.cover),
-          div({style:{fontSize:"10px",color:"#6B5D4A",marginTop:"1px"}},"💡 "+curPass.tip)
-        )
-      ):null
-    );
+    const passInfo = PASS_RECOMMEND.find(p=>p.id===S.selectedPass);
     return div({className:"fu"},
-      div({className:"sec"},"智慧路線規劃"),subTabs,passStrip,
-      !allAdded.length
-        ?div({className:"card"},div({className:"empty"},div({style:{fontSize:"28px",marginBottom:"6px"}},"🗺"),div({},"先在行程頁加入景點")))
-        :div({},...dayCards,
-          allUrl?div({className:"card",style:{background:"linear-gradient(135deg,#1A1008,#2D1F0A)",border:"none"}},
-            div({style:{fontSize:"9px",color:"#8B7355",letterSpacing:"2px",marginBottom:"8px",fontFamily:"'Zen Dots',cursive"}},"ALL DAYS · "+allAdded.length+" SPOTS"),
-            a({href:allUrl,target:"_blank",style:{display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",background:"#F5F0E8",color:"#1A1008",borderRadius:"8px",padding:"11px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px"}},"🗺 一鍵規劃所有景點路線")
-          ):null
+      div({className:"sec"},"智慧路線規劃"),
+      subTabs,
+
+      // Pass selector strip
+      div({style:{marginBottom:"12px"}},
+        div({style:{fontSize:"10px",color:"#9A8F7E",fontWeight:"600",marginBottom:"6px"}},"使用票券 →"),
+        div({style:{display:"flex",gap:"5px",overflowX:"auto",paddingBottom:"4px",WebkitOverflowScrolling:"touch"}},
+          ...PASS_RECOMMEND.map(p=>span({
+            style:{flexShrink:"0",padding:"6px 11px",borderRadius:"20px",fontSize:"10px",fontWeight:"600",
+              cursor:"pointer",fontFamily:"'DM Sans',sans-serif",whiteSpace:"nowrap",
+              background:S.selectedPass===p.id?"#1A1008":"#FDFAF5",
+              color:S.selectedPass===p.id?"#F5F0E8":"#6B5D4A",
+              border:`1.5px solid ${S.selectedPass===p.id?"#1A1008":"#E0D5C0"}`},
+            onClick:()=>{S.selectedPass=p.id;render();}
+          }, p.icon+" "+p.name))
+        )
+      ),
+
+      // Selected pass info
+      passInfo?div({className:"card",style:{background:"#F0FDF4",border:"1px solid #BBF7D0",marginBottom:"12px",padding:"12px 14px"}},
+        div({style:{display:"flex",alignItems:"center",gap:"8px",marginBottom:"6px"}},
+          span({style:{fontSize:"20px"}},passInfo.icon),
+          div({},
+            div({style:{fontSize:"13px",fontWeight:"700"}},passInfo.name),
+            div({style:{fontSize:"11px",color:"#6B5D4A"}},passInfo.cover)
+          ),
+          passInfo.price>0?div({style:{marginLeft:"auto",fontFamily:"'Zen Dots',cursive",fontSize:"13px",color:"#C84B31"}},"¥"+passInfo.price):
+            div({style:{marginLeft:"auto",fontSize:"11px",color:"#059669",fontWeight:"600"}},"按次計費")
+        ),
+        div({style:{fontSize:"10px",color:"#6B5D4A",background:"#DCFCE7",borderRadius:"6px",padding:"5px 8px"}},
+          "💡 "+passInfo.tip
+        )
+      ):null,
+
+      // Per-day route cards
+      allAdded.length===0
+        ?div({className:"card"},div({className:"empty"},
+            div({style:{fontSize:"28px",marginBottom:"6px"}},"🗺"),
+            div({},"先在「行程」頁加入景點"),
+            div({style:{fontSize:"10px",color:"#C0B8A8",marginTop:"4px"}},"加入後可一鍵規劃完整交通路線")
+          ))
+        :div({},
+          ...D.dayKeys.map(day=>{
+            const spots=S.days[day]||[];
+            if(spots.length===0)return null;
+            const url=buildRouteUrl(spots);
+            return div({className:"card",style:{marginBottom:"10px"}},
+              // Day header
+              div({style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"10px"}},
+                div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px",color:"#1A1008"}},day),
+                div({style:{fontSize:"10px",color:"#9A8F7E"}},spots.length+" 個景點")
+              ),
+              // Spot flow with arrows
+              div({style:{marginBottom:"10px"}},
+                ...spots.map((s,i)=>div({},
+                  div({style:{display:"flex",alignItems:"center",gap:"8px",padding:"7px 10px",background:"#F8F5F0",borderRadius:"8px",marginBottom:"2px"}},
+                    div({style:{width:"22px",height:"22px",borderRadius:"50%",background:"#C84B31",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Zen Dots',cursive",fontSize:"9px",color:"#fff",flexShrink:"0"}},i+1),
+                    span({style:{fontSize:"15px"}},"  "+s.icon),
+                    div({style:{flex:"1",minWidth:"0"}},
+                      div({style:{fontSize:"12px",fontWeight:"600",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},s.name),
+                      div({style:{fontSize:"9px",color:"#C84B31",marginTop:"1px"}},s.subway)
+                    ),
+                    a({href:gmapNav(s),target:"_blank",style:{flexShrink:"0",padding:"4px 8px",background:"#2E86AB18",color:"#2E86AB",border:"1px solid #2E86AB40",borderRadius:"6px",fontSize:"10px",fontWeight:"600",textDecoration:"none"}},"導航")
+                  ),
+                  i<spots.length-1?div({style:{display:"flex",alignItems:"center",gap:"6px",padding:"3px 12px",marginBottom:"2px"}},
+                    div({style:{width:"1px",height:"16px",background:"#E0D5C0",marginLeft:"10px"}}),
+                    div({style:{fontSize:"9px",color:"#9A8F7E",marginLeft:"6px"}},"🚇 搭乘地鐵前往")
+                  ):null
+                ))
+              ),
+              // Action buttons
+              div({style:{display:"flex",gap:"7px"}},
+                a({href:url,target:"_blank",style:{flex:"2",display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",background:"#C84B31",color:"#fff",borderRadius:"8px",padding:"10px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",boxShadow:"0 2px 8px #C84B3130"}},
+                  "🗺 "+day+" 一鍵Google Maps路線"
+                ),
+                a({href:"https://www.google.com/maps/dir/?api=1&origin="+encodeURIComponent((spots[0]||{name:"",area:""}).name+" "+spots[0].area+" 東京")+"&destination="+encodeURIComponent((spots[spots.length-1]||{name:"",area:""}).name+" "+spots[spots.length-1].area+" 東京")+"&travelmode=walking",target:"_blank",
+                  style:{flex:"1",display:"flex",alignItems:"center",justifyContent:"center",background:"#F0EBE0",color:"#6B5D4A",borderRadius:"8px",padding:"10px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"11px",border:"1px solid #E0D5C0"}},
+                  "🚶 步行"
+                )
+              )
+            );
+          }).filter(Boolean),
+
+          // All days combined
+          div({className:"card",style:{background:"linear-gradient(135deg,#1A1008,#2D1F0A)",border:"none",marginTop:"6px"}},
+            div({style:{fontSize:"9px",color:"#8B7355",letterSpacing:"2px",marginBottom:"8px",fontFamily:"'Zen Dots',cursive"}},"FULL TRIP · ALL "+allAdded.length+" SPOTS"),
+            a({href:routeUrl,target:"_blank",style:{display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",background:"#F5F0E8",color:"#1A1008",borderRadius:"8px",padding:"11px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"700",fontSize:"13px",marginBottom:"8px"}},
+              "🗺 一鍵規劃所有景點完整路線"
+            ),
+            span({})
+          ),
+          null
         )
     );
   }
 
+  // ══ TAB: PASS ══
   if(S.transitTab==="pass"){
     return div({className:"fu"},
-      div({className:"sec"},"票券選擇指南"),subTabs,
+      div({className:"sec"},"票券選擇指南"),
+      subTabs,
+      div({style:{fontSize:"11px",color:"#9A8F7E",marginBottom:"12px",lineHeight:"1.7"}},"根據你的行程景點，推薦最划算票券 👇"),
+
       ...PASS_RECOMMEND.map(p=>{
-        const isSel=S.selectedPass===p.id;
-        return div({style:{background:"#FDFAF5",border:`2px solid ${isSel?"#C84B31":"#E8DFD0"}`,borderRadius:"14px",padding:"13px",marginBottom:"9px",cursor:"pointer"},onClick:()=>{S.selectedPass=p.id;render();}},
-          div({style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"6px"}},
+        const isSel = S.selectedPass===p.id;
+        const hasSpots = allAdded.some(s=>p.good.includes("全部景點")||p.good.some(g=>s.name.includes(g)||s.area.includes(g)));
+        return div({style:{background:"#FDFAF5",border:`2px solid ${isSel?"#C84B31":"#E8DFD0"}`,borderRadius:"14px",padding:"13px",marginBottom:"9px",cursor:"pointer",boxShadow:isSel?"0 3px 12px #C84B3120":"0 1px 3px rgba(0,0,0,.04)"},
+          onClick:()=>{S.selectedPass=p.id;render();}},
+          div({style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"8px"}},
             span({style:{fontSize:"22px"}},p.icon),
-            div({style:{flex:"1"}},div({style:{fontSize:"13px",fontWeight:"700"}},p.name),div({style:{fontSize:"10px",color:"#9A8F7E"}},p.cover)),
-            p.price>0?div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"14px",color:"#C84B31"}},"¥"+p.price):div({style:{fontSize:"11px",color:"#059669",fontWeight:"700"}},"按次計費")
+            div({style:{flex:"1"}},
+              div({style:{fontSize:"13px",fontWeight:"700"}},p.name),
+              div({style:{fontSize:"10px",color:"#9A8F7E",marginTop:"1px"}},p.cover)
+            ),
+            div({style:{textAlign:"right"}},
+              p.price>0
+                ?div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"14px",color:"#C84B31"}},"¥"+p.price)
+                :div({style:{fontSize:"11px",color:"#059669",fontWeight:"700"}},"按次計費"),
+              div({style:{fontSize:"9px",color:"#9A8F7E",marginTop:"1px"}},"per person/day")
+            )
           ),
-          div({style:{background:"#F0EBE0",borderRadius:"8px",padding:"7px 10px"}},
-            div({style:{fontSize:"10px",color:"#C84B31",fontWeight:"700",marginBottom:"2px"}},"✅ "+p.best),
-            div({style:{fontSize:"10px",color:"#6B5D4A"}},"💡 "+p.tip)
+          div({style:{background:"#F0EBE0",borderRadius:"8px",padding:"7px 10px",marginBottom:"8px"}},
+            div({style:{fontSize:"10px",color:"#C84B31",fontWeight:"700",marginBottom:"3px"}},"✅ 最適合"),
+            div({style:{fontSize:"11px",color:"#6B5D4A"}},p.best)
           ),
-          isSel?div({style:{marginTop:"6px",fontSize:"11px",color:"#C84B31",fontWeight:"700"}},"✓ 已選擇"):null
+          div({style:{fontSize:"10px",color:"#6B5D4A",lineHeight:"1.6",marginBottom:"8px"}},"💡 "+p.tip),
+          hasSpots&&p.good[0]!=="全部景點"?div({style:{display:"flex",gap:"4px",flexWrap:"wrap"}},
+            div({style:{fontSize:"9px",color:"#059669",fontWeight:"700",marginRight:"2px"}},"你的行程可用："),
+            ...p.good.filter(g=>allAdded.some(s=>s.name.includes(g)||s.area.includes(g))).map(g=>
+              span({style:{fontSize:"9px",background:"#DCFCE7",color:"#166534",borderRadius:"12px",padding:"2px 7px"}},g)
+            )
+          ):null,
+          div({style:{display:"flex",justifyContent:"flex-end",marginTop:"8px"}},
+            isSel
+              ?span({style:{fontSize:"11px",color:"#C84B31",fontWeight:"700"}},"✓ 已選擇")
+              :span({style:{fontSize:"11px",color:"#9A8F7E"}},p.good[0]==="全部景點"?"通用":"點擊選擇")
+          )
         );
       }),
+
+      // Transport line info
       div({className:"sec"},"各交通工具說明"),
       div({className:"card"},
-        ...[["🟠","東京Metro","銀座/丸之內/日比谷/東西/千代田/有樂町/半藏門/南北/副都心線"],["🔵","都營地鐵","淺草/三田/新宿/大江戶線"],["🟢","JR東日本","山手線/中央線/埼京線/京浜東北線/総武線"],["🚟","百合海鷗線","台場↔豐洲↔汐留"],["🚃","私鐵各線","東急/小田急/京王/西武/東武"],["💳","Suica/PASMO","全線通用，Apple Pay綁定最方便"]].map(([ic,name,lines])=>
-          div({style:{display:"flex",gap:"10px",marginBottom:"11px",alignItems:"flex-start"}},
-            span({style:{fontSize:"18px",flexShrink:"0"}},ic),
-            div({},div({style:{fontSize:"12px",fontWeight:"700",marginBottom:"2px"}},name),div({style:{fontSize:"10px",color:"#9A8F7E"}},lines))
+        ...Object.values(TRANSIT_LINES).map(t=>div({style:{display:"flex",gap:"10px",marginBottom:"12px",alignItems:"flex-start"}},
+          span({style:{fontSize:"18px",flexShrink:"0"}},t.icon),
+          div({},
+            div({style:{fontSize:"12px",fontWeight:"700",marginBottom:"2px"}},t.name),
+            t.lines?div({style:{fontSize:"10px",color:"#9A8F7E",marginBottom:"3px"}},"路線："+t.lines.join("・")):null,
+            t.pass?div({style:{fontSize:"10px",color:"#C84B31"}},"票券："+t.pass.name+" ¥"+t.pass.price+" — "+t.pass.tip):null,
+            t.tip?div({style:{fontSize:"10px",color:"#9A8F7E"}},t.tip):null
           )
-        )
+        ))
       )
     );
   }
 
+  // ══ TAB: SPOTS (Quick Nav) ══
+  const navTypes=TYPE_ORDER.filter(t=>t==="全部"||[...SPOTS,...S.customSpots].some(s=>s.type===t));
+  const navFilter=S.navFilter||"全部";
+  const navFiltered=[...SPOTS,...S.customSpots].filter(s=>navFilter==="全部"||s.type===navFilter);
   return div({className:"fu"},
-    div({className:"sec"},"景點快速導航"),subTabs,
+    div({className:"sec"},"景點快速導航"),
+    subTabs,
     div({className:"pills",style:{marginBottom:"12px"}},...navTypes.map(t=>span({className:"pill"+(navFilter===t?" on":""),onClick:()=>{S.navFilter=t;render();}},t))),
     div({style:{fontSize:"11px",color:"#B0A090",marginBottom:"8px"}},navFiltered.length+" 個景點"),
     ...navFiltered.map(s=>div({className:"card",style:{display:"flex",alignItems:"center",gap:"11px",marginBottom:"6px",padding:"11px 13px"}},
@@ -952,65 +952,42 @@ function buildNav(){
   );
 }
 
+
 function buildAddSpotModal(){
   if(!S.showAddSpot) return null;
   const f=S.addSpotForm;
+  const sf=(k,v)=>{S.addSpotForm={...S.addSpotForm,[k]:v};render();};
   const ICONS=["📍","🍜","🍣","🍺","🍵","☕","🛍️","🎮","🎎","⛩️","🌸","🏖️","🎡","🚗","🏨","💆","🎵","🎨","🏃","🌿"];
-
-  function ni(placeholder,field,opts={}){
-    const el=document.createElement("input");
-    el.className="inp";
-    el.placeholder=placeholder;
-    el.value=S.addSpotForm[field]||"";
-    if(opts.type) el.type=opts.type;
-    el.addEventListener("input",e=>{S.addSpotForm[field]=e.target.value;});
-    return el;
-  }
-
   const allTypes=TYPE_ORDER.filter(t=>t!=="全部");
-  const typeRow=div({style:{display:"flex",gap:"5px",flexWrap:"wrap",marginBottom:"6px"}},
-    ...[...allTypes,"＋ 新增分類"].map(t=>span({
-      style:{padding:"5px 10px",borderRadius:"16px",fontSize:"10px",fontWeight:"600",cursor:"pointer",
-        background:f.type===t?"#1A1008":"#F0EBE0",
-        color:f.type===t?"#F5F0E8":"#6B5D4A",
-        border:`1px solid ${f.type===t?"#1A1008":"#E0D5C0"}`},
-      onClick:()=>{
-        S.addSpotForm.type=t==="＋ 新增分類"?"":t;
-        S.addSpotForm.customType="";
-        render();
-      }
-    },t))
-  );
-
-  const iconRow=div({style:{display:"flex",gap:"6px",flexWrap:"wrap"}},
-    ...ICONS.map(ic=>span({
-      style:{fontSize:"22px",cursor:"pointer",padding:"4px",borderRadius:"8px",
-        background:f.icon===ic?"#F0EBE0":"transparent",
-        border:`1px solid ${f.icon===ic?"#C84B31":"transparent"}`},
-      onClick:()=>{S.addSpotForm.icon=ic;render();}
-    },ic))
-  );
-
   return div({className:"ov",onClick:()=>{S.showAddSpot=false;render();}},
     div({className:"modal",onClick:e=>e.stopPropagation()},
       div({className:"modal-bar"}),
       div({className:"modal-title"},"✏️ 自訂新增景點"),
-      div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"景點名稱 *"),ni("例：三鷹之森 吉卜力美術館","name")),
-      div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"區域"),ni("例：三鷹 / 新宿 / 澀谷","area")),
+      div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"景點名稱 *"),inp({className:"inp",placeholder:"例：吉卜力美術館",value:f.name,onInput:e=>sf("name",e.target.value)})),
+      div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"區域"),inp({className:"inp",placeholder:"例：三鷹 / 新宿",value:f.area,onInput:e=>sf("area",e.target.value)})),
       div({style:{marginBottom:"10px"}},
-        h("label",{className:"flabel"},"分類"),typeRow,
-        f.type===""?ni("輸入新分類名稱（例：🎭 特殊體驗）","customType"):null
+        h("label",{className:"flabel"},"分類"),
+        div({style:{display:"flex",gap:"5px",flexWrap:"wrap",marginBottom:"6px"}},
+          ...[...allTypes,"＋ 新增分類"].map(t=>span({
+            style:{padding:"5px 10px",borderRadius:"16px",fontSize:"10px",fontWeight:"600",cursor:"pointer",
+              background:f.type===t?"#1A1008":"#F0EBE0",color:f.type===t?"#F5F0E8":"#6B5D4A",
+              border:`1px solid ${f.type===t?"#1A1008":"#E0D5C0"}`},
+            onClick:()=>sf("type",t==="＋ 新增分類"?"":t)},t))
+        ),
+        f.type===""?inp({className:"inp",placeholder:"輸入新分類（例：🎭 特殊體驗）",value:f.customType,onInput:e=>sf("customType",e.target.value)}):null
       ),
-      div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"圖示"),iconRow),
+      div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"圖示"),
+        div({style:{display:"flex",gap:"6px",flexWrap:"wrap"}},
+          ...ICONS.map(ic=>span({style:{fontSize:"22px",cursor:"pointer",padding:"4px",borderRadius:"8px",background:f.icon===ic?"#F0EBE0":"transparent",border:`1px solid ${f.icon===ic?"#C84B31":"transparent"}`},onClick:()=>sf("icon",ic)},ic))
+        )
+      ),
       div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},
-        div({style:{flex:"1"}},h("label",{className:"flabel"},"費用 (¥)"),ni("0=免費","cost",{type:"number"})),
-        div({style:{flex:"1"}},h("label",{className:"flabel"},"建議時間(分)"),ni("90","dur",{type:"number"}))
+        div({style:{flex:"1"}},h("label",{className:"flabel"},"費用 (¥)"),inp({className:"inp",type:"number",placeholder:"0=免費",value:f.cost,onInput:e=>sf("cost",e.target.value)})),
+        div({style:{flex:"1"}},h("label",{className:"flabel"},"時間(分)"),inp({className:"inp",type:"number",placeholder:"90",value:f.dur,onInput:e=>sf("dur",e.target.value)}))
       ),
-      div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"最近地鐵站"),ni("例：JR 三鷹站 徒步10分","subway")),
-      div({style:{marginBottom:"14px"}},h("label",{className:"flabel"},"備註小貼士"),ni("例：需提前預約，週一公休","tip")),
-      div({style:{fontSize:"10px",color:"#9A8F7E",marginBottom:"12px",background:"#F0EBE0",borderRadius:"8px",padding:"8px 10px"}},
-        "📍 系統會自動根據景點名稱+區域搜尋座標"
-      ),
+      div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"最近地鐵站"),inp({className:"inp",placeholder:"例：JR 三鷹站 徒步10分",value:f.subway,onInput:e=>sf("subway",e.target.value)})),
+      div({style:{marginBottom:"14px"}},h("label",{className:"flabel"},"備註"),inp({className:"inp",placeholder:"例：需提前預約",value:f.tip,onInput:e=>sf("tip",e.target.value)})),
+      div({style:{fontSize:"10px",color:"#9A8F7E",marginBottom:"12px",background:"#F0EBE0",borderRadius:"8px",padding:"8px 10px"}},"📍 系統自動搜尋座標，加入後可直接導航"),
       div({style:{display:"flex",gap:"8px"}},
         btn({className:"btn-sm",style:{flex:"1",padding:"12px"},onClick:()=>{S.showAddSpot=false;render();}},"取消"),
         btn({className:"btn-red",style:{flex:"2",padding:"12px"},onClick:saveCustomSpot},"確認新增")
@@ -1018,7 +995,6 @@ function buildAddSpotModal(){
     )
   );
 }
-
 function buildModal(){
   if(!S.modal)return null;
   let inner;
@@ -1028,110 +1004,30 @@ function buildModal(){
   return div({className:"ov",onClick:()=>{S.modal=null;render();}},div({className:"modal",onClick:e=>e.stopPropagation()},div({className:"modal-bar"}),inner));
 }
 function buildFlightModal(){
-  const f=S.flightForm;
-  const dirRow=div({style:{display:"flex",gap:"6px",marginBottom:"12px"}},
-    ...[["去程","🛫 去程"],["回程","🛬 回程"]].map(([d,l])=>
-      span({className:"seg"+(f.direction===d?" on":""),
-        onClick:()=>{
-          S.flightForm.direction=d;
-          S.flightForm.from=d==="去程"?"TPE":"NRT";
-          S.flightForm.fromCity=d==="去程"?"台灣桃園":"東京成田";
-          S.flightForm.to=d==="去程"?"NRT":"TPE";
-          S.flightForm.toCity=d==="去程"?"東京成田":"台灣桃園";
-          render();
-        }},l)
-    )
-  );
-  // Use native input elements - no value binding
-  function ni(placeholder,field,opts={}){
-    const el=document.createElement("input");
-    el.className="inp";
-    el.placeholder=placeholder;
-    el.value=S.flightForm[field]||"";
-    if(opts.type) el.type=opts.type;
-    el.addEventListener("input",e=>{S.flightForm[field]=e.target.value;});
-    return el;
-  }
-  function nr(sel_el,field){
-    sel_el.addEventListener("change",e=>{S.flightForm[field]=e.target.value;});
-    return sel_el;
-  }
-  const termSel=sel({className:"inp",value:f.terminal,onChange:e=>{S.flightForm.terminal=e.target.value;}},
-    opt("","–"),opt("1","第1航廈"),opt("2","第2航廈"),opt("3","第3航廈"));
-
-  return div({},
-    div({className:"modal-title"},S.editFlight?"編輯航班":"新增航班 ✈️"),
-    dirRow,
-    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},
-      div({style:{flex:"1"}},h("label",{className:"flabel"},"航班號"),ni("BR197","flightNo")),
-      div({style:{flex:"1"}},h("label",{className:"flabel"},"航空公司"),ni("長榮航空","airline"))
-    ),
-    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},
-      div({style:{flex:"1"}},h("label",{className:"flabel"},"出發地"),ni("TPE","from")),
-      div({style:{flex:"1"}},h("label",{className:"flabel"},"目的地"),ni("NRT","to"))
-    ),
-    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"日期"),ni("","date",{type:"date"})),
-    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},
-      div({style:{flex:"1"}},h("label",{className:"flabel"},"起飛"),ni("","departTime",{type:"time"})),
-      div({style:{flex:"1"}},h("label",{className:"flabel"},"抵達"),ni("","arriveTime",{type:"time"}))
-    ),
-    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},
-      div({style:{flex:"1"}},h("label",{className:"flabel"},"航廈"),termSel),
-      div({style:{flex:"1"}},h("label",{className:"flabel"},"登機門"),ni("A12","gate")),
-      div({style:{flex:"1"}},h("label",{className:"flabel"},"座位"),ni("24A","seat"))
-    ),
-    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"機票金額 NT$（每人）"),ni("11000","ticketPrice",{type:"number"})),
-    div({style:{display:"flex",gap:"8px",marginTop:"6px"}},
-      btn({className:"btn-sm",style:{flex:"1",padding:"12px"},onClick:()=>{S.modal=null;render();}},"取消"),
-      btn({className:"btn-red",style:{flex:"2",padding:"12px"},onClick:saveFlight},S.editFlight?"儲存修改":"確認新增")
-    )
+  const f=S.flightForm;const sf=(k,v)=>{S.flightForm={...S.flightForm,[k]:v};render();};
+  return div({},div({className:"modal-title"},S.editFlight?"編輯航班":"新增航班 ✈️"),
+    div({style:{display:"flex",gap:"6px",marginBottom:"12px"}},...[["去程","🛫 去程"],["回程","🛬 回程"]].map(([d,l])=>span({className:"seg"+(f.direction===d?" on":""),onClick:()=>{S.flightForm={...S.flightForm,direction:d,from:d==="去程"?"TPE":"NRT",fromCity:d==="去程"?"台灣桃園":"東京成田",to:d==="去程"?"NRT":"TPE",toCity:d==="去程"?"東京成田":"台灣桃園"};render();}},l))),
+    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"航班號"),inp({className:"inp",placeholder:"BR197",value:f.flightNo,onInput:e=>sf("flightNo",e.target.value.toUpperCase())})),div({style:{flex:"1"}},h("label",{className:"flabel"},"航空公司"),inp({className:"inp",placeholder:"長榮航空",value:f.airline,onInput:e=>sf("airline",e.target.value)}))),
+    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"出發地"),inp({className:"inp",placeholder:"TPE",value:f.from,onInput:e=>sf("from",e.target.value.toUpperCase())})),div({style:{flex:"1"}},h("label",{className:"flabel"},"目的地"),inp({className:"inp",placeholder:"NRT",value:f.to,onInput:e=>sf("to",e.target.value.toUpperCase())}))),
+    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"日期"),inp({className:"inp",type:"date",value:f.date,onInput:e=>sf("date",e.target.value)})),
+    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"起飛"),inp({className:"inp",type:"time",value:f.departTime,onInput:e=>sf("departTime",e.target.value)})),div({style:{flex:"1"}},h("label",{className:"flabel"},"抵達"),inp({className:"inp",type:"time",value:f.arriveTime,onInput:e=>sf("arriveTime",e.target.value)}))),
+    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1"}},h("label",{className:"flabel"},"航廈"),sel({className:"inp",value:f.terminal,onChange:e=>sf("terminal",e.target.value)},opt("","–"),opt("1","第1航廈"),opt("2","第2航廈"),opt("3","第3航廈"))),div({style:{flex:"1"}},h("label",{className:"flabel"},"登機門"),inp({className:"inp",placeholder:"A12",value:f.gate,onInput:e=>sf("gate",e.target.value.toUpperCase())})),div({style:{flex:"1"}},h("label",{className:"flabel"},"座位"),inp({className:"inp",placeholder:"24A",value:f.seat,onInput:e=>sf("seat",e.target.value.toUpperCase())}))),
+    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"機票金額 NT$（每人）"),inp({className:"inp",type:"number",placeholder:"11000",value:f.ticketPrice,onInput:e=>sf("ticketPrice",e.target.value)})),
+    div({style:{display:"flex",gap:"8px",marginTop:"6px"}},btn({className:"btn-sm",style:{flex:"1",padding:"12px"},onClick:()=>{S.modal=null;render();}},"取消"),btn({className:"btn-red",style:{flex:"2",padding:"12px"},onClick:saveFlight},S.editFlight?"儲存修改":"確認新增"))
   );
 }
 function buildExpenseModal(){
-  const f=S.expForm;
-  function ni(placeholder,field,opts={}){
-    const el=document.createElement("input");
-    el.className="inp";
-    el.placeholder=placeholder;
-    el.value=S.expForm[field]||"";
-    if(opts.type) el.type=opts.type;
-    el.addEventListener("input",e=>{S.expForm[field]=e.target.value;});
-    return el;
-  }
-  const catSel=sel({className:"inp",value:f.category,onChange:e=>{S.expForm.category=e.target.value;}},...EXP_CATS.map(c=>opt(c,c)));
-  const curSel=sel({className:"inp",value:f.currency,onChange:e=>{S.expForm.currency=e.target.value;}},opt("TWD","🇹🇼 TWD"),opt("JPY","🇯🇵 JPY"));
-  const payerSel=sel({className:"inp",value:f.paidBy,onChange:e=>{S.expForm.paidBy=Number(e.target.value);}},...S.persons.map(p=>opt(p.id,p.name)));
-  const pcbs=S.persons.map(p=>{
-    const sw=f.splitWith;const checked=sw.length===0||sw.includes(p.id);
-    return lbl({style:{display:"flex",alignItems:"center",gap:"6px",background:checked?p.color+"15":"transparent",border:`1.5px solid ${checked?p.color+"50":"#E0D5C0"}`,borderRadius:"8px",padding:"5px 10px",cursor:"pointer",fontSize:"12px",fontWeight:"500"}},
-      inp({type:"checkbox",checked,style:{accentColor:p.color},onChange:()=>{
-        const cur=S.expForm.splitWith.length===0?S.persons.map(x=>x.id):S.expForm.splitWith;
-        const next=cur.includes(p.id)?cur.filter(x=>x!==p.id):[...cur,p.id];
-        S.expForm.splitWith=next.length===S.persons.length?[]:next;
-        render();
-      }}),avatar(p.name,p.color,22)," ",p.name
-    );
-  });
-  return div({},
-    div({className:"modal-title"},"新增消費 🧾"),
-    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"消費名稱"),ni("例：一蘭拉麵","label")),
-    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},
-      div({style:{flex:"1.2"}},h("label",{className:"flabel"},"分類"),catSel),
-      div({style:{flex:"1"}},h("label",{className:"flabel"},"日期"),ni("","date",{type:"date"}))
-    ),
-    div({style:{display:"flex",gap:"8px",marginBottom:"4px"}},
-      div({style:{flex:"1.5"}},h("label",{className:"flabel"},"金額"),ni("0","amount",{type:"number"})),
-      div({style:{flex:"1"}},h("label",{className:"flabel"},"幣別"),curSel)
-    ),
-    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"由誰付款"),payerSel),
-    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"分攤（不選＝全員均分）"),
-      div({style:{display:"flex",gap:"6px",flexWrap:"wrap",marginTop:"5px"}},...pcbs)
-    ),
-    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"備註"),ni("例：含服務費","note")),
-    div({style:{display:"flex",gap:"8px",marginTop:"4px"}},
-      btn({className:"btn-sm",style:{flex:"1",padding:"12px"},onClick:()=>{S.modal=null;render();}},"取消"),
-      btn({className:"btn-red",style:{flex:"2",padding:"12px"},onClick:saveExpense},"確認記帳")
-    )
+  const f=S.expForm;const sf=(k,v)=>{S.expForm={...S.expForm,[k]:v};render();};
+  const pcbs=S.persons.map(p=>{const sw=f.splitWith;const checked=sw.length===0||sw.includes(p.id);return lbl({style:{display:"flex",alignItems:"center",gap:"6px",background:checked?p.color+"15":"transparent",border:`1.5px solid ${checked?p.color+"50":"#E0D5C0"}`,borderRadius:"8px",padding:"5px 10px",cursor:"pointer",fontSize:"12px",fontWeight:"500"}},inp({type:"checkbox",checked,style:{accentColor:p.color},onChange:()=>{const cur=sw.length===0?S.persons.map(x=>x.id):sw;const next=cur.includes(p.id)?cur.filter(x=>x!==p.id):[...cur,p.id];sf("splitWith",next.length===S.persons.length?[]:next);}}),avatar(p.name,p.color,22)," ",p.name);});
+  return div({},div({className:"modal-title"},"新增消費 🧾"),
+    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"消費名稱"),inp({className:"inp",placeholder:"例：一蘭拉麵",value:f.label,onInput:e=>sf("label",e.target.value)})),
+    div({style:{display:"flex",gap:"8px",marginBottom:"10px"}},div({style:{flex:"1.2"}},h("label",{className:"flabel"},"分類"),sel({className:"inp",value:f.category,onChange:e=>sf("category",e.target.value)},...EXP_CATS.map(c=>opt(c,c)))),div({style:{flex:"1"}},h("label",{className:"flabel"},"日期"),inp({className:"inp",type:"date",value:f.date,onInput:e=>sf("date",e.target.value)}))),
+    div({style:{display:"flex",gap:"8px",marginBottom:"4px"}},div({style:{flex:"1.5"}},h("label",{className:"flabel"},"金額"),inp({className:"inp",type:"number",placeholder:"0",value:f.amount,onInput:e=>sf("amount",e.target.value)})),div({style:{flex:"1"}},h("label",{className:"flabel"},"幣別"),sel({className:"inp",value:f.currency,onChange:e=>sf("currency",e.target.value)},opt("TWD","🇹🇼 TWD"),opt("JPY","🇯🇵 JPY")))),
+    f.currency==="JPY"&&f.amount?div({style:{fontSize:"11px",color:"#9A8F7E",marginBottom:"8px"}},"≈ NT$"+j2t(Number(f.amount)).toLocaleString()):null,
+    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"由誰付款"),sel({className:"inp",value:f.paidBy,onChange:e=>sf("paidBy",Number(e.target.value))},...S.persons.map(p=>opt(p.id,p.name)))),
+    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"分攤（不選＝全員均分）"),div({style:{display:"flex",gap:"6px",flexWrap:"wrap",marginTop:"5px"}},...pcbs)),
+    div({style:{marginBottom:"10px"}},h("label",{className:"flabel"},"備註"),inp({className:"inp",placeholder:"例：含服務費",value:f.note,onInput:e=>sf("note",e.target.value)})),
+    div({style:{display:"flex",gap:"8px",marginTop:"4px"}},btn({className:"btn-sm",style:{flex:"1",padding:"12px"},onClick:()=>{S.modal=null;render();}},"取消"),btn({className:"btn-red",style:{flex:"2",padding:"12px"},onClick:saveExpense},"確認記帳"))
   );
 }
 function buildSpotModal(){
@@ -1140,52 +1036,40 @@ function buildSpotModal(){
 }
 
 // ── ACTIONS ──
-function openNewFlight(){S.editFlight=null;S.flightForm={direction:"去程",flightNo:"",airline:"",from:"TPE",fromCity:"台灣桃園",to:"NRT",toCity:"東京成田",date:"",departTime:"",arriveTime:"",terminal:"",gate:"",seat:"",ticketPrice:""};S.modal="flight";render();}
-function openEditFlight(f){S.editFlight=f.id;S.flightForm={...f};S.modal="flight";render();}
+
+// ── Geocode ──
+async function geocodePlace(name){
+  try{
+    const timeout=new Promise((_,rej)=>setTimeout(()=>rej("timeout"),3000));
+    const fetchResult=fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name+" 東京 日本")}&format=json&limit=1`,{headers:{"Accept-Language":"zh-TW"}}).then(r=>r.json());
+    const d=await Promise.race([fetchResult,timeout]);
+    if(d&&d.length>0) return{lat:parseFloat(d[0].lat),lng:parseFloat(d[0].lon)};
+  }catch(_){}
+  return{lat:35.6762,lng:139.6503};
+}
+
 async function saveCustomSpot(){
   const f=S.addSpotForm;
   if(!f.name.trim()) return;
   const type=f.customType.trim()||f.type||"📍 自訂景點";
   if(!TYPE_ORDER.includes(type)) TYPE_ORDER.push(type);
-
-  // Geocode with timeout - if fails, use Tokyo center
-  let lat=35.6762, lng=139.6503;
-  try{
-    const timeout=new Promise((_,rej)=>setTimeout(()=>rej("timeout"),3000));
-    const result=geocodePlace(f.area?f.name+" "+f.area:f.name);
-    const pos=await Promise.race([result,timeout]);
-    lat=pos.lat; lng=pos.lng;
-  }catch(_){}
-
-  const newSpot={
-    id:Date.now(),
-    name:f.name.trim(),
-    area:f.area.trim()||"東京",
-    type,
-    cost:Number(f.cost)||0,
-    dur:Number(f.dur)||90,
-    icon:f.icon||"📍",
-    ig:"自訂",
-    hot:false,
-    subway:f.subway.trim()||"請查詢最近車站",
-    lat,lng,
-    tip:f.tip.trim()||f.name,
-    custom:true,
-  };
+  let lat=35.6762,lng=139.6503;
+  try{const pos=await geocodePlace(f.area?f.name+" "+f.area:f.name);lat=pos.lat;lng=pos.lng;}catch(_){}
+  const newSpot={id:Date.now(),name:f.name.trim(),area:f.area.trim()||"東京",type,cost:Number(f.cost)||0,dur:Number(f.dur)||90,icon:f.icon||"📍",ig:"自訂",hot:false,subway:f.subway.trim()||"請查詢最近車站",lat,lng,tip:f.tip.trim()||f.name,custom:true};
   S.customSpots=[...S.customSpots,newSpot];
   S.addSpotForm={name:"",area:"",type:"",customType:"",cost:"",dur:"90",icon:"📍",tip:"",subway:""};
   S.showAddSpot=false;
-  persist();
-  render();
+  persist();render();
 }
 
 function deleteCustomSpot(id){
   S.customSpots=S.customSpots.filter(s=>s.id!==id);
-  // Also remove from days
   Object.keys(S.days).forEach(d=>{S.days[d]=(S.days[d]||[]).filter(s=>s.id!==id);});
   persist();render();
 }
 
+function openNewFlight(){S.editFlight=null;S.flightForm={direction:"去程",flightNo:"",airline:"",from:"TPE",fromCity:"台灣桃園",to:"NRT",toCity:"東京成田",date:"",departTime:"",arriveTime:"",terminal:"",gate:"",seat:"",ticketPrice:""};S.modal="flight";render();}
+function openEditFlight(f){S.editFlight=f.id;S.flightForm={...f};S.modal="flight";render();}
 function saveFlight(){if(!S.flightForm.flightNo&&!S.flightForm.date)return;if(S.editFlight)S.flights=S.flights.map(f=>f.id===S.editFlight?{...S.flightForm,id:S.editFlight}:f);else S.flights=[...S.flights,{...S.flightForm,id:Date.now()}];S.modal=null;persist();render();}
 function openExpense(){S.expForm={label:"",category:"🍜 餐飲",amount:"",currency:"TWD",paidBy:S.persons[0]?.id||1,splitWith:[],date:"",note:""};S.modal="expense";render();}
 function saveExpense(){if(!S.expForm.label||!S.expForm.amount)return;S.expenses=[...S.expenses,{...S.expForm,id:Date.now()}];S.modal=null;persist();render();}
@@ -1234,11 +1118,6 @@ async function runAIUpdate(){
 
 // ── RENDER ──
 function render(){
-  // Remember focused element
-  const focusedId = document.activeElement && document.activeElement.id;
-  const selStart = document.activeElement && document.activeElement.selectionStart;
-  const selEnd   = document.activeElement && document.activeElement.selectionEnd;
-
   const app=document.getElementById("app");
   while(app.firstChild)app.removeChild(app.firstChild);
   const[hdr,main]=buildApp();
@@ -1247,20 +1126,6 @@ function render(){
   if(modal)app.appendChild(modal);
   const addModal=buildAddSpotModal();
   if(addModal)app.appendChild(addModal);
-
-  // Restore focus if search box was active
-  if(focusedId){
-    const el=document.getElementById(focusedId);
-    if(el){
-      el.focus();
-      try{ el.setSelectionRange(selStart,selEnd); } catch(_){}
-    }
-  }
-  // Mark all inputs to track typing state
-  document.querySelectorAll("input,textarea").forEach(inp=>{
-    inp.addEventListener("focus",()=>{ inp._userTyping=true; },true);
-    inp.addEventListener("blur",()=>{ inp._userTyping=false; },true);
-  });
 }
 
 init();

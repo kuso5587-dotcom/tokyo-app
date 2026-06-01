@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F5F0E8">
+<title>東京旅遊規劃師 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Dots&family=Noto+Serif+JP:wght@400;700&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Zen+Dots&family=Noto+Serif+JP:wght@300;400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body,#root{width:100%;height:100%;background:#F5F0E8;}
+body{font-family:'DM Sans',sans-serif;color:#1A1008;-webkit-font-smoothing:antialiased;overflow:hidden;}
+::-webkit-scrollbar{width:0;}
+.app{width:100%;max-width:430px;margin:0 auto;height:100%;display:flex;flex-direction:column;background:#F5F0E8;position:relative;}
+.app::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");opacity:.6;}
+/* header */
+.hdr{background:#F5F0E8;border-bottom:1.5px solid #E0D5C5;padding:0 18px;padding-top:env(safe-area-inset-top,0px);position:relative;z-index:50;flex-shrink:0;}
+.hdr-top{padding:12px 0 8px;display:flex;align-items:flex-end;justify-content:space-between;}
+.logo-en{font-family:'Zen Dots',cursive;font-size:17px;color:#1A1008;letter-spacing:.5px;line-height:1;}
+.logo-en span{color:#C84B31;}
+.logo-jp{font-family:'Noto Serif JP',serif;font-size:9px;color:#9A8F7E;letter-spacing:2px;margin-top:2px;}
+.hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+.days-badge{font-family:'Zen Dots',cursive;font-size:10px;color:#C84B31;background:#C84B3115;border:1px solid #C84B3135;border-radius:6px;padding:4px 9px;}
+.save-lbl{font-family:'Zen Dots',cursive;font-size:8px;letter-spacing:.5px;}
+.tabbar{display:flex;border-top:1.5px solid #E0D5C5;}
+.tabbar button{flex:1;padding:8px 1px;background:transparent;border:none;font-family:'DM Sans',sans-serif;font-size:9.5px;font-weight:600;color:#9A8F7E;cursor:pointer;border-top:2px solid transparent;margin-top:-1.5px;transition:color .2s,border-color .2s;-webkit-tap-highlight-color:transparent;}
+.tabbar button.on{color:#C84B31;border-top-color:#C84B31;}
+/* content */
+.content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px;padding-bottom:calc(28px + env(safe-area-inset-bottom,0px));position:relative;z-index:1;}
+.sec{display:flex;align-items:center;gap:10px;font-family:'Zen Dots',cursive;font-size:9px;color:#C84B31;letter-spacing:2px;margin:18px 0 10px;}
+.sec::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,#C84B3130,transparent);}
+/* cards */
+.card{background:#FDFAF5;border:1px solid #E8DFD0;border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.scard{background:#FDFAF5;border:1px solid #E8DFD0;border-radius:14px;padding:12px;margin-bottom:8px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:transform .12s,border-color .12s;-webkit-tap-highlight-color:transparent;}
+.scard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#E8DFD0;transition:background .12s;}
+.scard:active{transform:scale(.98);}
+.scard.added{border-color:#3BB27340;background:#F5FEFA;}
+.scard.added::before{background:#3BB273;}
+.scard:not(.added):active::before{background:#C84B31;}
+.hot-badge{position:absolute;top:9px;right:9px;background:#C84B31;color:#fff;font-family:'Zen Dots',cursive;font-size:8px;padding:2px 7px;border-radius:4px;}
+.sico{width:42px;height:42px;border-radius:12px;background:#F0EBE0;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;border:1px solid #E0D5C0;}
+.tip{background:#F0EBE0;border-radius:8px;padding:7px 10px;font-size:11px;color:#6B5D4A;margin-top:8px;line-height:1.6;border-left:2.5px solid #C84B31;}
+.sw{font-size:10px;color:#8B7355;margin-top:5px;font-weight:500;}
+/* buttons */
+.btn-red{display:inline-flex;align-items:center;justify-content:center;background:#C84B31;color:#fff;border:none;border-radius:8px;padding:11px 18px;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;box-shadow:0 3px 12px #C84B3140;-webkit-tap-highlight-color:transparent;transition:filter .1s;}
+.btn-red:active{filter:brightness(.88);}
+.btn-red:disabled{background:#D8CFC4;color:#9A8F7E;box-shadow:none;}
+.btn-sm{display:inline-flex;align-items:center;justify-content:center;padding:6px 12px;font-size:11px;background:#F0EBE0;color:#6B5D4A;border-radius:6px;border:1px solid #E0D5C0;font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.btn-sm.active{background:#C84B31;color:#fff;border-color:#C84B31;}
+.btn-danger{background:#FFF0EE;color:#C84B31;border:1px solid #F0D0C8;padding:5px 10px;font-size:11px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;-webkit-tap-highlight-color:transparent;}
+/* inputs */
+.inp{width:100%;background:#FDFAF5;border:1.5px solid #E0D5C0;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:16px;color:#1A1008;padding:10px 13px;outline:none;-webkit-appearance:none;}
+.inp:focus{border-color:#C84B31;}
+.inp::placeholder{color:#B0A090;}
+select.inp{cursor:pointer;background-image:none;}
+.tag{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.pills{display:flex;gap:5px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
+.pills::-webkit-scrollbar{display:none;}
+.pill{flex-shrink:0;padding:6px 13px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid #E0D5C0;color:#6B5D4A;background:#FDFAF5;white-space:nowrap;font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent;}
+.pill.on{background:#C84B31;color:#fff;border-color:#C84B31;}
+.day-strip{display:flex;gap:5px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.day-strip::-webkit-scrollbar{display:none;}
+.day-chip{flex-shrink:0;padding:6px 13px;border-radius:8px;font-family:'Zen Dots',cursive;font-size:10px;cursor:pointer;border:1.5px solid #E0D5C0;color:#9A8F7E;background:#FDFAF5;-webkit-tap-highlight-color:transparent;}
+.day-chip.sel{background:#1A1008;color:#F5F0E8;border-color:#1A1008;}
+.tog{width:46px;height:26px;border-radius:13px;position:relative;cursor:pointer;transition:background .25s;flex-shrink:0;box-shadow:inset 0 1px 3px rgba(0,0,0,.15);-webkit-tap-highlight-color:transparent;}
+.tok{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .25s;box-shadow:0 1px 4px rgba(0,0,0,.25);}
+.pbar-track{height:6px;background:#EDE6D8;border-radius:3px;margin-top:5px;overflow:hidden;}
+.pbar-fill{height:100%;border-radius:3px;transition:width .6s ease;}
+.bp{background:#FDFAF5;border-radius:16px;overflow:hidden;margin-bottom:12px;}
+.bp-dashed{margin:12px 0;border-top:1.5px dashed #E0D5C5;position:relative;}
+.bp-dashed::before{content:'';position:absolute;top:-8px;left:-1px;width:16px;height:16px;border-radius:50%;background:#F5F0E8;border:1.5px solid #E0D5C5;}
+.bp-dashed::after{content:'';position:absolute;top:-8px;right:-1px;width:16px;height:16px;border-radius:50%;background:#F5F0E8;border:1.5px solid #E0D5C5;}
+.ov{position:fixed;inset:0;background:rgba(26,16,8,.55);z-index:200;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px);}
+.modal{background:#F5F0E8;border-radius:24px 24px 0 0;padding:22px 18px;width:100%;max-width:430px;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(22px + env(safe-area-inset-bottom,0px));}
+.modal-bar{width:36px;height:4px;border-radius:2px;background:#D8CFC4;margin:0 auto 16px;}
+.modal-title{font-family:'Noto Serif JP',serif;font-size:19px;color:#1A1008;margin-bottom:14px;font-weight:700;}
+.flabel{font-size:9px;font-weight:700;color:#9A8F7E;letter-spacing:1.5px;margin-bottom:5px;font-family:'Zen Dots',cursive;display:block;}
+.seg{flex:1;padding:9px;text-align:center;border-radius:9px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;border:1.5px solid #E0D5C0;color:#6B5D4A;background:#FDFAF5;-webkit-tap-highlight-color:transparent;}
+.seg.on{background:#1A1008;color:#F5F0E8;border-color:#1A1008;}
+.slider{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:#E0D5C0;outline:none;margin:8px 0;}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#C84B31;cursor:pointer;box-shadow:0 2px 8px rgba(200,75,49,.35);}
+.bcard{background:#FDFAF5;border:2px solid transparent;border-radius:14px;padding:12px 14px;cursor:pointer;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.04);-webkit-tap-highlight-color:transparent;}
+.bcard.sel{border-color:#C84B31;background:#FFF8F6;}
+.cpill{display:inline-flex;align-items:center;gap:4px;background:#F0EBE0;border:1px solid #E0D5C0;border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600;color:#6B5D4A;}
+.erow{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #EDE6D8;}
+.erow:last-child{border-bottom:none;}
+.ecat{width:40px;height:40px;border-radius:11px;background:#F0EBE0;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;border:1px solid #E0D5C0;}
+.erow-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.erow-amount{font-family:'Zen Dots',cursive;font-size:13px;color:#1A1008;font-weight:700;white-space:nowrap;}
+.erow-sub{font-size:10px;color:#9A8F7E;white-space:nowrap;}
+.erow-del{width:28px;height:28px;border-radius:8px;background:#FFF0EE;border:1px solid #F0D0C8;color:#C84B31;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;margin-top:4px;}
+.exp-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;}
+.exp-summary-item{background:rgba(255,255,255,.09);border-radius:10px;padding:8px 10px;}
+.exp-summary-label{font-size:9px;color:#8B7355;margin-bottom:3px;}
+.exp-summary-val{font-family:'Zen Dots',cursive;font-size:12px;font-weight:700;}
+a.nbtn{display:inline-flex;align-items:center;justify-content:center;padding:6px 11px;border-radius:8px;font-size:11px;font-weight:600;text-decoration:none;font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent;}
+a.nbtn.g{background:#3BB27318;color:#3BB273;border:1px solid #3BB27340;}
+a.nbtn.b{background:#2E86AB18;color:#2E86AB;border:1px solid #2E86AB40;}
+.ai-out{background:#FDFAF5;border:1px solid #E8DFD0;border-radius:14px;padding:14px;white-space:pre-wrap;font-size:12px;line-height:1.9;color:#4A3C2A;max-height:400px;overflow-y:auto;font-family:'Noto Serif JP',serif;}
+.empty{text-align:center;padding:22px 16px;font-size:12px;color:#B0A090;line-height:1.7;}
+/* loading screen */
+.loading-screen{position:fixed;inset:0;background:#F5F0E8;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;}
+.loading-logo{font-family:'Zen Dots',cursive;font-size:26px;color:#1A1008;letter-spacing:2px;}
+.loading-logo span{color:#C84B31;}
+.loading-bar{width:180px;height:2px;background:#E8DFD0;border-radius:2px;overflow:hidden;}
+.loading-fill{height:100%;background:linear-gradient(90deg,#C84B31,#e8836a,#C84B31);background-size:200% 100%;border-radius:2px;animation:loadfill 3s ease-in-out infinite;}
+.loading-txt{font-family:'Zen Dots',cursive;font-size:9px;color:#B0A090;letter-spacing:3px;animation:fadepulse 2s ease-in-out infinite;}
+.loading-sub{font-family:'Noto Serif JP',serif;font-size:11px;color:#C84B31;letter-spacing:1px;opacity:.7;margin-top:-8px;animation:fadepulse 2.5s ease-in-out infinite;}
+@keyframes loadfill{0%{background-position:100% 0;}50%{background-position:0% 0;}100%{background-position:100% 0;}}
+@keyframes fadepulse{0%,100%{opacity:.4;}50%{opacity:1;}}
+/* sync badge */
+.sync-badge{display:inline-flex;align-items:center;gap:4px;font-family:'Zen Dots',cursive;font-size:8px;letter-spacing:.5px;padding:3px 8px;border-radius:20px;}
+.sync-cloud{background:#2E86AB15;color:#2E86AB;border:1px solid #2E86AB30;}
+.sync-ok{background:#3BB27315;color:#3BB273;border:1px solid #3BB27330;}
+.sync-err{background:#C84B3115;color:#C84B31;border:1px solid #C84B3130;}
+.sync-saving{background:#F18F0115;color:#F18F01;border:1px solid #F18F0130;}
+@keyframes loadfill{0%{width:0%;}50%{width:80%;}100%{width:100%;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+.fu{animation:fadeUp .28s ease both;}
+
+</style>
+</head>
+<body>
+<div id="root">
+  <div class="loading-screen" id="loadingScreen">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:18px;">
+      <div style="font-size:52px;animation:fadepulse 2s ease-in-out infinite;">🗼</div>
+      <div class="loading-logo">TOKYO<span>旅</span> 2026</div>
+      <div class="loading-sub">日本東京行 X Bocheng 設計</div>
+      <div class="loading-bar"><div class="loading-fill"></div></div>
+      <div class="loading-txt">CONNECTING TO CLOUD</div>
+    </div>
+  </div>
+  <div class="app" id="app" style="display:none"></div>
+</div>
+
+<script>
+// ═══ SUPABASE ═══
+const SUPA_URL="https://zwecauiavjcdgmstgwnp.supabase.co";
+const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3ZWNhdWlhdmpjZGdtc3Rnd25wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMjgwNzksImV4cCI6MjA5NTgwNDA3OX0.e26Lx5O56U3HSg4MrA_zwI0iSuXwFpMJoG-BARp1rEY";
+const TABLE="tokyo_data", ROW_ID="main";
+
+async function dbLoad(){
+  const r=await fetch(`${SUPA_URL}/rest/v1/${TABLE}?id=eq.${ROW_ID}&select=*`,{headers:{"apikey":SUPA_KEY,"Authorization":"Bearer "+SUPA_KEY}});
+  const d=await r.json();
+  return d&&d[0]?d[0]:null;
+}
+async function dbSave(data){
+  await fetch(`${SUPA_URL}/rest/v1/${TABLE}?id=eq.${ROW_ID}`,{
+    method:"PATCH",
+    headers:{"apikey":SUPA_KEY,"Authorization":"Bearer "+SUPA_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},
+    body:JSON.stringify({...data,updated_at:new Date().toISOString()})
+  });
+}
+
+// ═══ DATA ═══
+const SPOTS=[
+  {id:1,name:"淺草寺 & 雷門",area:"淺草",type:"⛩️ 文化古蹟",cost:0,dur:90,icon:"⛩️",ig:"必拍",hot:true,subway:"銀座線 淺草站",lat:35.7148,lng:139.7967,tip:"早上8點前到，雷門空景不排隊"},
+  {id:2,name:"東京晴空塔",area:"押上",type:"🌅 展望台",cost:3100,dur:120,icon:"🗼",ig:"必拍",hot:true,subway:"東武 押上站",lat:35.7101,lng:139.8107,tip:"黃昏時段日夜景都能拍到"},
+  {id:3,name:"SHIBUYA SKY",area:"澀谷",type:"🌅 展望台",cost:2200,dur:90,icon:"🌅",ig:"爆紅",hot:true,subway:"JR 澀谷站（共構）",lat:35.6585,lng:139.7024,tip:"吊床打卡超熱門！黃昏兩週前搶票"},
+  {id:4,name:"澀谷十字路口",area:"澀谷",type:"🌆 熱門景點",cost:0,dur:30,icon:"🚦",ig:"必拍",hot:true,subway:"JR 澀谷站",lat:35.6595,lng:139.7004,tip:"Starbucks二樓俯拍最佳角度"},
+  {id:5,name:"teamLab Borderless",area:"麻布台",type:"🎨 藝術體驗",cost:3800,dur:180,icon:"🌊",ig:"爆紅",hot:true,subway:"日比谷線 神谷町站",lat:35.6588,lng:139.7438,tip:"穿白衣效果最好，預留3小時"},
+  {id:6,name:"teamLab Planets 豐洲",area:"豐洲",type:"🎨 藝術體驗",cost:3200,dur:120,icon:"💧",ig:"必拍",hot:true,subway:"ゆりかもめ 新豐洲站",lat:35.6427,lng:139.7842,tip:"穿短褲或短裙，需涉水體驗"},
+  {id:7,name:"麻布台之丘",area:"麻布台",type:"🆕 新地標",cost:0,dur:90,icon:"🏙️",ig:"新爆紅",hot:true,subway:"日比谷線 神谷町站",lat:35.6592,lng:139.7434,tip:"33F俯瞰東京鐵塔，日本最高大樓"},
+  {id:8,name:"東京鐵塔",area:"芝公園",type:"🌆 熱門景點",cost:1200,dur:60,icon:"🗽",ig:"必拍",hot:true,subway:"都營三田線 芝公園站",lat:35.6586,lng:139.7454,tip:"夜間紅色燈光最浪漫"},
+  {id:9,name:"原宿 HARAKADO",area:"原宿",type:"🆕 新地標",cost:0,dur:90,icon:"🏗️",ig:"新爆紅",hot:true,subway:"JR 原宿站",lat:35.6692,lng:139.7037,tip:"2024新開幕！地下銭湯超特別"},
+  {id:10,name:"原宿竹下通",area:"原宿",type:"🛍️ 一般購物",cost:3000,dur:90,icon:"🍦",ig:"熱點",hot:false,subway:"JR 原宿站",lat:35.6702,lng:139.7026,tip:"可麗餅+彩虹棉花糖必拍"},
+  {id:11,name:"明治神宮",area:"原宿",type:"⛩️ 文化古蹟",cost:0,dur:60,icon:"🌿",ig:"拍照",hot:false,subway:"JR 原宿站",lat:35.6763,lng:139.6993,tip:"都市森林芬多精，早晨光線最美"},
+  {id:12,name:"豐洲千客萬來",area:"豐洲",type:"🍣 必吃美食",cost:3000,dur:120,icon:"🐟",ig:"新爆紅",hot:true,subway:"ゆりかもめ 市場前站",lat:35.6459,lng:139.7834,tip:"2024新開幕！海鮮丼超新鮮"},
+  {id:13,name:"哈利波特影城",area:"練馬",type:"🎢 主題樂園",cost:6800,dur:300,icon:"🧙",ig:"必拍",hot:true,subway:"西武鐵道 豐島園站",lat:35.7347,lng:139.6561,tip:"亞洲首座！奶油啤酒必喝，留5小時"},
+  {id:14,name:"吉卜力美術館",area:"三鷹",type:"🎢 主題樂園",cost:1000,dur:180,icon:"🐱",ig:"必拍",hot:true,subway:"JR中央線 三鷹站+巴士",lat:35.6962,lng:139.5703,tip:"需提前一個月搶票！"},
+  {id:15,name:"秋葉原電器街",area:"秋葉原",type:"🛍️ 一般購物",cost:5000,dur:120,icon:"🎮",ig:"拍照",hot:false,subway:"JR 秋葉原站",lat:35.7022,lng:139.7741,tip:"動漫扭蛋天堂，女僕咖啡廳體驗"},
+  {id:16,name:"銀座 Sony Park",area:"銀座",type:"🆕 新地標",cost:0,dur:60,icon:"📱",ig:"新爆紅",hot:true,subway:"銀座線 銀座站",lat:35.6717,lng:139.7639,tip:"免費互動藝術裝置，科技感十足"},
+  {id:17,name:"上野阿美橫丁",area:"上野",type:"🍣 必吃美食",cost:1500,dur:90,icon:"🌸",ig:"拍照",hot:false,subway:"JR 上野站",lat:35.7122,lng:139.7741,tip:"平價美食挖寶，春天賞櫻聖地"},
+  {id:18,name:"新宿歌舞伎町一番街",area:"新宿",type:"🆕 新地標",cost:0,dur:60,icon:"🎭",ig:"新爆紅",hot:true,subway:"JR 新宿站",lat:35.6962,lng:139.7037,tip:"東急歌舞伎町Tower霓虹夜景爆紅"},
+  {id:19,name:"台場彩虹橋",area:"台場",type:"🌆 熱門景點",cost:0,dur:60,icon:"🌈",ig:"拍照",hot:false,subway:"ゆりかもめ 台場站",lat:35.6227,lng:139.7753,tip:"晚上8點燈光最美，對岸拍攝佳"},
+  {id:20,name:"築地場外市場",area:"築地",type:"🍣 必吃美食",cost:2500,dur:90,icon:"🍣",ig:"拍照",hot:false,subway:"都營大江戶線 築地市場站",lat:35.6654,lng:139.7707,tip:"早上6點開市，玉子燒必買"},
+  // ── 公仔 & 玩具 ──
+  {id:21,name:"Mandarake Complex 秋葉原",area:"秋葉原",type:"🎎 公仔玩具",cost:5000,dur:120,icon:"🎎",ig:"必去",hot:true,subway:"JR 秋葉原站 徒步5分",lat:35.7022,lng:139.7741,tip:"8層樓日本最大動漫藏品店！漫畫/公仔/模型/稀有限定品，挖寶天堂"},
+  {id:22,name:"中野百老匯 Mandarake",area:"中野",type:"🎎 公仔玩具",cost:8000,dur:150,icon:"🏬",ig:"必去",hot:true,subway:"JR中央線 中野站 徒步5分",lat:35.7078,lng:139.6653,tip:"老字號二手公仔聖地，稀有古董玩具比秋葉原更好挖寶，建議留2-3小時"},
+  {id:23,name:"駿河屋 秋葉原本店",area:"秋葉原",type:"🎎 公仔玩具",cost:5000,dur:90,icon:"🎮",ig:"熱門",hot:true,subway:"JR 秋葉原站 徒步3分",lat:35.6995,lng:139.7733,tip:"中古遊戲/公仔超大量，價格比台灣便宜，記得帶護照退稅"},
+  {id:24,name:"秋葉原扭蛋會館",area:"秋葉原",type:"🎎 公仔玩具",cost:3000,dur:60,icon:"🟡",ig:"爆紅",hot:true,subway:"JR 秋葉原站 徒步5分",lat:35.7020,lng:139.7738,tip:"超過500台扭蛋機！寶可夢/鬼滅/海賊王/角落生物全都有，每月50種新扭蛋"},
+  {id:25,name:"GiGO 秋葉原 夾娃娃",area:"秋葉原",type:"🎎 公仔玩具",cost:2000,dur:60,icon:"🕹️",ig:"熱門",hot:false,subway:"JR 秋葉原站 徒步3分",lat:35.7016,lng:139.7735,tip:"原SEGA旗下，100台以上夾娃娃機，限定公仔只有這裡有"},
+  {id:26,name:"寶可夢中心 Mega Tokyo",area:"池袋",type:"🎎 公仔玩具",cost:4000,dur:90,icon:"⚡",ig:"必拍",hot:true,subway:"JR山手線 池袋站 東口徒步2分",lat:35.7300,lng:139.7109,tip:"🔥全日本最大寶可夢中心！池袋限定皮卡丘周邊，門口有超夢可拍照"},
+  {id:27,name:"寶可夢中心 澀谷",area:"澀谷",type:"🎎 公仔玩具",cost:3000,dur:60,icon:"🔴",ig:"熱門",hot:false,subway:"JR山手線 澀谷站 徒步5分",lat:35.6617,lng:139.6990,tip:"澀谷Parco 6F，澀谷限定皮卡丘，逛完澀谷順道拜訪"},
+  {id:28,name:"LEGO 旗艦店 新宿",area:"新宿",type:"🎎 公仔玩具",cost:5000,dur:60,icon:"🧱",ig:"必拍",hot:true,subway:"JR山手線 新宿站 徒步5分",lat:35.6915,lng:139.7008,tip:"日本最大LEGO旗艦店！限定款/大型展示積木/現場組裝體驗，必拍照"},
+  {id:29,name:"Disney Store 銀座旗艦",area:"銀座",type:"🎎 公仔玩具",cost:5000,dur:60,icon:"🐭",ig:"熱門",hot:false,subway:"東京Metro銀座線 銀座站 徒步3分",lat:35.6717,lng:139.7658,tip:"銀座限定迪士尼商品，裝潢超精美，逛銀座必順道"},
+  {id:30,name:"Jump Shop 東京晴空塔",area:"押上",type:"🎎 公仔玩具",cost:4000,dur:60,icon:"📕",ig:"熱門",hot:false,subway:"東武 押上站 徒步3分",lat:35.7100,lng:139.8096,tip:"少年JUMP官方店，海賊王/火影/龍珠限定商品，週邊超齊全"},
+  {id:31,name:"Hobby Japan 秋葉原",area:"秋葉原",type:"🎎 公仔玩具",cost:6000,dur:90,icon:"🤖",ig:"熱門",hot:false,subway:"JR 秋葉原站 徒步3分",lat:35.7010,lng:139.7730,tip:"鋼彈模型/figma/高達模型超齊全，模型控必朝聖"},
+  {id:32,name:"Animate 池袋本店",area:"池袋",type:"🎎 公仔玩具",cost:4000,dur:90,icon:"✨",ig:"熱門",hot:false,subway:"JR山手線 池袋站 徒步5分",lat:35.7295,lng:139.7121,tip:"動漫周邊/聲優CD/漫畫最齊全連鎖店，池袋本店共8層樓"},
+
+  // ── 精品包 ──
+  {id:33,name:"Louis Vuitton 表參道旗艦",area:"表參道",type:"👜 精品包",cost:0,dur:60,icon:"👜",ig:"必拍",hot:true,subway:"東京Metro銀座線 表參道站 徒步2分",lat:35.6653,lng:139.7127,tip:"🔥青木淳設計的建築本身就是藝術！即使不買也值得拍照，日本限定款比台灣好找"},
+  {id:34,name:"Chanel 銀座旗艦",area:"銀座",type:"👜 精品包",cost:0,dur:60,icon:"🖤",ig:"必拍",hot:true,subway:"東京Metro銀座線 銀座站 徒步2分",lat:35.6705,lng:139.7637,tip:"銀座最美精品店之一，外牆LED燈光秀夜間必拍，日本限定香水值得入手"},
+  {id:35,name:"Hermès 銀座",area:"銀座",type:"👜 精品包",cost:0,dur:45,icon:"🟠",ig:"熱門",hot:false,subway:"東京Metro銀座線 銀座站 徒步3分",lat:35.6703,lng:139.7633,tip:"銀座旗艦，Birkin/Kelly等候名單，絲巾/小皮件較易入手，環境優雅"},
+  {id:36,name:"Gucci 表參道",area:"表參道",type:"👜 精品包",cost:0,dur:45,icon:"🟢",ig:"熱門",hot:false,subway:"東京Metro銀座線 表參道站 徒步3分",lat:35.6646,lng:139.7124,tip:"表參道精品街必逛，日本限定聯名款要提早關注官網"},
+  {id:37,name:"Dior 表參道",area:"表參道",type:"👜 精品包",cost:0,dur:45,icon:"💙",ig:"必拍",hot:true,subway:"東京Metro銀座線 表參道站 徒步2分",lat:35.6649,lng:139.7130,tip:"建築設計超美，Dior Beauty日本限定色號必買，拍照聖地"},
+  {id:38,name:"二手精品 Brand Off 銀座",area:"銀座",type:"👜 精品包",cost:30000,dur:90,icon:"💎",ig:"熱門",hot:true,subway:"東京Metro銀座線 銀座站 徒步5分",lat:35.6715,lng:139.7650,tip:"🔥日本二手精品CP值最高！LV/Chanel/Hermès 比台灣便宜20-30%，帶護照免稅"},
+  {id:39,name:"KOMEHYO 新宿",area:"新宿",type:"👜 精品包",cost:20000,dur:90,icon:"🏷️",ig:"熱門",hot:true,subway:"JR山手線 新宿站 徒步5分",lat:35.6940,lng:139.7025,tip:"老字號二手精品名錶，價格透明公道，Rolex/AP二手款選擇多"},
+
+  // ── 精品錶 ──
+  {id:40,name:"Rolex 銀座 Lexia 精品錶店",area:"銀座",type:"⌚ 精品錶",cost:0,dur:45,icon:"⌚",ig:"必朝聖",hot:true,subway:"東京Metro銀座線 銀座站 徒步2分",lat:35.6712,lng:139.7643,tip:"🔥日本最大Rolex官方精品店！Submariner/Daytona正規管道，買錶記得帶護照"},
+  {id:41,name:"AP Royal Oak 表參道 AP House",area:"表參道",type:"⌚ 精品錶",cost:0,dur:45,icon:"⌚",ig:"必朝聖",hot:true,subway:"東京Metro銀座線 表參道站 徒步3分",lat:35.6658,lng:139.7135,tip:"Audemars Piguet官方體驗空間，Royal Oak全系列展示，錶迷朝聖必去"},
+  {id:42,name:"Patek Philippe 銀座",area:"銀座",type:"⌚ 精品錶",cost:0,dur:30,icon:"⌚",ig:"熱門",hot:false,subway:"東京Metro銀座線 銀座站 徒步3分",lat:35.6718,lng:139.7640,tip:"百達翡麗官方沙龍，Calatrava/Nautilus展示，感受頂級鐘錶工藝"},
+  {id:43,name:"Cartier 銀座",area:"銀座",type:"⌚ 精品錶",cost:0,dur:45,icon:"💍",ig:"必拍",hot:false,subway:"東京Metro銀座線 銀座站 徒步2分",lat:35.6710,lng:139.7638,tip:"Tank/Santos日本限定款，銀座旗艦建築夜間燈光超美，首飾&錶都值得看"},
+  {id:44,name:"Watch Fever 中古錶 渋谷",area:"澀谷",type:"⌚ 精品錶",cost:0,dur:60,icon:"🔍",ig:"熱門",hot:true,subway:"JR山手線 澀谷站 徒步5分",lat:35.6600,lng:139.6988,tip:"二手名錶挖寶勝地，Rolex/Omega/Tudor價格比台灣透明，店員懂錶好溝通"},
+  {id:45,name:"大黑屋 二手名錶 銀座",area:"銀座",type:"⌚ 精品錶",cost:0,dur:60,icon:"🕐",ig:"熱門",hot:false,subway:"東京Metro銀座線 銀座站 徒步5分",lat:35.6720,lng:139.7655,tip:"老字號二手名錶，Omega/Rolex/IWC選擇多，保固完整價格合理"},
+  // ── 在地隱藏景點 ──
+  {id:46,name:"谷根千 下町老街",area:"谷中",type:"🏮 私藏秘境",cost:500,dur:150,icon:"🏮",ig:"秘境",hot:true,subway:"JR 日暮里站 徒步5分",lat:35.7261,lng:139.7659,tip:"🔥在地人最愛！谷中銀座商店街+昭和老街，遠離觀光客，銅鑼燒+炸肉餅邊走邊吃必試"},
+  {id:47,name:"清澄白河 咖啡文青街",area:"清澄白河",type:"🏮 私藏秘境",cost:1500,dur:120,icon:"☕",ig:"秘境",hot:true,subway:"東京Metro半藏門線 清澄白河站",lat:35.6786,lng:139.7972,tip:"東京Brooklyn！Blue Bottle等精品咖啡聚集地，藝廊+選物店散落巷弄間，最適合文青慢遊"},
+  {id:48,name:"豪德寺 招財貓聖地",area:"世田谷",type:"🏮 私藏秘境",cost:0,dur:60,icon:"🐱",ig:"秘境",hot:true,subway:"東急世田谷線 宮の坂站 徒步5分",lat:35.6572,lng:139.6366,tip:"🔥數千隻招財貓小雕像！貓奴朝聖必去，遊客超少，寧靜美麗，IG秘境"},
+  {id:49,name:"下北澤 古著&咖哩街",area:"下北澤",type:"🏮 私藏秘境",cost:3000,dur:150,icon:"🎸",ig:"在地推薦",hot:true,subway:"小田急線/京王井之頭線 下北澤站",lat:35.6614,lng:139.6680,tip:"東京次文化中心！日本最密集古著店+全日本最多咖哩店，週末有獨立音樂表演"},
+  {id:50,name:"代官山蔦屋書店",area:"代官山",type:"🏮 私藏秘境",cost:0,dur:90,icon:"📚",ig:"秘境",hot:true,subway:"東急東橫線 代官山站 徒步5分",lat:35.6491,lng:139.7026,tip:"全球最美書店！深夜開到凌晨2點，附設lounge bar，慢慢翻書配咖啡最享受"},
+  {id:51,name:"自由之丘 甜點天堂",area:"自由之丘",type:"🏮 私藏秘境",cost:2000,dur:120,icon:"🎂",ig:"在地推薦",hot:false,subway:"東急東橫線 自由が丘站",lat:35.6086,lng:139.6685,tip:"歐風甜點小鎮，蒙布朗發源地！在地上班族的秘密甜點街，人潮比澀谷少得多"},
+  {id:52,name:"吉祥寺 井之頭公園",area:"吉祥寺",type:"🏮 私藏秘境",cost:0,dur:120,icon:"🌳",ig:"在地推薦",hot:false,subway:"JR中央線 吉祥寺站 徒步5分",lat:35.7027,lng:139.5778,tip:"日本人票選最想居住地區！公園+商店街+薩太郎炸牛肉丸，悠閒一整天"},
+  {id:53,name:"中目黑 運河咖啡街",area:"中目黑",type:"🏮 私藏秘境",cost:1500,dur:120,icon:"🌊",ig:"秘境",hot:true,subway:"東急東橫線 中目黑站",lat:35.6440,lng:139.6987,tip:"目黑川沿岸精品咖啡+選物店！Starbucks Reserve Roastery世界最美分店就在這，春天賞櫻超夢幻"},
+  {id:54,name:"藏前 手作職人街",area:"藏前",type:"🏮 私藏秘境",cost:1000,dur:90,icon:"🏺",ig:"秘境",hot:false,subway:"都營淺草線/大江戶線 藏前站",lat:35.7055,lng:139.7922,tip:"東京Brooklyn！皮革/文具/陶器手作職人工房，每間都是獨立小店，好拍好逛"},
+  {id:55,name:"新宿思い出横丁",area:"新宿",type:"🏮 私藏秘境",cost:3000,dur:90,icon:"🏮",ig:"在地推薦",hot:true,subway:"JR山手線 新宿站 西口徒步2分",lat:35.6939,lng:139.6999,tip:"昭和風燒烤橫丁！50年老店聚集，烤內臟+燒鳥+啤酒，深夜氣氛絕佳，在地人下班必去"},
+  {id:56,name:"麻布十番 百年商店街",area:"麻布十番",type:"🏮 私藏秘境",cost:2000,dur:90,icon:"⛩️",ig:"在地推薦",hot:false,subway:"東京Metro南北線 麻布十番站",lat:35.6552,lng:139.7369,tip:"可以看到東京鐵塔的百年老街，豆源仙貝+浪花家鯛魚燒是必吃老店，觀光客少"},
+
+  // ── 隱藏美食 ──
+  {id:57,name:"AFURI 柚子鹽拉麵",area:"原宿",type:"🔍 隱藏美食",cost:1500,dur:60,icon:"🍜",ig:"必吃",hot:true,subway:"JR山手線 原宿站 徒步5分",lat:35.6691,lng:139.7047,tip:"PTT/Dcard評價超高！柚子清香湯頭，清爽不膩，和一般濃厚拉麵完全不同，炎夏也能吃"},
+  {id:58,name:"天金 天丼名店 築地",area:"築地",type:"🔍 隱藏美食",cost:1200,dur:45,icon:"🍤",ig:"必吃",hot:true,subway:"都營大江戶線 築地市場站 徒步3分",lat:35.6659,lng:139.7701,tip:"¥1000內整尾星鰻+炸蝦+炸花枝+半熟蛋！連日本人排隊的天丼始祖，建議早上去"},
+  {id:59,name:"Mercer Brunch 法式吐司 銀座",area:"銀座",type:"🔍 隱藏美食",cost:2000,dur:60,icon:"🍞",ig:"爆紅",hot:true,subway:"東京Metro銀座線 銀座站 徒步3分",lat:35.6713,lng:139.7636,tip:"🔥Dcard評論爆炸多！法式吐司入口即化，打卡必點，假日建議提早預約"},
+  {id:60,name:"吉祥寺 Satou 炸牛肉丸",area:"吉祥寺",type:"🔍 隱藏美食",cost:800,dur:20,icon:"🥩",ig:"必吃",hot:true,subway:"JR中央線 吉祥寺站 徒步3分",lat:35.7025,lng:139.5796,tip:"排隊名物！外酥內嫩juicy，一顆¥240，5顆以上¥200，邊走邊吃最爽，常賣到下午就售完"},
+  {id:61,name:"蟻月 牛腸鍋 中目黑",area:"中目黑",type:"🔍 隱藏美食",cost:4000,dur:90,icon:"🫕",ig:"必吃",hot:true,subway:"東急東橫線 中目黑站 徒步5分",lat:35.6437,lng:139.6980,tip:"東京版福岡名物！牛腸鍋湯底香醇，味噌和醬油各有擁護者，吃完配白飯絕配"},
+  {id:62,name:"大和家 天丼 人形町",area:"人形町",type:"🔍 隱藏美食",cost:1000,dur:45,icon:"🍚",ig:"在地推薦",hot:false,subway:"東京Metro日比谷線 人形町站 徒步2分",lat:35.6840,lng:139.7775,tip:"在地上班族午餐秘密！古早味天丼老店，分量超大，¥1000以內，觀光客很少知道"},
+  {id:63,name:"豐洲市場 大江戶海鮮丼",area:"豐洲",type:"🔍 隱藏美食",cost:3500,dur:60,icon:"🐡",ig:"必吃",hot:true,subway:"ゆりかもめ 市場前站 徒步5分",lat:35.6459,lng:139.7831,tip:"豐洲市場內隱藏版！5種以上海膽食べ比べ丼，早上7點開始，新鮮程度比千客萬來更高"},
+  {id:64,name:"新宿 思い出横丁 燒烤",area:"新宿",type:"🔍 隱藏美食",cost:3000,dur:90,icon:"🍺",ig:"在地推薦",hot:true,subway:"JR山手線 新宿站 西口",lat:35.6938,lng:138.6998,tip:"昭和50年老店烤內臟！日本本地人的深夜食堂，啤酒配串烤，氣氛超好"},
+  {id:65,name:"RURU SHIBUYA 抹茶甜點",area:"澀谷",type:"🔍 隱藏美食",cost:1800,dur:45,icon:"🍵",ig:"爆紅",hot:true,subway:"JR山手線 澀谷站 徒步5分",lat:35.6600,lng:139.6995,tip:"2024爆紅抹茶咖啡廳！流水抹茶裝置超夢幻，IG打卡必去，記得提早排隊"},
+  {id:66,name:"谷中銀座 銅鑼燒老店",area:"谷中",type:"🔍 隱藏美食",cost:500,dur:20,icon:"🍡",ig:"在地推薦",hot:false,subway:"JR 日暮里站 徒步7分",lat:35.7256,lng:139.7659,tip:"在地阿嬤級甜點！現包熱騰騰銅鑼燒+草糰子，¥200-300，昭和風情老街邊走邊吃"},
+  // ── 更多日本在地推薦 ──
+  {id:67,name:"新宿黃金街",area:"新宿",type:"🏮 私藏秘境",cost:2000,dur:90,icon:"🍺",ig:"在地推薦",hot:true,subway:"JR山手線 新宿站 東口徒步5分",lat:35.6938,lng:139.7036,tip:"200間以上昭和風小酒吧聚集巷弄，在地文人常去，每間只有5-10人，深夜必訪"},
+  {id:68,name:"谷中銀座商店街",area:"谷中",type:"🏮 私藏秘境",cost:1000,dur:90,icon:"🏮",ig:"在地推薦",hot:true,subway:"JR日暮里站 徒步7分",lat:35.7261,lng:139.7659,tip:"昭和風老街，炸雞串+銅鑼燒邊走邊吃，貓咪隨處可見，遠離觀光人潮"},
+  {id:69,name:"根津神社",area:"文京區",type:"⛩️ 文化古蹟",cost:0,dur:60,icon:"⛩️",ig:"秘境",hot:false,subway:"東京Metro千代田線 根津站 徒步5分",lat:35.7208,lng:139.7625,tip:"千本鳥居！比伏見稻荷人少很多，春天杜鵑花盛開超美，幾乎無觀光客"},
+  {id:70,name:"池袋西口公園",area:"池袋",type:"🆕 新地標",cost:0,dur:45,icon:"🌳",ig:"在地推薦",hot:false,subway:"JR山手線 池袋站 西口徒步3分",lat:35.7295,lng:139.7102,tip:"2020改裝後成為東京最美廣場，夜間燈光裝置精彩，免費入場"},
+  {id:71,name:"二丁目同志區酒吧",area:"新宿",type:"🏮 私藏秘境",cost:3000,dur:120,icon:"🌈",ig:"在地推薦",hot:false,subway:"東京Metro丸之內線 新宿三丁目站",lat:35.6897,lng:139.7063,tip:"全亞洲最大LGBT友善區域，氣氛熱鬧開放，外國旅客非常歡迎"},
+  {id:72,name:"東京都廳展望台",area:"新宿",type:"🌅 展望台",cost:0,dur:60,icon:"🏢",ig:"必拍",hot:true,subway:"都營大江戶線 都廳前站 直結",lat:35.6896,lng:139.6921,tip:"完全免費！晴天可看富士山，夜景超美，比晴空塔便宜又不輸，北展望台週五夜間開放"},
+  {id:73,name:"調布 深大寺",area:"調布",type:"⛩️ 文化古蹟",cost:0,dur:90,icon:"🌿",ig:"秘境",hot:false,subway:"京王線 調布站→巴士15分",lat:35.6551,lng:139.5651,tip:"東京近郊隱藏寺廟，蕎麥麵名店林立，人潮極少的在地秘境，順道可去鬼太郎茶屋"},
+  {id:74,name:"東急Foodshow 澀谷",area:"澀谷",type:"🍣 必吃美食",cost:3000,dur:60,icon:"🛒",ig:"在地推薦",hot:true,subway:"JR山手線 澀谷站 直結B1",lat:35.6595,lng:139.7005,tip:"日本最強地下食品賣場！和菓子/熟食/甜點超齊全，下午5點後出清折扣，在地人每天必逛"},
+  {id:75,name:"月島文字燒",area:"月島",type:"🔍 隱藏美食",cost:2000,dur:90,icon:"🥞",ig:"必吃",hot:true,subway:"東京Metro有樂町線 月島站 徒步5分",lat:35.6635,lng:139.7817,tip:"東京文字燒發源地！西仲通商店街50間以上文字燒店，店家自己幫你煎，啤酒配文字燒絕配"},
+  {id:76,name:"根津・千駄木 文青街",area:"文京區",type:"🏮 私藏秘境",cost:1000,dur:120,icon:"📚",ig:"秘境",hot:false,subway:"東京Metro千代田線 千駄木站",lat:35.7215,lng:139.7618,tip:"古書店+咖啡廳+古民家改建選物店聚集，Yanaka Ginza旁，最純粹的東京下町生活感"},
+
+
+
+];
+const BP_DEF={economy:{label:"省錢背包客",icon:"🎒",flight:8000,hotel:1800,food:600,misc:2000},standard:{label:"標準舒適",icon:"🧳",flight:11000,hotel:3500,food:900,misc:4000},premium:{label:"享受優質",icon:"✨",flight:15000,hotel:6000,food:1500,misc:8000}};
+const PASS_RECOMMEND = [
+  {
+    id:"metro24", name:"Metro 24小時券", price:800, icon:"🟠",
+    cover:"Metro 9條線全線", best:"市區觀光為主",
+    good:["淺草","上野","銀座","表參道","澀谷","六本木","麻布台"],
+    tip:"2025年起可用信用卡感應入場，最方便",
+  },
+  {
+    id:"jr1day", name:"JR都區內一日券", price:800, icon:"🟢",
+    cover:"東京23區JR全線", best:"山手線沿線移動多",
+    good:["原宿","澀谷","新宿","池袋","上野","秋葉原","品川"],
+    tip:"山手線+中央線+埼京線全涵蓋",
+  },
+  {
+    id:"combo", name:"Metro+都營一日券", price:1000, icon:"🟣",
+    cover:"Metro+都營13條線", best:"跨區移動最靈活",
+    good:["淺草","築地","押上","六本木","新宿","澀谷","台場附近"],
+    tip:"最全面的地鐵通票，觀光客首選",
+  },
+  {
+    id:"yurikamome", name:"百合海鷗一日券", price:820, icon:"🚟",
+    cover:"台場↔豐洲↔汐留", best:"台場、豐洲行程必備",
+    good:["台場","豐洲市場","千客萬來","teamLab Planets"],
+    tip:"配合Metro券使用效果最佳",
+  },
+  {
+    id:"suica", name:"Suica / PASMO", price:0, icon:"💳",
+    cover:"所有路線通用", best:"混搭各線最彈性",
+    good:["全部景點"],
+    tip:"Apple Pay綁定，不需換券，按次計費最靈活",
+  },
+];
+
+const DAYS5=["DAY 1","DAY 2","DAY 3","DAY 4","DAY 5"];
+const EXP_CATS=["🍜 餐飲","🛍️ 購物","🎡 景點","🚇 交通","🏨 住宿","💊 其他"];
+const PC=["#C84B31","#2E86AB","#3BB273","#8B5CF6","#F59E0B","#EC4899"];
+const TYPE_ORDER=["全部","🌆 熱門景點","⛩️ 文化古蹟","🌅 展望台","🎨 藝術體驗","🆕 新地標","🎢 主題樂園","🍣 必吃美食","🔍 隱藏美食","🛍️ 一般購物","🎎 公仔玩具","👜 精品包","⌚ 精品錶","🏮 私藏秘境","🌟 宜庭私藏"];
+const TC={"⛩️ 文化古蹟":"#8B6F47","🌆 熱門景點":"#6B7280","🌅 展望台":"#0EA5E9","🎨 藝術體驗":"#A23B72","🆕 新地標":"#10B981","🎢 主題樂園":"#7C3AED","🍣 必吃美食":"#DC2626","🔍 隱藏美食":"#D97706","🛍️ 一般購物":"#C84B31","🎎 公仔玩具":"#E8541A","👜 精品包":"#8B5CF6","⌚ 精品錶":"#0369A1","🏮 私藏秘境":"#059669","🌟 宜庭私藏":"#E4A011"};
+
+// ═══ STATE ═══
+let S={
+  tab:"flight",subTab:"lib",numDays:5,dayPass:true,selDay:"DAY 1",
+  days:Object.fromEntries(DAYS5.map(d=>[d,[]])),
+  persons:[{id:1,name:"旅人A",color:PC[0]},{id:2,name:"旅人B",color:PC[1]}],
+  pexp:{},flights:[],editFlight:null,
+  flightForm:{direction:"去程",flightNo:"",airline:"",from:"TPE",fromCity:"台灣桃園",to:"NRT",toCity:"東京成田",date:"",departTime:"",arriveTime:"",terminal:"",gate:"",seat:"",ticketPrice:""},
+  expenses:[],
+  expForm:{label:"",category:"🍜 餐飲",amount:"",currency:"TWD",paidBy:1,splitWith:[],date:"",note:""},
+  preset:"standard",budget:{...BP_DEF.standard},
+  filter:"全部",navFilter:"全部",transitTab:"spots",selectedPass:"combo",
+  syncStatus:"cloud",newName:"",
+  showFlightForm:false,showExpForm:false,showAddSpot:false,
+  customSpots:[],
+  addSpotForm:{name:"",area:"",type:"",customType:"",cost:"",dur:"90",icon:"📍",tip:"",subway:""},
+  mSpot:null,
+};
+
+// ═══ PERSIST ═══
+let saveTimer=null;
+function persist(){
+  clearTimeout(saveTimer);
+  updateBadge("💾 儲存中…","#9A8F7E");
+  saveTimer=setTimeout(async()=>{
+    try{
+      await dbSave({
+        flights:S.flights,days:S.days,persons:S.persons,pexp:S.pexp,
+        customSpots:S.customSpots||[],expenses:S.expenses,
+        preset:S.preset,budget:S.budget,num_days:S.numDays,day_pass:S.dayPass
+      });
+      updateBadge("✓ 已儲存","#3BB273");
+      setTimeout(()=>updateBadge("☁️ 雲端同步","#9A8F7E"),2500);
+    }catch(e){updateBadge("✗ 失敗","#C84B31");}
+  },800);
+}
+function updateBadge(text,color){
+  const b=document.querySelector(".sync-badge");
+  if(b){b.textContent=text;b.style.color=color;}
+}
+
+// ═══ HELPERS ═══
+const j2t=n=>Math.round(Number(n)*0.22);
+const fmtY=n=>`¥${Number(n).toLocaleString()}`;
+const fmtN=n=>`NT$${Math.round(n).toLocaleString()}`;
+function gmapNav(s){return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(s.lat+","+s.lng)}&travelmode=transit`;}
+function gmapSearch(s){return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name+" "+s.area+" 東京")}`;}
+function avatar(name,color,size=30){
+  const el=document.createElement("div");
+  el.style.cssText=`width:${size}px;height:${size}px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-size:${size*0.4}px;color:#fff;font-weight:700;flex-shrink:0`;
+  el.textContent=(name||"?")[0];
+  return el;
+}
+
+// ═══ RENDER ═══
+function render(){
+  const app=document.getElementById("app");
+  while(app.firstChild)app.removeChild(app.firstChild);
+  app.appendChild(buildHeader());
+  app.appendChild(buildMain());
+}
+
+function buildHeader(){
+  const hdr=document.createElement("div");
+  hdr.className="header";
+  hdr.innerHTML=`
+    <div class="logo-wrap">
+      <div class="logo">TOKYO<span>旅</span> 2026</div>
+      <div class="logo-jp">日本東京行 X Bocheng 設計</div>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <span class="sync-badge" style="font-size:10px;color:#9A8F7E">☁️ 雲端同步</span>
+      <div class="days-badge">${S.numDays}D · ${S.persons.length}P</div>
+    </div>`;
+  // Tabs
+  const tabBar=document.createElement("div");
+  tabBar.className="tab-bar";
+  [{"k":"flight","l":"✈️ 航班"},{"k":"plan","l":"📅 行程"},{"k":"expense","l":"💳 記帳"},{"k":"budget","l":"💰 預算"},{"k":"nav","l":"🗺 導航"}].forEach(({"k":k,"l":l})=>{
+    const btn=document.createElement("button");
+    btn.className=S.tab===k?"on":"";
+    btn.textContent=l;
+    btn.onclick=()=>{S.tab=k;render();};
+    tabBar.appendChild(btn);
+  });
+  hdr.appendChild(tabBar);
+  return hdr;
+}
+
+function buildMain(){
+  const main=document.createElement("div");
+  main.className="main";
+  const content=document.createElement("div");
+  content.className="content";
+  if(S.tab==="flight")      buildFlightTab(content);
+  else if(S.tab==="plan")   buildPlanTab(content);
+  else if(S.tab==="expense")buildExpenseTab(content);
+  else if(S.tab==="budget") buildBudgetTab(content);
+  else if(S.tab==="nav")    buildNavTab(content);
+  main.appendChild(content);
+  return main;
+}
+
+// ═══ FLIGHT TAB ═══
+function buildFlightTab(el){
+  const sec=document.createElement("div");
+  sec.className="sec";
+  sec.textContent="BOARDING PASS";
+  el.appendChild(sec);
+
+  // Show existing flights
+  S.flights.forEach(f=>{
+    el.appendChild(buildBoardingPass(f));
+  });
+
+  // Show inline form or add button
+  if(S.showFlightForm){
+    el.appendChild(buildFlightForm());
+  } else {
+    const addBtn=document.createElement("button");
+    addBtn.className="btn-sm";
+    addBtn.style.cssText="width:100%;padding:11px;margin-top:4px";
+    addBtn.textContent=S.flights.length===0?"＋ 新增航班":"＋ 新增另一航班";
+    addBtn.onclick=()=>{
+      S.flightForm={direction:"去程",flightNo:"",airline:"",from:"TPE",fromCity:"台灣桃園",to:"NRT",toCity:"東京成田",date:"",departTime:"",arriveTime:"",terminal:"",gate:"",seat:"",ticketPrice:""};
+      S.editFlight=null;S.showFlightForm=true;render();
+    };
+    el.appendChild(addBtn);
+  }
+
+  // Airport guide
+  const guide=document.createElement("div");
+  guide.className="sec";
+  guide.style.marginTop="18px";
+  guide.textContent="AIRPORT GUIDE";
+  el.appendChild(guide);
+  [{"icon":"🛫","title":"成田機場 NRT","sub":"T1 JAL長榮・T2 ANA全日空・T3 樂桃/星宇/虎航"},
+   {"icon":"🛬","title":"羽田機場 HND","sub":"T1 JAL・T2 ANA・T3 國際線，市區最快"},
+   {"icon":"🚃","title":"成田→市區","sub":"Skyliner 36分 NT$約380 / 利木津巴士 NT$約230"},
+   {"icon":"⏰","title":"提早到機場","sub":"長榮/單航建議起飛前3小時；LCC 2.5小時"},
+   {"icon":"📱","title":"Visit Japan Web","sub":"出發前填好，入境掃QR不排隊"}
+  ].forEach(item=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.style.cssText="display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:6px";
+    card.innerHTML=`<span style="font-size:22px;flex-shrink:0">${item.icon}</span><div><div style="font-size:13px;font-weight:600">${item.title}</div><div style="font-size:11px;color:#9A8F7E;margin-top:2px">${item.sub}</div></div>`;
+    el.appendChild(card);
+  });
+}
+
+function buildBoardingPass(f){
+  const ac=f.direction==="去程"?"#C84B31":"#2E86AB";
+  const card=document.createElement("div");
+  card.className="bp-card";
+  card.style.marginBottom="12px";
+  card.innerHTML=`
+    <div class="bp-header" style="background:${ac}">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:16px">${f.direction==="去程"?"🛫":"🛬"}</span>
+        <span class="bp-title">${f.direction==="去程"?"DEPARTURE":"RETURN"}</span>
+        <span class="bp-dir" style="opacity:.7;font-size:10px">${f.direction}</span>
+      </div>
+      <div class="bp-fn">${f.flightNo||"– – –"}</div>
+    </div>
+    <div class="bp-body">
+      <div class="bp-route">
+        <div class="bp-airport"><div class="bp-code">${f.from||"TPE"}</div><div class="bp-city">${f.fromCity||"台灣桃園"}</div></div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center"><span style="font-size:20px">✈️</span></div>
+        <div class="bp-airport" style="text-align:right"><div class="bp-code">${f.to||"NRT"}</div><div class="bp-city">${f.toCity||"東京成田"}</div></div>
+      </div>
+      <div class="bp-dashed"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:0 16px 14px">
+        ${[["DATE",f.date||"–"],["DEPART",f.departTime||"–"],["ARRIVE",f.arriveTime||"–"]].map(([l,v])=>`<div><div class="bp-label">${l}</div><div class="bp-val">${v}</div></div>`).join('')}
+        ${[["TERMINAL",f.terminal||"–"],["GATE",f.gate||"–"],["SEAT",f.seat||"–"]].map(([l,v])=>`<div><div class="bp-label">${l}</div><div class="bp-val">${v}</div></div>`).join('')}
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;padding:0 14px 12px">
+      <button class="edit-btn" style="flex:1">✏️ 編輯</button>
+      <button class="del-btn" style="padding:8px 14px">刪除</button>
+    </div>`;
+  card.querySelector(".edit-btn").onclick=()=>{
+    S.flightForm={...f};S.editFlight=f.id;S.showFlightForm=true;render();
+  };
+  card.querySelector(".del-btn").onclick=()=>{
+    S.flights=S.flights.filter(x=>x.id!==f.id);persist();render();
+  };
+  return card;
+}
+
+function buildFlightForm(){
+  const card=document.createElement("div");
+  card.className="card";
+  card.style.marginBottom="12px";
+  const f=S.flightForm;
+  card.innerHTML=`
+    <div style="font-family:'Noto Serif JP',serif;font-size:15px;font-weight:700;margin-bottom:14px">${S.editFlight?"✏️ 編輯航班":"✈️ 新增航班"}</div>
+    <div style="display:flex;gap:6px;margin-bottom:12px">
+      <button id="ff-dep" style="flex:1;padding:9px;border-radius:9px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid;background:${f.direction==='去程'?'#1A1008':'#FDFAF5'};color:${f.direction==='去程'?'#F5F0E8':'#6B5D4A'};border-color:${f.direction==='去程'?'#1A1008':'#E0D5C0'}">🛫 去程</button>
+      <button id="ff-ret" style="flex:1;padding:9px;border-radius:9px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid;background:${f.direction==='回程'?'#1A1008':'#FDFAF5'};color:${f.direction==='回程'?'#F5F0E8':'#6B5D4A'};border-color:${f.direction==='回程'?'#1A1008':'#E0D5C0'}">🛬 回程</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <div style="flex:1"><label class="flabel">航班號</label><input class="inp" id="ff-no" placeholder="BR197" value="${f.flightNo||''}"></div>
+      <div style="flex:1"><label class="flabel">航空公司</label><input class="inp" id="ff-airline" placeholder="長榮航空" value="${f.airline||''}"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <div style="flex:1"><label class="flabel">出發地</label><input class="inp" id="ff-from" placeholder="TPE" value="${f.from||'TPE'}"></div>
+      <div style="flex:1"><label class="flabel">目的地</label><input class="inp" id="ff-to" placeholder="NRT" value="${f.to||'NRT'}"></div>
+    </div>
+    <div style="margin-bottom:10px"><label class="flabel">日期</label><input class="inp" id="ff-date" type="date" value="${f.date||''}"></div>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <div style="flex:1"><label class="flabel">起飛</label><input class="inp" id="ff-dep" type="time" value="${f.departTime||''}"></div>
+      <div style="flex:1"><label class="flabel">抵達</label><input class="inp" id="ff-arr" type="time" value="${f.arriveTime||''}"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <div style="flex:1"><label class="flabel">航廈</label>
+        <select class="inp" id="ff-term">
+          <option value="">–</option>
+          <option value="1" ${f.terminal==='1'?'selected':''}>第1航廈</option>
+          <option value="2" ${f.terminal==='2'?'selected':''}>第2航廈</option>
+          <option value="3" ${f.terminal==='3'?'selected':''}>第3航廈</option>
+        </select>
+      </div>
+      <div style="flex:1"><label class="flabel">登機門</label><input class="inp" id="ff-gate" placeholder="A12" value="${f.gate||''}"></div>
+      <div style="flex:1"><label class="flabel">座位</label><input class="inp" id="ff-seat" placeholder="24A" value="${f.seat||''}"></div>
+    </div>
+    <div style="margin-bottom:14px"><label class="flabel">機票金額 NT$（每人）</label><input class="inp" id="ff-price" type="number" placeholder="11000" value="${f.ticketPrice||''}"></div>
+    <div style="display:flex;gap:8px">
+      <button id="ff-cancel" class="btn-sm" style="flex:1;padding:12px">取消</button>
+      <button id="ff-save" class="btn-red" style="flex:2;padding:12px">${S.editFlight?"儲存修改":"確認新增"}</button>
+    </div>`;
+
+  card.querySelector("#ff-dep").onclick=()=>{S.flightForm.direction="去程";S.flightForm.from="TPE";S.flightForm.fromCity="台灣桃園";S.flightForm.to="NRT";S.flightForm.toCity="東京成田";render();};
+  card.querySelector("#ff-ret").onclick=()=>{S.flightForm.direction="回程";S.flightForm.from="NRT";S.flightForm.fromCity="東京成田";S.flightForm.to="TPE";S.flightForm.toCity="台灣桃園";render();};
+  card.querySelector("#ff-cancel").onclick=()=>{S.showFlightForm=false;S.editFlight=null;render();};
+  card.querySelector("#ff-save").onclick=()=>{
+    S.flightForm.flightNo   =card.querySelector("#ff-no").value;
+    S.flightForm.airline    =card.querySelector("#ff-airline").value;
+    S.flightForm.from       =card.querySelector("#ff-from").value;
+    S.flightForm.to         =card.querySelector("#ff-to").value;
+    S.flightForm.date       =card.querySelector("#ff-date").value;
+    S.flightForm.departTime =card.querySelector("#ff-dep").value;
+    S.flightForm.arriveTime =card.querySelector("#ff-arr").value;
+    S.flightForm.terminal   =card.querySelector("#ff-term").value;
+    S.flightForm.gate       =card.querySelector("#ff-gate").value;
+    S.flightForm.seat       =card.querySelector("#ff-seat").value;
+    S.flightForm.ticketPrice=card.querySelector("#ff-price").value;
+    if(!S.flightForm.flightNo&&!S.flightForm.date)return;
+    if(S.editFlight)S.flights=S.flights.map(x=>x.id===S.editFlight?{...S.flightForm,id:S.editFlight}:x);
+    else S.flights=[...S.flights,{...S.flightForm,id:Date.now()}];
+    S.showFlightForm=false;S.editFlight=null;persist();render();
+  };
+  return card;
+}
+
+// ═══ EXPENSE TAB ═══
+function buildExpenseTab(el){
+  // Add button
+  if(!S.showExpForm){
+    const addBtn=document.createElement("button");
+    addBtn.className="btn-red";
+    addBtn.style.cssText="width:100%;margin-bottom:14px";
+    addBtn.textContent="＋ 新增消費記錄";
+    addBtn.onclick=()=>{
+      S.expForm={label:"",category:"🍜 餐飲",amount:"",currency:"TWD",paidBy:S.persons[0]?.id||1,splitWith:[],date:"",note:""};
+      S.showExpForm=true;render();
+    };
+    el.appendChild(addBtn);
+  }
+
+  // Inline expense form
+  if(S.showExpForm){
+    const card=document.createElement("div");
+    card.className="card";
+    card.style.marginBottom="14px";
+    const f=S.expForm;
+    const catOpts=EXP_CATS.map(c=>`<option value="${c}" ${f.category===c?'selected':''}>${c}</option>`).join('');
+    const personOpts=S.persons.map(p=>`<option value="${p.id}" ${f.paidBy==p.id?'selected':''}>${p.name}</option>`).join('');
+    card.innerHTML=`
+      <div style="font-family:'Noto Serif JP',serif;font-size:15px;font-weight:700;margin-bottom:14px">🧾 新增消費</div>
+      <div style="margin-bottom:10px"><label class="flabel">消費名稱</label><input class="inp" id="ef-label" placeholder="例：一蘭拉麵" value="${f.label||''}"></div>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <div style="flex:1.2"><label class="flabel">分類</label><select class="inp" id="ef-cat">${catOpts}</select></div>
+        <div style="flex:1"><label class="flabel">日期</label><input class="inp" id="ef-date" type="date" value="${f.date||''}"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <div style="flex:1.5"><label class="flabel">金額</label><input class="inp" id="ef-amount" type="number" placeholder="0" value="${f.amount||''}"></div>
+        <div style="flex:1"><label class="flabel">幣別</label>
+          <select class="inp" id="ef-cur">
+            <option value="TWD" ${f.currency==='TWD'?'selected':''}>🇹🇼 TWD</option>
+            <option value="JPY" ${f.currency==='JPY'?'selected':''}>🇯🇵 JPY</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:10px"><label class="flabel">由誰付款</label><select class="inp" id="ef-payer">${personOpts}</select></div>
+      <div style="margin-bottom:14px"><label class="flabel">備註</label><input class="inp" id="ef-note" placeholder="例：含服務費" value="${f.note||''}"></div>
+      <div style="display:flex;gap:8px">
+        <button id="ef-cancel" class="btn-sm" style="flex:1;padding:12px">取消</button>
+        <button id="ef-save" class="btn-red" style="flex:2;padding:12px">確認記帳</button>
+      </div>`;
+    card.querySelector("#ef-cancel").onclick=()=>{S.showExpForm=false;render();};
+    card.querySelector("#ef-save").onclick=()=>{
+      S.expForm.label   =card.querySelector("#ef-label").value;
+      S.expForm.category=card.querySelector("#ef-cat").value;
+      S.expForm.date    =card.querySelector("#ef-date").value;
+      S.expForm.amount  =card.querySelector("#ef-amount").value;
+      S.expForm.currency=card.querySelector("#ef-cur").value;
+      S.expForm.paidBy  =Number(card.querySelector("#ef-payer").value);
+      S.expForm.note    =card.querySelector("#ef-note").value;
+      if(!S.expForm.label||!S.expForm.amount)return;
+      S.expenses=[...S.expenses,{...S.expForm,id:Date.now()}];
+      S.showExpForm=false;persist();render();
+    };
+    el.appendChild(card);
+  }
+
+  // Expense list
+  if(S.expenses.length===0){
+    const empty=document.createElement("div");
+    empty.className="card";
+    empty.style.cssText="text-align:center;padding:26px 16px";
+    empty.innerHTML=`<div style="font-size:40px;margin-bottom:8px">🧾</div><div style="font-size:14px;font-weight:700;margin-bottom:4px">尚未有消費記錄</div><div style="font-size:11px;color:#9A8F7E">記錄每筆消費，自動計算分攤</div>`;
+    el.appendChild(empty);
+  } else {
+    // Summary
+    const total=S.expenses.reduce((a,e)=>a+(e.currency==="JPY"?j2t(Number(e.amount)):Number(e.amount)),0);
+    const summary=document.createElement("div");
+    summary.className="card";
+    summary.style.cssText="background:linear-gradient(135deg,#1A1008,#2D1F0A);border:none;margin-bottom:12px;padding:14px 16px";
+    summary.innerHTML=`<div style="font-size:9px;color:#8B7355;letter-spacing:2px;font-family:'Zen Dots',cursive;margin-bottom:4px">TOTAL EXPENSE</div><div style="font-family:'Zen Dots',cursive;font-size:22px;color:#F5F0E8">NT$${total.toLocaleString()}</div><div style="font-size:10px;color:#8B7355;margin-top:2px">${S.expenses.length} 筆消費</div>`;
+    el.appendChild(summary);
+
+    S.expenses.slice().reverse().forEach(e=>{
+      const row=document.createElement("div");
+      row.className="card";
+      row.style.cssText="display:flex;align-items:center;gap:10px;margin-bottom:6px;padding:11px 13px";
+      const amt=e.currency==="JPY"?j2t(Number(e.amount)):Number(e.amount);
+      row.innerHTML=`
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.label}</div>
+          <div style="font-size:10px;color:#9A8F7E;margin-top:1px">${e.category} · ${e.date||"–"} · ${S.persons.find(p=>p.id===e.paidBy)?.name||"?"}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-family:'Zen Dots',cursive;font-size:13px;color:#C84B31">NT$${amt.toLocaleString()}</div>
+          ${e.currency==="JPY"?`<div style="font-size:9px;color:#9A8F7E">${fmtY(e.amount)}</div>`:''}</div>
+        <button class="erow-del">✕</button>`;
+      row.querySelector(".erow-del").onclick=()=>{S.expenses=S.expenses.filter(x=>x.id!==e.id);persist();render();};
+      el.appendChild(row);
+    });
+  }
+}
+
+// ═══ PLAN TAB ═══
+function buildPlanTab(el){
+  // Sub tabs
+  const subNav=document.createElement("div");
+  subNav.style.cssText="display:flex;gap:7px;margin-bottom:13px";
+  [{"k":"lib","l":"🗾 景點庫"},{"k":"days","l":"📅 我的行程"}].forEach(({"k":k,"l":l})=>{
+    const btn=document.createElement("button");
+    btn.className="btn-sm"+(S.subTab===k?" active":"");
+    btn.style.cssText="flex:1;padding:9px;font-size:12px";
+    btn.textContent=l;
+    btn.onclick=()=>{S.subTab=k;render();};
+    subNav.appendChild(btn);
+  });
+  el.appendChild(subNav);
+
+  if(S.subTab==="lib"){
+    // Day selector
+    const dayWrap=document.createElement("div");
+    dayWrap.style.marginBottom="10px";
+    const dayLabel=document.createElement("div");
+    dayLabel.style.cssText="font-size:11px;color:#9A8F7E;font-weight:600;margin-bottom:6px";
+    dayLabel.textContent="加入到 →";
+    dayWrap.appendChild(dayLabel);
+    const strip=document.createElement("div");
+    strip.className="day-strip";
+    DAYS5.slice(0,S.numDays).forEach(d=>{
+      const chip=document.createElement("span");
+      chip.className="day-chip"+(S.selDay===d?" sel":"");
+      chip.textContent=d;
+      chip.onclick=()=>{S.selDay=d;render();};
+      strip.appendChild(chip);
+    });
+    dayWrap.appendChild(strip);
+    el.appendChild(dayWrap);
+
+    // Filter pills
+    const allSpots=[...SPOTS,...(S.customSpots||[])];
+    const types=TYPE_ORDER.filter(t=>t==="全部"||allSpots.some(s=>s.type===t));
+    const pills=document.createElement("div");
+    pills.className="pills";
+    pills.style.marginBottom="10px";
+    types.forEach(t=>{
+      const p=document.createElement("span");
+      p.className="pill"+(S.filter===t?" on":"");
+      p.textContent=t;
+      p.onclick=()=>{S.filter=t;render();};
+      pills.appendChild(p);
+    });
+    el.appendChild(pills);
+
+    // Add custom button
+    const addRow=document.createElement("div");
+    addRow.style.cssText="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px";
+    const countEl=document.createElement("div");
+    countEl.style.cssText="font-size:11px;color:#B0A090";
+    const filtered=allSpots.filter(s=>S.filter==="全部"||s.type===S.filter);
+    countEl.textContent=filtered.length+" 個景點";
+    addRow.appendChild(countEl);
+    const customBtn=document.createElement("button");
+    customBtn.className="btn-sm";
+    customBtn.style.cssText="background:#1A1008;color:#F5F0E8;border:none;font-size:11px;padding:5px 12px";
+    customBtn.textContent="＋ 自訂";
+    customBtn.onclick=()=>{S.showAddSpot=true;render();};
+    addRow.appendChild(customBtn);
+    el.appendChild(addRow);
+
+    // Custom spot form
+    if(S.showAddSpot){
+      el.appendChild(buildAddSpotForm());
+    }
+
+    // Spot cards
+    const addedIds=new Set(DAYS5.flatMap(d=>S.days[d]||[]).map(s=>s.id));
+    filtered.forEach(s=>{
+      const added=addedIds.has(s.id);
+      const card=document.createElement("div");
+      card.className="scard"+(added?" added":"");
+      card.style.position="relative";
+      card.innerHTML=`
+        <div style="display:flex;align-items:flex-start;gap:10px">
+          <div class="sico" style="width:40px;height:40px;font-size:18px;flex-shrink:0">${s.icon}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name}</div>
+            <div style="font-size:10px;color:#9A8F7E;margin-top:2px">${s.area}</div>
+            <div style="font-size:10px;color:#C84B31;margin-top:2px">🚇 ${s.subway}</div>
+            <div style="display:flex;gap:8px;margin-top:4px">
+              <span style="font-size:9px;color:#9A8F7E">${s.cost===0?"免費":fmtY(s.cost)}</span>
+              <span style="font-size:9px;color:#9A8F7E">${s.dur}分鐘</span>
+            </div>
+          </div>
+        </div>
+        ${s.hot&&!added?'<div class="hot-badge">🔥 HOT</div>':''}
+        ${s.custom&&!added?'<div class="hot-badge" style="background:#8B5CF6">✏️ 自訂</div>':''}
+        ${added?'<div class="hot-badge" style="background:#3BB273">✓ 已加入</div>':''}`;
+      if(!added){
+        card.onclick=()=>{
+          S.days={...S.days,[S.selDay]:[...(S.days[S.selDay]||[]),s]};
+          persist();render();
+        };
+      } else {
+        card.onclick=()=>{S.mSpot=s;render();};
+      }
+      if(s.custom&&!added){
+        const delBtn=document.createElement("button");
+        delBtn.style.cssText="position:absolute;bottom:9px;right:9px;background:#FFF0EE;border:1px solid #F0D0C8;border-radius:5px;color:#C84B31;font-size:9px;padding:2px 6px;cursor:pointer";
+        delBtn.textContent="刪除";
+        delBtn.onclick=e=>{e.stopPropagation();S.customSpots=S.customSpots.filter(x=>x.id!==s.id);persist();render();};
+        card.appendChild(delBtn);
+      }
+      el.appendChild(card);
+    });
+
+    // Spot detail card
+    if(S.mSpot){
+      const s=S.mSpot;
+      const overlay=document.createElement("div");
+      overlay.className="ov";
+      overlay.onclick=e=>{if(e.target===overlay){S.mSpot=null;render();}};
+      const modal=document.createElement("div");
+      modal.className="modal";
+      modal.onclick=e=>e.stopPropagation();
+      modal.innerHTML=`
+        <div class="modal-bar"></div>
+        <div style="text-align:center;margin-bottom:13px">
+          <div style="font-size:44px;margin-bottom:6px">${s.icon}</div>
+          <div style="font-size:18px;font-weight:700;margin-bottom:3px">${s.name}</div>
+          <div style="font-size:12px;color:#9A8F7E">${s.area} · ${s.type}</div>
+        </div>
+        <div class="tip" style="margin-bottom:12px;font-size:12px">${s.tip}</div>
+        <div style="background:#F0EBE0;border-radius:10px;padding:10px 13px;margin-bottom:12px">
+          <div style="font-size:9px;font-weight:700;color:#C84B31;margin-bottom:3px;letter-spacing:1px">TRANSIT</div>
+          <div style="font-size:12px">🚇 ${s.subway}</div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <div style="flex:1;background:#F0EBE0;border-radius:10px;padding:10px;text-align:center">
+            <div style="font-size:10px;color:#9A8F7E;margin-bottom:3px">費用</div>
+            <div style="font-size:15px;color:#3BB273;font-weight:700">${s.cost===0?"免費":fmtY(s.cost)}</div>
+          </div>
+          <div style="flex:1;background:#F0EBE0;border-radius:10px;padding:10px;text-align:center">
+            <div style="font-size:10px;color:#9A8F7E;margin-bottom:3px">時間</div>
+            <div style="font-size:15px;color:#2E86AB;font-weight:700">${s.dur}分鐘</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:9px">
+          <a href="${gmapSearch(s)}" target="_blank" class="nbtn g" style="flex:1;padding:10px;text-align:center;text-decoration:none">📍 Google Maps</a>
+          <a href="${gmapNav(s)}" target="_blank" class="nbtn b" style="flex:1;padding:10px;text-align:center;text-decoration:none">🚇 地鐵導航</a>
+        </div>`;
+      const removeBtn=document.createElement("button");
+      removeBtn.style.cssText="width:100%;padding:10px;font-size:13px;border-radius:8px;border:1px solid #F0D0C8;background:#FFF0EE;color:#C84B31;cursor:pointer";
+      removeBtn.textContent="從行程中移除";
+      removeBtn.onclick=()=>{DAYS5.forEach(d=>{S.days={...S.days,[d]:(S.days[d]||[]).filter(x=>x.id!==s.id)};});S.mSpot=null;persist();render();};
+      modal.appendChild(removeBtn);
+      overlay.appendChild(modal);
+      el.appendChild(overlay);
+    }
+  } else {
+    // Days view
+    buildDaysView(el);
+  }
+}
+
+function buildDaysView(el){
+  // Num days + day pass
+  const settings=document.createElement("div");
+  settings.className="card";
+  settings.style.marginBottom="12px";
+  const daysRow=document.createElement("div");
+  daysRow.style.cssText="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px";
+  daysRow.innerHTML=`<span style="font-size:13px;font-weight:600">旅遊天數</span>`;
+  const daysBtn=document.createElement("div");
+  daysBtn.style.cssText="display:flex;gap:5px";
+  [3,4,5].forEach(n=>{
+    const b=document.createElement("button");
+    b.className="btn-sm"+(S.numDays===n?" active":"");
+    b.textContent=n+"天";
+    b.onclick=()=>{S.numDays=n;const nd={};DAYS5.slice(0,n).forEach(k=>{nd[k]=S.days[k]||[];});S.days=nd;persist();render();};
+    daysBtn.appendChild(b);
+  });
+  daysRow.appendChild(daysBtn);
+  settings.appendChild(daysRow);
+  el.appendChild(settings);
+
+  DAYS5.slice(0,S.numDays).forEach(day=>{
+    const spots=S.days[day]||[];
+    const sec=document.createElement("div");
+    sec.className="sec";
+    sec.style.display="flex";
+    sec.style.justifyContent="space-between";
+    sec.innerHTML=`<span>${day}</span><span style="font-size:10px;color:#9A8F7E;font-weight:400">${spots.length} 景點</span>`;
+    el.appendChild(sec);
+    if(spots.length===0){
+      const empty=document.createElement("div");
+      empty.className="card";
+      empty.style.cssText="text-align:center;padding:16px;color:#C0B8A8;font-size:12px";
+      empty.textContent="點景點庫加入景點";
+      el.appendChild(empty);
+    } else {
+      spots.forEach((s,i)=>{
+        const row=document.createElement("div");
+        row.className="card";
+        row.style.cssText="display:flex;align-items:center;gap:10px;margin-bottom:6px;padding:10px 12px";
+        row.innerHTML=`
+          <div style="width:22px;height:22px;border-radius:50%;background:#C84B31;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-family:'Zen Dots',cursive;flex-shrink:0">${i+1}</div>
+          <div style="font-size:20px;flex-shrink:0">${s.icon}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name}</div>
+            <div style="font-size:9px;color:#C84B31">${s.subway}</div>
+          </div>`;
+        const delBtn=document.createElement("button");
+        delBtn.className="btn-danger";
+        delBtn.textContent="✕";
+        delBtn.onclick=()=>{S.days={...S.days,[day]:S.days[day].filter(x=>x.id!==s.id)};persist();render();};
+        row.appendChild(delBtn);
+        el.appendChild(row);
+      });
+    }
+  });
+}
+
+function buildAddSpotForm(){
+  const f=S.addSpotForm;
+  const card=document.createElement("div");
+  card.className="card";
+  card.style.marginBottom="12px";
+  const ICONS=["📍","🍜","🍣","🍺","🍵","☕","🛍️","🎮","🎎","⛩️","🌸","🏖️","🎡","🚗","🏨","🎵","🎨","🌿"];
+  const allTypes=TYPE_ORDER.filter(t=>t!=="全部");
+  const typeButtons=allTypes.map(t=>`<span class="addspot-type" data-type="${t}" style="display:inline-block;padding:5px 10px;border-radius:16px;font-size:10px;font-weight:600;cursor:pointer;margin:2px;background:${f.type===t?'#1A1008':'#F0EBE0'};color:${f.type===t?'#F5F0E8':'#6B5D4A'};border:1px solid ${f.type===t?'#1A1008':'#E0D5C0'}">${t}</span>`).join('')+`<span class="addspot-type" data-type="__new__" style="display:inline-block;padding:5px 10px;border-radius:16px;font-size:10px;font-weight:600;cursor:pointer;margin:2px;background:#F0EBE0;color:#6B5D4A;border:1px solid #E0D5C0">＋ 新增</span>`;
+  const iconButtons=ICONS.map(ic=>`<span class="addspot-icon" data-icon="${ic}" style="font-size:20px;cursor:pointer;padding:3px;border-radius:6px;background:${f.icon===ic?'#F0EBE0':'transparent'};border:1px solid ${f.icon===ic?'#C84B31':'transparent'}">${ic}</span>`).join('');
+  card.innerHTML=`
+    <div style="font-family:'Noto Serif JP',serif;font-size:15px;font-weight:700;margin-bottom:14px">✏️ 自訂新增景點</div>
+    <div style="margin-bottom:10px"><label class="flabel">景點名稱 *</label><input class="inp" id="as-name" placeholder="例：吉卜力美術館" value="${f.name||''}"></div>
+    <div style="margin-bottom:10px"><label class="flabel">區域</label><input class="inp" id="as-area" placeholder="例：三鷹 / 新宿" value="${f.area||''}"></div>
+    <div style="margin-bottom:10px"><label class="flabel">分類</label><div style="margin-bottom:6px">${typeButtons}</div><input class="inp" id="as-ctype" placeholder="輸入新分類" value="${f.customType||''}" style="display:${f.type===''?'block':'none'}"></div>
+    <div style="margin-bottom:10px"><label class="flabel">圖示</label><div style="display:flex;flex-wrap:wrap;gap:4px">${iconButtons}</div></div>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <div style="flex:1"><label class="flabel">費用(¥)</label><input class="inp" id="as-cost" type="number" placeholder="0=免費" value="${f.cost||''}"></div>
+      <div style="flex:1"><label class="flabel">時間(分)</label><input class="inp" id="as-dur" type="number" placeholder="90" value="${f.dur||'90'}"></div>
+    </div>
+    <div style="margin-bottom:10px"><label class="flabel">最近地鐵站</label><input class="inp" id="as-subway" placeholder="例：JR 三鷹站 徒步10分" value="${f.subway||''}"></div>
+    <div style="margin-bottom:14px"><label class="flabel">備註</label><input class="inp" id="as-tip" placeholder="例：需提前預約" value="${f.tip||''}"></div>
+    <div style="font-size:10px;color:#9A8F7E;background:#F0EBE0;border-radius:8px;padding:8px;margin-bottom:12px">📍 系統自動搜尋 Google Maps 座標</div>
+    <div style="display:flex;gap:8px">
+      <button id="as-cancel" class="btn-sm" style="flex:1;padding:12px">取消</button>
+      <button id="as-save" class="btn-red" style="flex:2;padding:12px">確認新增</button>
+    </div>`;
+  card.querySelectorAll(".addspot-type").forEach(btn=>{
+    btn.onclick=()=>{S.addSpotForm.type=btn.dataset.type==="__new__"?"":btn.dataset.type;S.addSpotForm.customType="";render();};
+  });
+  card.querySelectorAll(".addspot-icon").forEach(btn=>{
+    btn.onclick=()=>{S.addSpotForm.icon=btn.dataset.icon;render();};
+  });
+  card.querySelector("#as-cancel").onclick=()=>{S.showAddSpot=false;render();};
+  card.querySelector("#as-save").onclick=async()=>{
+    S.addSpotForm.name  =card.querySelector("#as-name").value.trim();
+    S.addSpotForm.area  =card.querySelector("#as-area").value.trim();
+    S.addSpotForm.ctype =card.querySelector("#as-ctype").value.trim();
+    S.addSpotForm.cost  =card.querySelector("#as-cost").value;
+    S.addSpotForm.dur   =card.querySelector("#as-dur").value;
+    S.addSpotForm.subway=card.querySelector("#as-subway").value.trim();
+    S.addSpotForm.tip   =card.querySelector("#as-tip").value.trim();
+    if(!S.addSpotForm.name)return;
+    const type=S.addSpotForm.customType||S.addSpotForm.ctype||S.addSpotForm.type||"📍 自訂景點";
+    if(!TYPE_ORDER.includes(type))TYPE_ORDER.push(type);
+    let lat=35.6762,lng=139.6503;
+    try{
+      const q=encodeURIComponent(S.addSpotForm.name+" "+(S.addSpotForm.area||"")+" 東京 日本");
+      const tout=new Promise((_,r)=>setTimeout(()=>r("t"),3000));
+      const res=await Promise.race([fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`).then(r=>r.json()),tout]);
+      if(res&&res[0]){lat=parseFloat(res[0].lat);lng=parseFloat(res[0].lon);}
+    }catch(_){}
+    const spot={id:Date.now(),name:S.addSpotForm.name,area:S.addSpotForm.area||"東京",type,cost:Number(S.addSpotForm.cost)||0,dur:Number(S.addSpotForm.dur)||90,icon:S.addSpotForm.icon||"📍",ig:"自訂",hot:false,subway:S.addSpotForm.subway||"請查詢最近車站",lat,lng,tip:S.addSpotForm.tip||S.addSpotForm.name,custom:true};
+    S.customSpots=[...S.customSpots,spot];
+    S.addSpotForm={name:"",area:"",type:"",customType:"",ctype:"",cost:"",dur:"90",icon:"📍",tip:"",subway:""};
+    S.showAddSpot=false;persist();render();
+  };
+  return card;
+}
+
+// ═══ BUDGET TAB ═══
+function buildBudgetTab(el){
+  // Preset cards
+  const secEl=document.createElement("div");secEl.className="sec";secEl.textContent="2026 預算等級";el.appendChild(secEl);
+  Object.entries(BP_DEF).forEach(([key,p])=>{
+    const card=document.createElement("div");
+    card.className="bcard"+(S.preset===key?" sel":"");
+    card.onclick=()=>{S.preset=key;S.budget={...p};persist();render();};
+    const total=p.flight+p.hotel*S.numDays+p.food*3*S.numDays+p.misc;
+    card.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="font-size:28px">${p.icon}</div>
+          <div><div style="font-size:13px;font-weight:700">${p.label}</div><div style="font-size:11px;color:#9A8F7E">每人約 NT$${total.toLocaleString()}</div></div>
+        </div>
+        <div style="width:20px;height:20px;border-radius:50%;border:2px solid ${S.preset===key?"#C84B31":"#E0D5C0"};background:${S.preset===key?"#C84B31":"transparent"};display:flex;align-items:center;justify-content:center">
+          ${S.preset===key?'<div style="width:8px;height:8px;border-radius:50%;background:#fff"></div>':''}
+        </div>
+      </div>
+      ${S.preset===key?`<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:10px">${[["✈️",p.flight],["🏨",p.hotel],["🍜",p.food],["🛍️",p.misc]].map(([ic,v])=>`<span class="cpill">${ic} NT$${v.toLocaleString()}</span>`).join('')}</div>`:''}`;
+    el.appendChild(card);
+  });
+
+  // Custom inputs
+  const sec2=document.createElement("div");sec2.className="sec";sec2.textContent="自訂每人預算";el.appendChild(sec2);
+  const inputCard=document.createElement("div");inputCard.className="card";
+  [{"key":"flight","label":"✈️ 來回機票"},{"key":"hotel","label":"🏨 住宿/每晚"},{"key":"food","label":"🍜 餐費/每餐"},{"key":"misc","label":"🛍️ 購物&其他"}].forEach(({"key":key,"label":label})=>{
+    const row=document.createElement("div");
+    row.style.cssText="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #EDE6D8";
+    const lbl=document.createElement("div");lbl.style.cssText="font-size:12px;font-weight:600";lbl.textContent=label;
+    const right=document.createElement("div");right.style.cssText="display:flex;align-items:center;gap:4px";
+    const prefix=document.createElement("div");prefix.style.cssText="font-size:11px;color:#9A8F7E";prefix.textContent="NT$";
+    const inp=document.createElement("input");
+    inp.type="number";inp.className="inp";
+    inp.style.cssText="width:110px;text-align:right;padding:6px 8px;font-size:13px;font-family:'Zen Dots',cursive;color:#C84B31;border:1px solid #E0D5C0;border-radius:8px";
+    inp.value=S.budget[key]||0;
+    inp.onblur=()=>{S.budget[key]=Number(inp.value)||0;persist();render();};
+    right.appendChild(prefix);right.appendChild(inp);
+    row.appendChild(lbl);row.appendChild(right);
+    inputCard.appendChild(row);
+  });
+  el.appendChild(inputCard);
+
+  // Summary
+  const allAdded=DAYS5.flatMap(d=>S.days[d]||[]);
+  const spotJPY=allAdded.reduce((a,x)=>a+x.cost,0);
+  const transTWD=j2t(S.dayPass?S.numDays*800*S.persons.length:allAdded.length*220*S.persons.length);
+  const bpp=S.budget.flight+S.budget.hotel*S.numDays+S.budget.food*3*S.numDays+S.budget.misc;
+  const grand=bpp*S.persons.length;
+  const sec3=document.createElement("div");sec3.className="sec";sec3.textContent="每人費用試算";el.appendChild(sec3);
+  const dark=document.createElement("div");
+  dark.className="card";
+  dark.style.cssText="background:linear-gradient(135deg,#1A1008,#2D1F0A);border:none;padding:18px 16px";
+  dark.innerHTML=`
+    <div style="font-size:9px;color:#8B7355;letter-spacing:2px;font-family:'Zen Dots',cursive;margin-bottom:4px">2026 TOKYO · PER PERSON</div>
+    <div style="font-family:'Zen Dots',cursive;font-size:28px;color:#F5F0E8;margin-bottom:4px">NT$${bpp.toLocaleString()}</div>
+    <div style="font-size:11px;color:#8B7355;margin-bottom:14px">${S.persons.length} 人合計 NT$${grand.toLocaleString()}</div>
+    ${[["✈️ 機票",S.budget.flight,"#C84B31"],["🏨 住宿",S.budget.hotel*S.numDays,"#E8831A"],["🍜 餐飲",S.budget.food*3*S.numDays,"#F5A623"],["🗺 景點",j2t(spotJPY),"#4CAF50"],["🚇 交通",transTWD,"#2E86AB"],["🛍️ 購物等",S.budget.misc,"#9B59B6"]].map(([l,v,c])=>{
+      const pct=bpp>0?Math.round(v/bpp*100):0;
+      return `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:8px;flex:1">
+          <div style="font-size:12px;color:#C8B89A;width:70px">${l}</div>
+          <div style="flex:1;height:3px;background:#2D1F0A;border-radius:2px">
+            <div style="width:${pct}%;height:100%;background:${c};border-radius:2px"></div>
+          </div>
+          <div style="font-size:9px;color:#8B7355;width:28px;text-align:right">${pct}%</div>
+        </div>
+        <div style="font-family:'Zen Dots',cursive;font-size:12px;color:${c};margin-left:10px;width:90px;text-align:right">NT$${v.toLocaleString()}</div>
+      </div>`;
+    }).join('')}`;
+  el.appendChild(dark);
+
+  // Persons
+  const sec4=document.createElement("div");sec4.className="sec";sec4.textContent="旅伴設定";el.appendChild(sec4);
+  const personCard=document.createElement("div");personCard.className="card";
+  S.persons.forEach(p=>{
+    const row=document.createElement("div");
+    row.style.cssText="display:flex;align-items:center;gap:10px;margin-bottom:9px";
+    row.appendChild(avatar(p.name,p.color));
+    const name=document.createElement("span");name.style.cssText="flex:1;font-size:13px;font-weight:600";name.textContent=p.name;
+    row.appendChild(name);
+    if(S.persons.length>1){
+      const del=document.createElement("button");del.className="btn-danger";del.textContent="移除";
+      del.onclick=()=>{S.persons=S.persons.filter(x=>x.id!==p.id);persist();render();};
+      row.appendChild(del);
+    }
+    personCard.appendChild(row);
+  });
+  const addRow=document.createElement("div");addRow.style.cssText="display:flex;gap:7px;margin-top:4px";
+  const nameInp=document.createElement("input");
+  nameInp.className="inp";nameInp.style.flex="1";nameInp.placeholder="新增旅伴姓名";
+  nameInp.value=S.newName;
+  nameInp.oninput=e=>{S.newName=e.target.value;};
+  nameInp.onkeydown=e=>{if(e.key==="Enter"&&S.newName.trim())addPerson();};
+  const addBtn2=document.createElement("button");addBtn2.className="btn-sm";addBtn2.style.padding="9px 12px";addBtn2.textContent="＋";
+  addBtn2.onclick=addPerson;
+  function addPerson(){if(!S.newName.trim())return;S.persons=[...S.persons,{id:Date.now(),name:S.newName.trim(),color:PC[S.persons.length%PC.length]}];S.newName="";persist();render();}
+  addRow.appendChild(nameInp);addRow.appendChild(addBtn2);
+  personCard.appendChild(addRow);
+  el.appendChild(personCard);
+}
+
+// ═══ NAV TAB ═══
+function buildNavTab(el){
+  const subTabs=document.createElement("div");
+  subTabs.style.cssText="display:flex;gap:6px;margin-bottom:14px";
+  [{"k":"spots","l":"📍 景點導航"},{"k":"pass","l":"🎫 票券"}].forEach(({"k":k,"l":l})=>{
+    const b=document.createElement("button");
+    b.className="btn-sm"+(S.transitTab===k?" active":"");
+    b.style.cssText="flex:1;padding:8px;font-size:11px";
+    b.textContent=l;
+    b.onclick=()=>{S.transitTab=k;render();};
+    subTabs.appendChild(b);
+  });
+  el.appendChild(subTabs);
+
+  if(S.transitTab==="pass"){
+    PASS_RECOMMEND.forEach(p=>{
+      const isSel=S.selectedPass===p.id;
+      const card=document.createElement("div");
+      card.style.cssText=`background:#FDFAF5;border:2px solid ${isSel?"#C84B31":"#E8DFD0"};border-radius:14px;padding:13px;margin-bottom:9px;cursor:pointer`;
+      card.innerHTML=`
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+          <span style="font-size:22px">${p.icon}</span>
+          <div style="flex:1"><div style="font-size:13px;font-weight:700">${p.name}</div><div style="font-size:10px;color:#9A8F7E">${p.cover}</div></div>
+          ${p.price>0?`<div style="font-family:'Zen Dots',cursive;font-size:14px;color:#C84B31">¥${p.price}</div>`:`<div style="font-size:11px;color:#059669;font-weight:700">按次計費</div>`}
+        </div>
+        <div style="background:#F0EBE0;border-radius:8px;padding:7px 10px">
+          <div style="font-size:10px;color:#C84B31;font-weight:700;margin-bottom:2px">✅ ${p.best}</div>
+          <div style="font-size:10px;color:#6B5D4A">💡 ${p.tip}</div>
+        </div>
+        ${isSel?'<div style="margin-top:6px;font-size:11px;color:#C84B31;font-weight:700">✓ 已選擇</div>':''}`;
+      card.onclick=()=>{S.selectedPass=p.id;render();};
+      el.appendChild(card);
+    });
+    return;
+  }
+
+  // Spots nav
+  const allSpots=[...SPOTS,...(S.customSpots||[])];
+  const navTypes=TYPE_ORDER.filter(t=>t==="全部"||allSpots.some(s=>s.type===t));
+  const pills=document.createElement("div");pills.className="pills";pills.style.marginBottom="12px";
+  navTypes.forEach(t=>{
+    const p=document.createElement("span");p.className="pill"+(S.navFilter===t?" on":"");p.textContent=t;
+    p.onclick=()=>{S.navFilter=t;render();};
+    pills.appendChild(p);
+  });
+  el.appendChild(pills);
+  const navFiltered=allSpots.filter(s=>S.navFilter==="全部"||s.type===S.navFilter);
+  const count=document.createElement("div");count.style.cssText="font-size:11px;color:#B0A090;margin-bottom:8px";count.textContent=navFiltered.length+" 個景點";
+  el.appendChild(count);
+  navFiltered.forEach(s=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.style.cssText="display:flex;align-items:center;gap:11px;margin-bottom:6px;padding:11px 13px";
+    card.innerHTML=`
+      <div class="sico" style="width:37px;height:37px;font-size:17px">${s.icon}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name}</div>
+        <div style="font-size:10px;color:#C84B31;font-weight:600;margin-top:2px">🚇 ${s.subway}</div>
+      </div>
+      <div style="display:flex;gap:5px">
+        <a class="nbtn g" href="${gmapSearch(s)}" target="_blank">📍</a>
+        <a class="nbtn b" href="${gmapNav(s)}" target="_blank">🚇</a>
+      </div>`;
+    el.appendChild(card);
+  });
+}
+
+// ═══ INIT ═══
+async function init(){
+  const MIN=2800, start=Date.now();
+  try{
+    const timeout=new Promise((_,r)=>setTimeout(()=>r("t"),4000));
+    const d=await Promise.race([dbLoad(),timeout]);
+    if(d){
+      if(d.flights?.length)   S.flights=d.flights;
+      if(d.days)              S.days=d.days;
+      if(d.persons?.length)   S.persons=d.persons;
+      if(d.pexp)              S.pexp=d.pexp;
+      if(d.expenses?.length)  S.expenses=d.expenses;
+      if(d.preset)            S.preset=d.preset;
+      if(d.budget)            S.budget=d.budget;
+      if(d.num_days)          S.numDays=d.num_days;
+      if(d.day_pass!=null)    S.dayPass=d.day_pass;
+      if(d.customSpots?.length) S.customSpots=d.customSpots;
+    }
+  }catch(_){}
+  const remain=MIN-(Date.now()-start);
+  if(remain>0)await new Promise(r=>setTimeout(r,remain));
+  const ls=document.getElementById("loadingScreen");
+  ls.style.transition="opacity .6s";ls.style.opacity="0";
+  await new Promise(r=>setTimeout(r,620));
+  ls.style.display="none";
+  const app=document.getElementById("app");
+  app.style.display="flex";app.style.opacity="0";app.style.transition="opacity .4s";
+  setTimeout(()=>{app.style.opacity="1";},30);
+  render();
+}
+
+init();
+</script>
+</body>
+</html>

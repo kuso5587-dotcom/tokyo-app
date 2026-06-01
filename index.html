@@ -415,6 +415,8 @@ async function init(){
 // ═══════════════════════════════════════════
 //  DERIVED
 // ═══════════════════════════════════════════
+const TYPE_ORDER=["全部","🌆 熱門景點","⛩️ 文化古蹟","🌅 展望台","🎨 藝術體驗","🆕 新地標","🎢 主題樂園","🍣 必吃美食","🔍 隱藏美食","🛍️ 一般購物","🎎 公仔玩具","👜 精品包","⌚ 精品錶","🏮 私藏秘境","🌟 宜庭私藏"];
+
 function derived(){
   const dayKeys=DAYS5.slice(0,S.numDays);
   const allAdded=dayKeys.flatMap(d=>S.days[d]||[]);
@@ -433,7 +435,6 @@ function derived(){
     return{...p,total:Math.round(t)};
   });
   const grand=perPerson.reduce((a,p)=>a+p.total,0);
-  const TYPE_ORDER=["全部","🌆 熱門景點","⛩️ 文化古蹟","🌅 展望台","🎨 藝術體驗","🆕 新地標","🎢 主題樂園","🍣 必吃美食","🔍 隱藏美食","🛍️ 一般購物","🎎 公仔玩具","👜 精品包","⌚ 精品錶","🏮 私藏秘境"];const TYPES=TYPE_ORDER.filter(t=>t==="全部"||SPOTS.some(s=>s.type===t));
   const filtered=SPOTS.filter(s=>(S.filter==="全部"||s.type===S.filter)&&(S.search===""||s.name.includes(S.search)||s.area.includes(S.search)));
   return{dayKeys,allAdded,addedIds,spotJPY,transTWD,flightTotal,expTWD,bpp,perPerson,grand,TYPES,filtered};
 }
@@ -496,7 +497,13 @@ function buildApp(){
   else if(S.tab==="plan")content=buildPlan(D);
   else if(S.tab==="expense")content=buildExpense(D);
   else if(S.tab==="budget")content=buildBudget(D);
-  else content=buildNav();
+  else {
+    try { content=buildNav(); }
+    catch(e){ content=div({style:{padding:"20px",color:"#C84B31",fontSize:"12px",fontFamily:"sans-serif"}},
+      div({style:{fontWeight:"700",marginBottom:"8px"}},"⚠️ 導航頁錯誤"),
+      div({},e.message)
+    ); }
+  }
   return[hdr,h("main",{className:"content"},content)];
 }
 
@@ -621,7 +628,25 @@ function buildBudget(D){
   const bars=[["✈️ 機票",S.budget.flight,"#C84B31"],["🏨 住宿",S.budget.hotel*S.numDays,"#F18F01"],["🍜 餐飲",S.budget.food*3*S.numDays,"#3BB273"],["🎡 景點",j2t(spotJPYpp),"#A23B72"],["🚇 交通",transpp,"#2E86AB"],["🛍️ 購物等",S.budget.misc,"#9B8FC0"]].map(([l,v,c])=>{const pct=totalBars?Math.round(v/totalBars*100):0;return div({style:{marginBottom:"8px"}},div({style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"3px"}},div({style:{fontSize:"11px",color:"rgba(245,240,232,.8)",fontWeight:"600"}},l),div({style:{display:"flex",gap:"8px",alignItems:"center"}},div({style:{fontSize:"9px",color:"#8B7355"}},pct+"%"),div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"12px",color:c}},fmtN(v)))),div({style:{height:"4px",background:"rgba(255,255,255,.08)",borderRadius:"2px"}},div({style:{height:"100%",width:pct+"%",background:c,borderRadius:"2px"}})));});
   const personsCard=div({className:"card"},...S.persons.map(p=>div({style:{display:"flex",alignItems:"center",gap:"10px",marginBottom:"9px"}},avatar(p.name,p.color),span({style:{flex:"1",fontSize:"13px",fontWeight:"600"}},p.name),S.persons.length>1?btn({className:"btn-danger",onClick:()=>{S.persons=S.persons.filter(x=>x.id!==p.id);persist();render();}},"移除"):null)),div({style:{display:"flex",gap:"7px",marginTop:"4px"}},inp({className:"inp",style:{flex:"1"},placeholder:"新增旅伴姓名",value:S.newName,onInput:e=>S.newName=e.target.value,onKeyDown:e=>{if(e.key==="Enter"&&S.newName.trim()){const id=Date.now();S.persons=[...S.persons,{id,name:S.newName.trim(),color:PC[S.persons.length%PC.length]}];S.newName="";persist();render();}}}),btn({className:"btn-sm",style:{padding:"9px 12px"},onClick:()=>{if(!S.newName.trim())return;const id=Date.now();S.persons=[...S.persons,{id,name:S.newName.trim(),color:PC[S.persons.length%PC.length]}];S.newName="";persist();render();}},"＋")));
   const presets=Object.entries(BP_DEF).map(([key,p])=>div({className:"bcard"+(S.preset===key?" sel":""),onClick:()=>{S.preset=key;S.budget={...p};persist();render();}},div({style:{display:"flex",alignItems:"center",justifyContent:"space-between"}},div({style:{display:"flex",alignItems:"center",gap:"10px"}},div({style:{fontSize:"28px"}},p.icon),div({},div({style:{fontSize:"13px",fontWeight:"700"}},p.label),div({style:{fontSize:"11px",color:"#9A8F7E"}},"每人約 NT$"+(p.flight+p.hotel*S.numDays+p.food*3*S.numDays+p.misc).toLocaleString()))),div({style:{width:"20px",height:"20px",borderRadius:"50%",border:`2px solid ${S.preset===key?"#C84B31":"#E0D5C0"}`,background:S.preset===key?"#C84B31":"transparent",display:"flex",alignItems:"center",justifyContent:"center"}},S.preset===key?div({style:{width:"8px",height:"8px",borderRadius:"50%",background:"#fff"}}):null)),S.preset===key?div({style:{display:"flex",gap:"5px",flexWrap:"wrap",marginTop:"10px"}},...[["✈️",p.flight],["🏨",p.hotel],["🍜",p.food],["🛍️",p.misc]].map(([ic,v])=>span({className:"cpill"},ic+" NT$"+v.toLocaleString()))):null));
-  const sliders=[{key:"flight",label:"✈️ 來回機票",min:6000,max:25000,step:500},{key:"hotel",label:"🏨 住宿/每晚",min:1000,max:12000,step:200},{key:"food",label:"🍜 餐費/每餐",min:200,max:2000,step:50},{key:"misc",label:"🛍️ 購物&其他",min:500,max:20000,step:500}].map(({key,label,min,max,step})=>div({style:{marginBottom:"14px"}},div({style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"4px"}},div({style:{fontSize:"12px",fontWeight:"600"}},label),div({style:{fontFamily:"'Zen Dots',cursive",fontSize:"13px",color:"#C84B31"}},"NT$"+Number(S.budget[key]).toLocaleString())),inp({type:"range",className:"slider",min,max,step,value:S.budget[key],onInput:e=>{S.budget={...S.budget,[key]:Number(e.target.value)};persist();render();}}),div({style:{display:"flex",justifyContent:"space-between",fontSize:"9px",color:"#C0B8A8"}},span({},"NT$"+min.toLocaleString()),span({},"NT$"+max.toLocaleString()))));
+  const sliders=[
+    {key:"flight",label:"✈️ 來回機票",ph:"例：11000"},
+    {key:"hotel", label:"🏨 住宿/每晚",ph:"例：3500"},
+    {key:"food",  label:"🍜 餐費/每餐",ph:"例：900"},
+    {key:"misc",  label:"🛍️ 購物&其他",ph:"例：4000"},
+  ].map(({key,label,ph})=>
+    div({style:{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"11px 0",borderBottom:"1px solid #EDE6D8"}},
+      div({style:{fontSize:"12px",fontWeight:"600"}},label),
+      div({style:{display:"flex",alignItems:"center",gap:"4px"}},
+        div({style:{fontSize:"11px",color:"#9A8F7E"}},"NT$"),
+        inp({type:"number",className:"inp",
+          style:{width:"110px",textAlign:"right",padding:"6px 8px",fontSize:"13px",fontFamily:"'Zen Dots',cursive",color:"#C84B31",border:"1px solid #E0D5C0",borderRadius:"8px"},
+          value:S.budget[key],
+          onInput:e=>{ S.budget[key]=Number(e.target.value)||0; },
+          onBlur:e=>{ S.budget={...S.budget,[key]:Number(e.target.value)||0}; persist(); render(); }
+        })
+      )
+    )
+  );
   return div({className:"fu"},
     div({className:"sec"},"旅伴設定"),personsCard,
     div({className:"sec"},"2026 預算等級"),...presets,

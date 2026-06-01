@@ -448,7 +448,8 @@ async function init(){
   const startTime = Date.now();
 
   try {
-    const d = await dbLoad();
+    const timeout = new Promise((_,rej)=>setTimeout(()=>rej("timeout"),4000));
+    const d = await Promise.race([dbLoad(), timeout]);
     if(d){
       if(d.flights?.length)   S.flights  = d.flights;
       if(d.customSpots?.length) S.customSpots = d.customSpots;

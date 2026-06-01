@@ -795,7 +795,7 @@ function buildNav(){
                 a({href:url,target:"_blank",style:{flex:"2",display:"flex",alignItems:"center",justifyContent:"center",gap:"6px",background:"#C84B31",color:"#fff",borderRadius:"8px",padding:"10px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"12px",boxShadow:"0 2px 8px #C84B3130"}},
                   "🗺 "+day+" 一鍵Google Maps路線"
                 ),
-                a({href:"https://www.google.com/maps/dir/?api=1&origin="+encodeURIComponent((spots[0]||{name:"",area:""}).name+" "+spots[0].area+" 東京")+"&destination="+encodeURIComponent((spots[spots.length-1]||{name:"",area:""}).name+" "+spots[spots.length-1].area+" 東京")+"&travelmode=walking",target:"_blank",
+                a({href:"https://www.google.com/maps/dir/?api=1&origin="+encodeURIComponent(((spots[0]||{}).name||"")+" "+((spots[0]||{}).area||"")+" 東京")+"&destination="+encodeURIComponent(((spots[spots.length-1]||{}).name||"")+" "+((spots[spots.length-1]||{}).area||"")+" 東京")+"&travelmode=walking",target:"_blank",
                   style:{flex:"1",display:"flex",alignItems:"center",justifyContent:"center",background:"#F0EBE0",color:"#6B5D4A",borderRadius:"8px",padding:"10px",textDecoration:"none",fontFamily:"'DM Sans',sans-serif",fontWeight:"600",fontSize:"11px",border:"1px solid #E0D5C0"}},
                   "🚶 步行"
                 )

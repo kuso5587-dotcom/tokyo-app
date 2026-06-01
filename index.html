@@ -435,7 +435,8 @@ function derived(){
     return{...p,total:Math.round(t)};
   });
   const grand=perPerson.reduce((a,p)=>a+p.total,0);
-  const filtered=SPOTS.filter(s=>(S.filter==="全部"||s.type===S.filter)&&(S.search===""||s.name.includes(S.search)||s.area.includes(S.search)));
+  const TYPES=TYPE_ORDER.filter(t=>t==="全部"||ALL_SPOTS.some(s=>s.type===t));
+  const filtered=ALL_SPOTS.filter(s=>(S.filter==="全部"||s.type===S.filter));
   return{dayKeys,allAdded,addedIds,spotJPY,transTWD,flightTotal,expTWD,bpp,perPerson,grand,TYPES,filtered};
 }
 

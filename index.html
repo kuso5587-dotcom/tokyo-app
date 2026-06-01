@@ -125,6 +125,7 @@ a.nbtn.b{background:#2E86AB18;color:#2E86AB;border:1px solid #2E86AB40;}
 </style>
 </head>
 <body>
+<div id="modal-container" style="position:fixed;inset:0;pointer-events:none;z-index:500"></div>
 <div id="root">
   <div class="loading-screen" id="loadingScreen">
     <div style="display:flex;flex-direction:column;align-items:center;gap:18px;">
@@ -583,11 +584,11 @@ function buildPlan(D){
       div({className:"pills",style:{marginBottom:"11px"}},...D.TYPES.map(t=>span({className:"pill"+(S.filter===t?" on":""),onClick:()=>{S.filter=t;render();}},t))),
       div({style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"8px"}},
         div({style:{fontSize:"11px",color:"#B0A090"}},D.filtered.length+" 個景點"),
-        btn({className:"btn-sm",style:{background:"#1A1008",color:"#F5F0E8",border:"none",fontSize:"11px",padding:"5px 12px"},onClick:()=>{S.showAddSpot=true;render();}},"＋ 自訂")
+        btn({className:"btn-sm",style:{background:"#1A1008",color:"#F5F0E8",border:"none",fontSize:"11px",padding:"5px 12px"},onClick:()=>{S.showAddSpot=true;render();syncModal();}},"＋ 自訂")
       ),
       ...D.filtered.map(s=>{
         const added=D.addedIds.has(s.id);
-        return div({className:"scard"+(added?" added":""),onClick:()=>{if(added){S.mSpot=s;S.modal="spot";render();}else{S.days={...S.days,[S.selDay]:[...(S.days[S.selDay]||[]),s]};persist();render();}}},
+        return div({className:"scard"+(added?" added":""),onClick:()=>{if(added){S.mSpot=s;S.modal="spot";render();syncModal();}else{S.days={...S.days,[S.selDay]:[...(S.days[S.selDay]||[]),s]};persist();render();}}},
           s.hot&&!added?div({className:"hot-badge"},"🔥 HOT"):null,s.custom&&!added?div({className:"hot-badge",style:{background:"#8B5CF6"}},"✏️ 自訂"):null,added?div({className:"hot-badge",style:{background:"#3BB273"}},"✓ 已加入"):null,s.custom&&!added?btn({style:{position:"absolute",bottom:"9px",right:"9px",background:"#FFF0EE",border:"1px solid #F0D0C8",borderRadius:"5px",color:"#C84B31",fontSize:"9px",padding:"2px 6px",cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontWeight:"600"},onClick:e=>{e.stopPropagation();deleteCustomSpot(s.id);}},"刪除"):null,
           div({style:{display:"flex",gap:"10px",alignItems:"flex-start"}},div({className:"sico"},s.icon),div({style:{flex:"1",minWidth:"0"}},div({style:{fontFamily:"'Noto Serif JP',serif",fontSize:"14px",fontWeight:"700",marginBottom:"3px"}},s.name),div({style:{fontSize:"11px",color:"#9A8F7E",marginBottom:"6px"}},s.area),div({style:{display:"flex",gap:"4px",flexWrap:"wrap"}},tag(s.type,TC[s.type]),tag(s.ig,s.ig.includes("爆紅")?"#C84B31":s.ig==="必拍"?"#A23B72":"#8B7355"),tag(s.cost===0?"免費":fmtY(s.cost),"#3BB273"),tag(s.dur+"分鐘","#2E86AB")),div({className:"tip"},s.tip),div({className:"sw"},"🚇 "+s.subway)))
         );
@@ -922,34 +923,24 @@ function buildAddSpotModal(){
 }
 function buildModal(){
   if(!S.modal)return null;
-  const ov=document.createElement("div");
-  ov.className="ov";
-  ov.addEventListener("click",()=>{S.modal=null;render();});
-  const modal=document.createElement("div");
-  modal.className="modal";
-  modal.addEventListener("click",e=>e.stopPropagation());
-  const bar=document.createElement("div");
-  bar.className="modal-bar";
-  modal.appendChild(bar);
   let inner;
   if(S.modal==="flight")inner=buildFlightModal();
   else if(S.modal==="expense")inner=buildExpenseModal();
   else if(S.modal==="spot")inner=buildSpotModal();
-  if(inner)modal.appendChild(inner);
-  ov.appendChild(modal);
-  return ov;
+  return div({className:"ov",onClick:()=>{S.modal=null;render();}},div({className:"modal",onClick:e=>e.stopPropagation()},div({className:"modal-bar"}),inner));
 }
 function buildFlightModal(){
-  const wrap=document.createElement("div");
-  const f=S.flightForm;
-  wrap.innerHTML=`
+  const wrap = document.createElement("div");
+  const f = S.flightForm;
+
+  wrap.innerHTML = `
     <div class="modal-title">${S.editFlight?"編輯航班":"新增航班 ✈️"}</div>
     <div style="display:flex;gap:6px;margin-bottom:12px">
       <span id="btn-dep" class="seg ${f.direction==='去程'?'on':''}" style="cursor:pointer">🛫 去程</span>
       <span id="btn-ret" class="seg ${f.direction==='回程'?'on':''}" style="cursor:pointer">🛬 回程</span>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:10px">
-      <div style="flex:1"><label class="flabel">航班號</label><input class="inp" id="fi-no" placeholder="BR197" value="${f.flightNo||''}"></div>
+      <div style="flex:1"><label class="flabel">航班號</label><input class="inp" id="fi-flightNo" placeholder="BR197" value="${f.flightNo||''}"></div>
       <div style="flex:1"><label class="flabel">航空公司</label><input class="inp" id="fi-airline" placeholder="長榮航空" value="${f.airline||''}"></div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:10px">
@@ -963,7 +954,7 @@ function buildFlightModal(){
     </div>
     <div style="display:flex;gap:8px;margin-bottom:10px">
       <div style="flex:1"><label class="flabel">航廈</label>
-        <select class="inp" id="fi-term">
+        <select class="inp" id="fi-terminal">
           <option value="">–</option>
           <option value="1" ${f.terminal==='1'?'selected':''}>第1航廈</option>
           <option value="2" ${f.terminal==='2'?'selected':''}>第2航廈</option>
@@ -977,64 +968,85 @@ function buildFlightModal(){
     <div style="display:flex;gap:8px;margin-top:6px">
       <button class="btn-sm" id="fi-cancel" style="flex:1;padding:12px">取消</button>
       <button class="btn-red" id="fi-save" style="flex:2;padding:12px">${S.editFlight?"儲存修改":"確認新增"}</button>
-    </div>`;
-  wrap.querySelector("#btn-dep").onclick=()=>{S.flightForm.direction="去程";S.flightForm.from="TPE";S.flightForm.fromCity="台灣桃園";S.flightForm.to="NRT";S.flightForm.toCity="東京成田";render();};
-  wrap.querySelector("#btn-ret").onclick=()=>{S.flightForm.direction="回程";S.flightForm.from="NRT";S.flightForm.fromCity="東京成田";S.flightForm.to="TPE";S.flightForm.toCity="台灣桃園";render();};
+    </div>
+  `;
+
+  // Direction buttons
+  wrap.querySelector("#btn-dep").onclick=()=>{
+    S.flightForm.direction="去程";S.flightForm.from="TPE";S.flightForm.fromCity="台灣桃園";S.flightForm.to="NRT";S.flightForm.toCity="東京成田";
+    render();
+  };
+  wrap.querySelector("#btn-ret").onclick=()=>{
+    S.flightForm.direction="回程";S.flightForm.from="NRT";S.flightForm.fromCity="東京成田";S.flightForm.to="TPE";S.flightForm.toCity="台灣桃園";
+    render();
+  };
+
+  // Save
   wrap.querySelector("#fi-save").onclick=()=>{
-    S.flightForm.flightNo   =wrap.querySelector("#fi-no").value;
-    S.flightForm.airline    =wrap.querySelector("#fi-airline").value;
-    S.flightForm.from       =wrap.querySelector("#fi-from").value;
-    S.flightForm.to         =wrap.querySelector("#fi-to").value;
-    S.flightForm.date       =wrap.querySelector("#fi-date").value;
-    S.flightForm.departTime =wrap.querySelector("#fi-dep").value;
-    S.flightForm.arriveTime =wrap.querySelector("#fi-arr").value;
-    S.flightForm.terminal   =wrap.querySelector("#fi-term").value;
-    S.flightForm.gate       =wrap.querySelector("#fi-gate").value;
-    S.flightForm.seat       =wrap.querySelector("#fi-seat").value;
-    S.flightForm.ticketPrice=wrap.querySelector("#fi-price").value;
+    S.flightForm.flightNo   = wrap.querySelector("#fi-flightNo").value;
+    S.flightForm.airline    = wrap.querySelector("#fi-airline").value;
+    S.flightForm.from       = wrap.querySelector("#fi-from").value;
+    S.flightForm.to         = wrap.querySelector("#fi-to").value;
+    S.flightForm.date       = wrap.querySelector("#fi-date").value;
+    S.flightForm.departTime = wrap.querySelector("#fi-dep").value;
+    S.flightForm.arriveTime = wrap.querySelector("#fi-arr").value;
+    S.flightForm.terminal   = wrap.querySelector("#fi-terminal").value;
+    S.flightForm.gate       = wrap.querySelector("#fi-gate").value;
+    S.flightForm.seat       = wrap.querySelector("#fi-seat").value;
+    S.flightForm.ticketPrice= wrap.querySelector("#fi-price").value;
     saveFlight();
   };
-  wrap.querySelector("#fi-cancel").onclick=()=>{S.modal=null;render();};
+
+  wrap.querySelector("#fi-cancel").onclick=()=>{closeModal();render();};
   return wrap;
 }
 function buildExpenseModal(){
-  const wrap=document.createElement("div");
-  const f=S.expForm;
-  const personOpts=S.persons.map(p=>`<option value="${p.id}" ${f.paidBy==p.id?'selected':''}>${p.name}</option>`).join('');
-  const catOpts=EXP_CATS.map(c=>`<option value="${c}" ${f.category===c?'selected':''}>${c}</option>`).join('');
-  wrap.innerHTML=`
+  const wrap = document.createElement("div");
+  const f = S.expForm;
+
+  const personOpts = S.persons.map(p=>`<option value="${p.id}" ${f.paidBy==p.id?'selected':''}>${p.name}</option>`).join('');
+  const catOpts = EXP_CATS.map(c=>`<option value="${c}" ${f.category===c?'selected':''}>${c}</option>`).join('');
+
+  wrap.innerHTML = `
     <div class="modal-title">新增消費 🧾</div>
     <div style="margin-bottom:10px"><label class="flabel">消費名稱</label>
       <input class="inp" id="ex-label" placeholder="例：一蘭拉麵" value="${f.label||''}"></div>
     <div style="display:flex;gap:8px;margin-bottom:10px">
-      <div style="flex:1.2"><label class="flabel">分類</label><select class="inp" id="ex-cat">${catOpts}</select></div>
-      <div style="flex:1"><label class="flabel">日期</label><input class="inp" id="ex-date" type="date" value="${f.date||''}"></div>
+      <div style="flex:1.2"><label class="flabel">分類</label>
+        <select class="inp" id="ex-cat">${catOpts}</select></div>
+      <div style="flex:1"><label class="flabel">日期</label>
+        <input class="inp" id="ex-date" type="date" value="${f.date||''}"></div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:10px">
-      <div style="flex:1.5"><label class="flabel">金額</label><input class="inp" id="ex-amount" type="number" placeholder="0" value="${f.amount||''}"></div>
+      <div style="flex:1.5"><label class="flabel">金額</label>
+        <input class="inp" id="ex-amount" type="number" placeholder="0" value="${f.amount||''}"></div>
       <div style="flex:1"><label class="flabel">幣別</label>
-        <select class="inp" id="ex-cur">
+        <select class="inp" id="ex-currency">
           <option value="TWD" ${f.currency==='TWD'?'selected':''}>🇹🇼 TWD</option>
           <option value="JPY" ${f.currency==='JPY'?'selected':''}>🇯🇵 JPY</option>
         </select></div>
     </div>
-    <div style="margin-bottom:10px"><label class="flabel">由誰付款</label><select class="inp" id="ex-payer">${personOpts}</select></div>
-    <div style="margin-bottom:10px"><label class="flabel">備註</label><input class="inp" id="ex-note" placeholder="例：含服務費" value="${f.note||''}"></div>
+    <div style="margin-bottom:10px"><label class="flabel">由誰付款</label>
+      <select class="inp" id="ex-payer">${personOpts}</select></div>
+    <div style="margin-bottom:10px"><label class="flabel">備註</label>
+      <input class="inp" id="ex-note" placeholder="例：含服務費" value="${f.note||''}"></div>
     <div style="display:flex;gap:8px;margin-top:4px">
       <button class="btn-sm" id="ex-cancel" style="flex:1;padding:12px">取消</button>
       <button class="btn-red" id="ex-save" style="flex:2;padding:12px">確認記帳</button>
-    </div>`;
+    </div>
+  `;
+
   wrap.querySelector("#ex-save").onclick=()=>{
-    S.expForm.label   =wrap.querySelector("#ex-label").value;
-    S.expForm.category=wrap.querySelector("#ex-cat").value;
-    S.expForm.date    =wrap.querySelector("#ex-date").value;
-    S.expForm.amount  =wrap.querySelector("#ex-amount").value;
-    S.expForm.currency=wrap.querySelector("#ex-cur").value;
-    S.expForm.paidBy  =Number(wrap.querySelector("#ex-payer").value);
-    S.expForm.note    =wrap.querySelector("#ex-note").value;
+    S.expForm.label    = wrap.querySelector("#ex-label").value;
+    S.expForm.category = wrap.querySelector("#ex-cat").value;
+    S.expForm.date     = wrap.querySelector("#ex-date").value;
+    S.expForm.amount   = wrap.querySelector("#ex-amount").value;
+    S.expForm.currency = wrap.querySelector("#ex-currency").value;
+    S.expForm.paidBy   = Number(wrap.querySelector("#ex-payer").value);
+    S.expForm.note     = wrap.querySelector("#ex-note").value;
     saveExpense();
   };
-  wrap.querySelector("#ex-cancel").onclick=()=>{S.modal=null;render();};
+  wrap.querySelector("#ex-cancel").onclick=()=>{closeModal();render();};
   return wrap;
 }
 function buildSpotModal(){
@@ -1089,8 +1101,8 @@ function deleteCustomSpot(id){
   Object.keys(S.days).forEach(d=>{S.days[d]=(S.days[d]||[]).filter(s=>s.id!==id);});
   persist();render();
 }
-function openNewFlight(){S.editFlight=null;S.flightForm={direction:"去程",flightNo:"",airline:"",from:"TPE",fromCity:"台灣桃園",to:"NRT",toCity:"東京成田",date:"",departTime:"",arriveTime:"",terminal:"",gate:"",seat:"",ticketPrice:""};S.modal="flight";render();}
-function openEditFlight(f){S.editFlight=f.id;S.flightForm={...f};S.modal="flight";render();}
+function openNewFlight(){S.editFlight=null;S.flightForm={direction:"去程",flightNo:"",airline:"",from:"TPE",fromCity:"台灣桃園",to:"NRT",toCity:"東京成田",date:"",departTime:"",arriveTime:"",terminal:"",gate:"",seat:"",ticketPrice:""};S.modal="flight";render();syncModal();}
+function openEditFlight(f){S.editFlight=f.id;S.flightForm={...f};S.modal="flight";render();syncModal();}
 function saveFlight(){
   // 從 DOM 讀取最新值（不管 state 有沒有更新）
   const modal=document.querySelector(".modal");
@@ -1116,7 +1128,7 @@ function saveFlight(){
   else S.flights=[...S.flights,{...S.flightForm,id:Date.now()}];
   S.modal=null;persist();render();
 }
-function openExpense(){S.expForm={label:"",category:"🍜 餐飲",amount:"",currency:"TWD",paidBy:S.persons[0]?.id||1,splitWith:[],date:"",note:""};S.modal="expense";render();}
+function openExpense(){S.expForm={label:"",category:"🍜 餐飲",amount:"",currency:"TWD",paidBy:S.persons[0]?.id||1,splitWith:[],date:"",note:""};S.modal="expense";render();syncModal();}
 function saveExpense(){
   const modal=document.querySelector(".modal");
   if(modal){
@@ -1178,23 +1190,53 @@ async function runAIUpdate(){
 // ── RENDER ──
 function render(){
   const app=document.getElementById("app");
-
-  // 如果 modal 開著，保留 modal DOM 不重建，只重建背景頁面
-  const existingModal=app.querySelector(".ov");
-
   while(app.firstChild)app.removeChild(app.firstChild);
   const[hdr,main]=buildApp();
   app.appendChild(hdr);
   app.appendChild(main);
+}
 
-  // Modal 處理
-  if(S.showAddSpot){
-    const addModal=buildAddSpotModal();
-    if(addModal)app.appendChild(addModal);
-  } else if(S.modal){
-    const modal=buildModal();
-    if(modal)app.appendChild(modal);
-  }
+
+function showModal(type){
+  S.modal=type; syncModal();
+}
+function closeModal(){
+  S.modal=null;
+  const mc=document.getElementById("modal-container");
+  if(mc){mc.innerHTML="";mc.dataset.m="";mc.style.pointerEvents="none";}
+}
+function closeAddSpot(){
+  S.showAddSpot=false;
+  const mc=document.getElementById("modal-container");
+  if(mc){mc.innerHTML="";mc.dataset.m="";mc.style.pointerEvents="none";}
+}
+function syncModal(){
+  const mc=document.getElementById("modal-container");
+  if(!mc)return;
+  const key=S.showAddSpot?"addspot":(S.modal||"");
+  if(!key){mc.innerHTML="";mc.dataset.m="";mc.style.pointerEvents="none";return;}
+  if(mc.dataset.m===key)return;
+  mc.dataset.m=key;
+  mc.style.pointerEvents="auto";
+  mc.innerHTML="";
+  const ov=document.createElement("div");
+  ov.className="ov";
+  ov.style.cssText="position:fixed;inset:0;background:rgba(26,16,8,.55);display:flex;align-items:flex-end;justify-content:center;z-index:200;backdrop-filter:blur(4px)";
+  ov.addEventListener("click",e=>{
+    if(e.target===ov){S.modal=null;S.showAddSpot=false;mc.innerHTML="";mc.dataset.m="";mc.style.pointerEvents="none";render();}
+  });
+  const modal=document.createElement("div");
+  modal.className="modal";
+  modal.addEventListener("click",e=>e.stopPropagation());
+  const bar=document.createElement("div");bar.className="modal-bar";modal.appendChild(bar);
+  let inner;
+  if(S.showAddSpot)inner=buildAddSpotModal();
+  else if(S.modal==="flight")inner=buildFlightModal();
+  else if(S.modal==="expense")inner=buildExpenseModal();
+  else if(S.modal==="spot")inner=buildSpotModal();
+  if(inner)modal.appendChild(inner);
+  ov.appendChild(modal);
+  mc.appendChild(ov);
 }
 
 init();
